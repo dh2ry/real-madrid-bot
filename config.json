@@ -1,0 +1,101 @@
+{
+  "handle": "@حسابك",
+  "timezone": "Asia/Riyadh",
+  "timezoneLabel": "بتوقيت مكة المكرمة",
+  "newsEveryMinutes": 30,
+  "longPosts": false,
+  "maxTweetsPerRun": 2,
+  "maxAgeHours": 6,
+  "includeLink": false,
+  "claudeModel": "claude-sonnet-5-5",
+  "style": "استخدم إيموجي واحد مناسب في بداية التغريدة، وأضف هاشتاق #ريال_مدريد في النهاية قبل المصدر.",
+  "feeds": [
+    {
+      "name": "Google News (عربي)",
+      "url": "https://news.google.com/rss/search?q=%D8%B1%D9%8A%D8%A7%D9%84+%D9%85%D8%AF%D8%B1%D9%8A%D8%AF+when:1d&hl=ar&gl=SA&ceid=SA:ar",
+      "filtered": true
+    },
+    {
+      "name": "Google News (English)",
+      "url": "https://news.google.com/rss/search?q=%22Real+Madrid%22+when:1d&hl=en-US&gl=US&ceid=US:en",
+      "filtered": true
+    },
+    {
+      "name": "Google News (Español)",
+      "url": "https://news.google.com/rss/search?q=%22Real+Madrid%22+when:1d&hl=es&gl=ES&ceid=ES:es",
+      "filtered": true
+    },
+    {
+      "name": "Managing Madrid",
+      "url": "https://www.managingmadrid.com/rss/current.xml",
+      "filtered": true
+    },
+    {
+      "name": "BBC Sport",
+      "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
+      "filtered": false
+    },
+    {
+      "name": "ESPN",
+      "url": "https://www.espn.com/espn/rss/soccer/news",
+      "filtered": false
+    },
+    {
+      "name": "The Guardian",
+      "url": "https://www.theguardian.com/football/rss",
+      "filtered": false
+    }
+  ],
+  "keywords": [
+    "real madrid",
+    "ريال مدريد",
+    "الملكي",
+    "الميرينغي",
+    "bernabeu",
+    "برنابيو",
+    "mbappe",
+    "mbappé",
+    "مبابي",
+    "vinicius",
+    "فينيسيوس",
+    "bellingham",
+    "بيلينغهام",
+    "xabi alonso",
+    "تشابي ألونسو",
+    "courtois",
+    "كورتوا"
+  ],
+  "lineup": {
+    "enabled": true,
+    "startMinutesBefore": 75,
+    "webSearchFallbackMinutesBefore": 55
+  },
+  "pressers": {
+    "enabled": true,
+    "opponent": true,
+    "maxQuotes": 6,
+    "retryMinutes": 60,
+    "preHoursBefore": [
+      30,
+      2
+    ],
+    "postHoursAfter": [
+      1.75,
+      10
+    ]
+  },
+  "extraFixtures": [],
+  "_extraFixtures_example": {
+    "kickoff": "2026-12-17T20:00:00Z",
+    "opponent": "Athletic Club",
+    "competition": "Copa del Rey",
+    "isHome": false
+  },
+  "fontFile": "assets/fonts/thmanyah-serif-display-bold.otf",
+  "webSearchTool": "web_search_20250305",
+  "crests": {},
+  "_crests_example": {
+    "Real Madrid": "assets/crests/real-madrid.png",
+    "FC Barcelona": "https://example.com/barca.png"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "real-madrid-news-bot",
+  "version": "2.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node bot.js",
+    "test": "DRY_RUN=true node bot.js",
+    "preview": "node bot.js --preview-card"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "rss-parser": "^3.13.0",
+    "twitter-api-v2": "^1.17.2",
+    "playwright-core": "^1.50.0"
+  }
+}
