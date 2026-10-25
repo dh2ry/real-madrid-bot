@@ -1,0 +1,61 @@
+name: Real Madrid Bot
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "تجربة بدون نشر"
+        type: boolean
+        default: false
+      preview_card:
+        description: "معاينة تصميم التشكيلة فقط"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rm-bot
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+
+      - name: Run bot
+        run: node bot.js ${{ inputs.preview_card && '--preview-card' || '' }}
+        env:
+          DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+
+      - name: Upload images (preview / dry run)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: images
+          path: out/
+          if-no-files-found: ignore
+
+      - name: Save state
+        if: ${{ !inputs.dry_run && !inputs.preview_card }}
+        run: |
+          git config user.name "rm-bot"
+          git config user.email "rm-bot@users.noreply.github.com"
+          git add state/posted.json 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "update state" && git push)
