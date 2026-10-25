@@ -105,9 +105,9 @@
     "yellowCards": true,
     "opponentYellowCards": true,
     "substitutions": true,
-    "opponentSubstitutions": false,
+    "opponentSubstitutions": true,
     "injuries": true,
-    "opponentInjuries": false,
+    "opponentInjuries": true,
     "resultCard": true
   },
   "official": {
