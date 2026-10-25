@@ -4,7 +4,7 @@
   "timezoneLabel": "بتوقيت مكة المكرمة",
   "newsEveryMinutes": 30,
   "longPosts": false,
-  "maxTweetsPerRun": 2,
+  "maxTweetsPerRun": 3,
   "maxAgeHours": 6,
   "includeLink": false,
   "claudeModel": "claude-sonnet-5-5",
@@ -36,11 +36,6 @@
       "filtered": false
     },
     {
-      "name": "ESPN",
-      "url": "https://www.espn.com/espn/rss/soccer/news",
-      "filtered": false
-    },
-    {
       "name": "The Guardian",
       "url": "https://www.theguardian.com/football/rss",
       "filtered": false
@@ -60,10 +55,10 @@
     "فينيسيوس",
     "bellingham",
     "بيلينغهام",
-    "xabi alonso",
-    "تشابي ألونسو",
     "courtois",
-    "كورتوا"
+    "كورتوا",
+    "mourinho",
+    "مورينيو"
   ],
   "lineup": {
     "enabled": true,
@@ -97,5 +92,46 @@
   "_crests_example": {
     "Real Madrid": "assets/crests/real-madrid.png",
     "FC Barcelona": "https://example.com/barca.png"
+  },
+  "live": {
+    "enabled": true,
+    "startMinutesBefore": 15,
+    "pollSeconds": 60,
+    "maxMinutes": 200,
+    "kickoff": true,
+    "halftime": true,
+    "fulltime": true,
+    "redCards": true,
+    "yellowCards": true,
+    "opponentYellowCards": true
+  },
+  "official": {
+    "enabled": true,
+    "sections": [
+      "primer-equipo"
+    ],
+    "skipCategories": [
+      "ruedas-de-prensa"
+    ],
+    "maxAgeHours": 30,
+    "maxPerRun": 5
+  },
+  "xSources": {
+    "enabled": true,
+    "officialAccounts": [
+      "realmadrid"
+    ],
+    "rmAccounts": [
+      "realmadrid",
+      "MarioCortegana"
+    ],
+    "generalAccounts": [
+      "FabrizioRomano",
+      "MatteMoretto",
+      "relevo",
+      "diarioas",
+      "marca"
+    ],
+    "maxPerQuery": 25
   }
 }

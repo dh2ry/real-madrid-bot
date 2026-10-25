@@ -4,6 +4,7 @@ import { runNews } from './lib/news.js';
 import { getFixtures } from './lib/fixtures.js';
 import { runLineup, buildLineupPost } from './lib/lineup.js';
 import { runPressers } from './lib/pressers.js';
+import { shouldGoLive, runLive } from './lib/live.js';
 import { SAMPLE_FIXTURE, SAMPLE_LINEUP } from './lib/sample.js';
 
 async function step(name, fn) {
@@ -26,6 +27,17 @@ async function main() {
   await step('المؤتمرات', () => runPressers(state, fixtures));
   await step('الأخبار', () => runNews(state));
   if (!DRY_RUN) saveState(state);
+
+  // 🔴 وضع المباراة المباشر: يفحص الأحداث كل دقيقة لين النهاية
+  const live = fixtures.find((f) => shouldGoLive(f, state));
+  if (live) {
+    await runLive(state, live, async () => {
+      if (Date.now() < live.kickoff) await step('التشكيلة', () => runLineup(state, fixtures));
+      await step('الأخبار', () => runNews(state));
+      if (!DRY_RUN) saveState(state);
+    });
+    if (!DRY_RUN) saveState(state);
+  }
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });
