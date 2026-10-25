@@ -103,7 +103,12 @@
     "fulltime": true,
     "redCards": true,
     "yellowCards": true,
-    "opponentYellowCards": true
+    "opponentYellowCards": true,
+    "substitutions": true,
+    "opponentSubstitutions": false,
+    "injuries": true,
+    "opponentInjuries": false,
+    "resultCard": true
   },
   "official": {
     "enabled": true,
