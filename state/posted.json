@@ -912,7 +912,7 @@
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1792990472937,
+    "fetchedAt": 1793004924524,
     "list": [
       {
         "id": "564723",
@@ -1006,10 +1006,10 @@
       }
     ]
   },
-  "lastNewsRun": 1792990512742,
+  "lastNewsRun": 1793004924525,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2114512618283323855",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2114491148773535780"
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2114622147528208774"
   },
   "live": {
     "564723": {
