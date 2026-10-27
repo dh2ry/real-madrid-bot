@@ -2,7 +2,7 @@ name: Real Madrid Bot
 
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/10 * * * *"   # كل 10 دقائق (الأخبار نفسها تنشر كل 30 دقيقة)
   workflow_dispatch:
     inputs:
       dry_run:
@@ -32,15 +32,16 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 330
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: npm install --no-audit --no-fund
 
       - name: Run bot
+        timeout-minutes: 315
         run: node bot.js ${{ inputs.preview_card && '--preview-card' || '' }}
         env:
           DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}

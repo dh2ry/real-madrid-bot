@@ -71,8 +71,8 @@
     "maxQuotes": 6,
     "retryMinutes": 60,
     "preHoursBefore": [
-      30,
-      2
+      40,
+      1
     ],
     "postHoursAfter": [
       1.75,
@@ -95,9 +95,9 @@
   },
   "live": {
     "enabled": true,
-    "startMinutesBefore": 15,
+    "startMinutesBefore": 70,
     "pollSeconds": 60,
-    "maxMinutes": 200,
+    "maxMinutes": 185,
     "kickoff": true,
     "halftime": true,
     "fulltime": true,

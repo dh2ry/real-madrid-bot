@@ -1,5 +1,6 @@
 // بوت ريال مدريد: أخبار + تشكيلة مصممة + مؤتمرات صحفية مترجمة ← حسابك في X
 import { DRY_RUN, loadState, saveState, saveOutput } from './lib/config.js';
+import { setPostLog } from './lib/x.js';
 import { runNews } from './lib/news.js';
 import { getFixtures } from './lib/fixtures.js';
 import { runLineup, buildLineupPost } from './lib/lineup.js';
@@ -12,8 +13,11 @@ import { runOfficialX } from './lib/officialx.js';
 import { runCovers } from './lib/covers.js';
 import { runOnThisDay, runStandings, runAbsences, runMilestones, runWeekly } from './lib/extras.js';
 
-async function step(name, fn) {
-  try { await fn(); } catch (e) { console.error(`❌ ${name}:`, e.message); }
+// كل قسم له وقت أقصى، عشان لو علق طلب ما يوقف البوت كله
+async function step(name, fn, minutes = 8) {
+  let timer;
+  const limit = new Promise((_, rej) => { timer = setTimeout(() => rej(new Error(`تجاوز ${minutes} دقائق وتم تخطيه`)), minutes * 60000); });
+  try { await Promise.race([fn(), limit]); } catch (e) { console.error(`❌ ${name}:`, e.message); } finally { clearTimeout(timer); }
 }
 
 async function main() {
@@ -28,13 +32,15 @@ async function main() {
 
   // 🧵 سلسلة عن موضوع تكتبه في خانة «الموضوع» عند Run workflow
   const topic = (process.env.TOPIC || '').trim();
-  if (topic) { await runTopic(topic); return; }
+  if (topic) { await step('سلسلة الموضوع', () => runTopic(topic), 15); return; }
 
   const state = loadState();
-  const fixtures = await getFixtures(state);
+  setPostLog((t) => state.tweets.push(t));
+  let fixtures = [];
+  await step('جدول المباريات', async () => { fixtures = await getFixtures(state); }, 2);
   await step('التشكيلة', () => runLineup(state, fixtures));
-  await step('المؤتمرات', () => runPressers(state, fixtures));
-  await step('الأخبار', () => runNews(state));
+  await step('المؤتمرات', () => runPressers(state, fixtures), 20);
+  await step('الأخبار', () => runNews(state), 10);
   await step('الحساب الرسمي', () => runOfficialX(state));
   await step('أغلفة الصحف', () => runCovers(state));
   await step('أفضل لاعب', () => runMotm(state, fixtures));
@@ -58,4 +64,5 @@ async function main() {
   }
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+// نخرج بشكل صريح عشان أي طلب معلّق بالخلفية ما يخلي التشغيل واقف
+main().then(() => process.exit(0)).catch((e) => { console.error(e); process.exit(1); });

@@ -1557,7 +1557,7 @@
       {
         "id": "564723",
         "kickoff": 1792958400000,
-        "status": "TIMED",
+        "status": "FINISHED",
         "competition": "Primera Division",
         "isHome": false,
         "opponent": {
@@ -1568,8 +1568,8 @@
         "rmCrest": "https://crests.football-data.org/86.png",
         "venue": null,
         "score": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 2
         }
       },
       {
@@ -1625,24 +1625,6 @@
           "home": null,
           "away": null
         }
-      },
-      {
-        "id": "564723",
-        "kickoff": 1792958400000,
-        "status": "FINISHED",
-        "competition": "Primera Division",
-        "isHome": false,
-        "opponent": {
-          "name": "Barça",
-          "fullName": "FC Barcelona",
-          "crest": "https://crests.football-data.org/81.png"
-        },
-        "rmCrest": "https://crests.football-data.org/86.png",
-        "venue": null,
-        "score": {
-          "home": 1,
-          "away": 2
-        }
       }
     ]
   },
@@ -1682,7 +1664,6 @@
         "ft": true
       },
       "lastScore": [
-        0,
         1,
         2
       ],
