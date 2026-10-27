@@ -1552,7 +1552,7 @@
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1793090817072,
+    "fetchedAt": 1793114495437,
     "list": [
       {
         "id": "564723",
@@ -1646,7 +1646,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793111383319,
+  "lastNewsRun": 1793114495438,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2115041508910907767",
@@ -1718,8 +1718,9 @@
     "Carlos Espí": "كارلوس إسبي",
     "Yan Diomande": "يان ديوماندي"
   },
-  "officialXRun": 1793111395342,
+  "officialXRun": 1793114508863,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون"
-  ]
+  ],
+  "officialSince": "2115100998473490842"
 }
