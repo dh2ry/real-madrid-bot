@@ -13,6 +13,14 @@ on:
         description: "معاينة تصميم التشكيلة فقط"
         type: boolean
         default: false
+      topic:
+        description: "🧵 موضوع سلسلة (اتركه فاضي للتشغيل العادي)"
+        type: string
+        default: ""
+      topic_tweets:
+        description: "عدد تغريدات السلسلة"
+        type: string
+        default: "8"
 
 permissions:
   contents: write
@@ -36,6 +44,8 @@ jobs:
         run: node bot.js ${{ inputs.preview_card && '--preview-card' || '' }}
         env:
           DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
+          TOPIC: ${{ inputs.topic }}
+          TOPIC_TWEETS: ${{ inputs.topic_tweets }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           FOOTBALL_DATA_KEY: ${{ secrets.FOOTBALL_DATA_KEY }}
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
@@ -53,7 +63,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Save state
-        if: ${{ always() && !inputs.dry_run && !inputs.preview_card }}
+        if: ${{ always() && !inputs.dry_run && !inputs.preview_card && !inputs.topic }}
         run: |
           git config user.name "rm-bot"
           git config user.email "rm-bot@users.noreply.github.com"
