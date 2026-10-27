@@ -1323,9 +1323,9 @@
       }
     ]
   },
-  "lastNewsRun": 1793038504177,
+  "lastNewsRun": 1793052970498,
   "xSince": {
-    "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2114747547050754257",
+    "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2114796357445697835",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2114776999663161344"
   },
   "live": {
