@@ -6,6 +6,11 @@ import { runLineup, buildLineupPost } from './lib/lineup.js';
 import { runPressers } from './lib/pressers.js';
 import { shouldGoLive, runLive } from './lib/live.js';
 import { SAMPLE_FIXTURE, SAMPLE_LINEUP } from './lib/sample.js';
+import { runTopic } from './lib/topic.js';
+import { runMotm } from './lib/motm.js';
+import { runOfficialX } from './lib/officialx.js';
+import { runCovers } from './lib/covers.js';
+import { runOnThisDay, runStandings, runAbsences, runMilestones, runWeekly } from './lib/extras.js';
 
 async function step(name, fn) {
   try { await fn(); } catch (e) { console.error(`❌ ${name}:`, e.message); }
@@ -21,11 +26,23 @@ async function main() {
     return;
   }
 
+  // 🧵 سلسلة عن موضوع تكتبه في خانة «الموضوع» عند Run workflow
+  const topic = (process.env.TOPIC || '').trim();
+  if (topic) { await runTopic(topic); return; }
+
   const state = loadState();
   const fixtures = await getFixtures(state);
   await step('التشكيلة', () => runLineup(state, fixtures));
   await step('المؤتمرات', () => runPressers(state, fixtures));
   await step('الأخبار', () => runNews(state));
+  await step('الحساب الرسمي', () => runOfficialX(state));
+  await step('أغلفة الصحف', () => runCovers(state));
+  await step('أفضل لاعب', () => runMotm(state, fixtures));
+  await step('الغيابات', () => runAbsences(state, fixtures));
+  await step('الأرقام القياسية', () => runMilestones(state, fixtures));
+  await step('جدول الترتيب', () => runStandings(state, fixtures));
+  await step('في مثل هذا اليوم', () => runOnThisDay(state));
+  await step('ملخص الأسبوع', () => runWeekly(state));
   if (!DRY_RUN) saveState(state);
 
   // 🔴 وضع المباراة المباشر: يفحص الأحداث كل دقيقة لين النهاية
@@ -34,6 +51,7 @@ async function main() {
     await runLive(state, live, async () => {
       if (Date.now() < live.kickoff) await step('التشكيلة', () => runLineup(state, fixtures));
       await step('الأخبار', () => runNews(state));
+      await step('الحساب الرسمي', () => runOfficialX(state, { liveNow: Date.now() > live.kickoff }));
       if (!DRY_RUN) saveState(state);
     });
     if (!DRY_RUN) saveState(state);

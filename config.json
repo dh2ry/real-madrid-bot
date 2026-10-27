@@ -33,12 +33,12 @@
     {
       "name": "BBC Sport",
       "url": "https://feeds.bbci.co.uk/sport/football/rss.xml",
-      "filtered": true
+      "filtered": false
     },
     {
       "name": "The Guardian",
       "url": "https://www.theguardian.com/football/rss",
-      "filtered": true
+      "filtered": false
     }
   ],
   "keywords": [
@@ -84,7 +84,7 @@
     "kickoff": "2026-12-17T20:00:00Z",
     "opponent": "Athletic Club",
     "competition": "Copa del Rey",
-    "isHome": true
+    "isHome": false
   },
   "fontFile": "assets/fonts/thmanyah-serif-display-bold.otf",
   "webSearchTool": "web_search_20250305",
@@ -108,7 +108,8 @@
     "opponentSubstitutions": true,
     "injuries": true,
     "opponentInjuries": true,
-    "resultCard": true
+    "resultCard": true,
+    "statsCard": true
   },
   "official": {
     "enabled": true,
@@ -138,5 +139,62 @@
       "marca"
     ],
     "maxPerQuery": 25
+  },
+  "motm": {
+    "enabled": true,
+    "hoursAfter": [
+      2.25,
+      12
+    ],
+    "retryMinutes": 45
+  },
+  "officialX": {
+    "enabled": true,
+    "accounts": [
+      "realmadrid"
+    ],
+    "everyMinutes": 10,
+    "maxPerRun": 20,
+    "skipDuringLive": true,
+    "minLength": 12,
+    "prefix": "🏛️ ريال مدريد:"
+  },
+  "covers": {
+    "enabled": true,
+    "papers": [
+      "marca",
+      "as"
+    ],
+    "fromHour": 6,
+    "retryMinutes": 30,
+    "onlyRealMadrid": false
+  },
+  "onThisDay": {
+    "enabled": true,
+    "hour": 12
+  },
+  "standings": {
+    "enabled": true,
+    "rows": 10,
+    "hoursAfter": [
+      2.5,
+      20
+    ]
+  },
+  "absences": {
+    "enabled": true,
+    "hoursBefore": [
+      26,
+      3
+    ]
+  },
+  "milestones": {
+    "enabled": true,
+    "max": 2
+  },
+  "weekly": {
+    "enabled": true,
+    "weekday": 1,
+    "hour": 14
   }
 }
