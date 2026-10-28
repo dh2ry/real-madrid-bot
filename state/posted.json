@@ -2179,7 +2179,11 @@
     "84cfeb2037144f09",
     "https://news.google.com/rss/articles/CBMihAJBVV95cUxNYW4wTGhFSklSQUxydjItNWpfTzZrdWRMdnRoUUthLVJpOFh3VVliSmtKQ1pPZmpDZm1SaEx6WEp5aFZ5RUFVY0ladjFpc1NpaEc0SWxndkNmWGxINGdCMEM1SUFFV0lWYWVuUDQwbHZfTi1RRnlndkFxRlAxRjIzT1A0VDZsQUJVcmkyV25jMktTdDlzUmlhdWlZSjVweGhYQUtCRGJxaGhZcG5wOVp0MnZTREdNdnlzaHNLQXdNLUJnRUVlVl93aFN0d3ZQMldrUTJ5Q0NHYUhZRG5BemY3VDBxaFB5dEVXT2lMZl9BMkJ0akpPS2VwYVNiMlpweDdxMjExZQ?oc=5",
     "224b5da2f44d701e",
-    "https://news.google.com/rss/articles/CBMiugFBVV95cUxPeExxZnluTTdVR0NOd3hqTHRwbTR3ejBMVlZEOWw1UXRzX1Z5R2tyRXlEXzlBOWg3VkhmYUpKclIwbS1SVXZNY0p0ZWkwZDc3RHVzMGFNdVRoYUM1WUlEdUNSUnJJd2J2eTBsa3V2VHZ2U2ZUaV9tNXk5d1hETWtCQ3VjcDNxaWlFU1lVaWRIMTNUeFBya0RzWENSYUlSd2hRM3ZsbUVXcUkyYl84QzZqTUxXSnB0ME9zelHSAboBQVVfeXFMT3hMcWZ5bk03VUdDTnd4akx0cG00d3owTFZWRDlsNVF0c19WeUdrckV5RF85QTloN1ZIZmFKSnJSMG0tUlV2TWNKdGVpMGQ3N0R1czBhTXVUaGFDNVlJRHVDUlJySXdidnkwbGt1dlR2dlNmVGlfbTV5OXdYRE1rQkN1Y3AzcWlpRVNZVWlkSDEzVHhQcmtEc1hDUmFJUndoUTN2bG1FV3FJMmJfOEM2ak1MV0pwdDBPc3pR?oc=5"
+    "https://news.google.com/rss/articles/CBMiugFBVV95cUxPeExxZnluTTdVR0NOd3hqTHRwbTR3ejBMVlZEOWw1UXRzX1Z5R2tyRXlEXzlBOWg3VkhmYUpKclIwbS1SVXZNY0p0ZWkwZDc3RHVzMGFNdVRoYUM1WUlEdUNSUnJJd2J2eTBsa3V2VHZ2U2ZUaV9tNXk5d1hETWtCQ3VjcDNxaWlFU1lVaWRIMTNUeFBya0RzWENSYUlSd2hRM3ZsbUVXcUkyYl84QzZqTUxXSnB0ME9zelHSAboBQVVfeXFMT3hMcWZ5bk03VUdDTnd4akx0cG00d3owTFZWRDlsNVF0c19WeUdrckV5RF85QTloN1ZIZmFKSnJSMG0tUlV2TWNKdGVpMGQ3N0R1czBhTXVUaGFDNVlJRHVDUlJySXdidnkwbGt1dlR2dlNmVGlfbTV5OXdYRE1rQkN1Y3AzcWlpRVNZVWlkSDEzVHhQcmtEc1hDUmFJUndoUTN2bG1FV3FJMmJfOEM2ak1MV0pwdDBPc3pR?oc=5",
+    "d7debe58019d5795",
+    "https://www.managingmadrid.com/general/114773/daily-thread-oct-28-2026",
+    "59a7e71870c6085f",
+    "https://news.google.com/rss/articles/CBMipAFBVV95cUxNVER6alAyb1hiVzVEdlJ3eUV5dDdCVGE2cFFwRzJUVjZEMHp4MVp6alVlbjVRYUQ1UW5Pa1Z4dnRGa28yNVQzSzVab0tvTFp1dFpYVm9SN1dBWllXQmNhVS1wYV9ubDdNT08teDI3aldOQi1NUVdBcU9SZTBvWGNkZGFqSDd3Z0VQMlhMVHJJOUhyek1kRmZXOU9tOWJUc0tXZkJnRA?oc=5"
   ],
   "tweets": [
     "🚨 رسمياً: تيبو كورتوا يغيب عن مباراة الكلاسيكو أمام برشلونة بسبب الإنفلونزا، ولن يسافر مع الفريق إلى برشلونة.\n\n#ريال_مدريد\n\nالمصدر: Mundo Deportivo",
@@ -2244,12 +2248,12 @@
     "cover:marca:2026-10-27": 1793102734818,
     "cover:as:2026-10-27": 1793102756634,
     "onthisday:2026-10-27": 1793102769087,
-    "cover:marca:2026-10-28": 1793159314308,
-    "cover:as:2026-10-28": 1793159316338
+    "cover:marca:2026-10-28": 1793161655095,
+    "cover:as:2026-10-28": 1793161656391
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1793138016845,
+    "fetchedAt": 1793161652021,
     "list": [
       {
         "id": "564723",
@@ -2325,7 +2329,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793159308485,
+  "lastNewsRun": 1793161652022,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2115205131843084303",
@@ -2398,7 +2402,7 @@
     "Carlos Espí": "كارلوس إسبي",
     "Yan Diomande": "يان ديوماندي"
   },
-  "officialXRun": 1793159314153,
+  "officialXRun": 1793161654969,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون"
   ],
