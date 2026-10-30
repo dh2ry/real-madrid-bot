@@ -4859,7 +4859,13 @@
     "31294b06035b1d38",
     "https://news.google.com/rss/articles/CBMiwgFBVV95cUxQRS0wMi1KdTlDRThTQ3gzNHFSS0wxR2E0dk9zcmhzX3hBR2xTcmwzY25SaE1ZLUZ5aklUTXZyVU9PeG0xVXFSTkFyM3M1S3BGLUxyOFNmcDRmNTg1UHRhZGMzRm5fQ3RPVVdDNHVRR19zSGlSdEwtcnJXQk9zXzNmdkNDQkN1ZnNpSmxVMWcxTUtxOGZTZmtiNmducHdQMmVFMlFRZS1ReGdDR0hsVEtXRjZxZ3lfbW1Xd2JkMThHWVNtQdIBxwFBVV95cUxPa3FMTW41MkZoOUc2ZkhpVmFBRFlmOE40dEg1dExJa3JKLV9OeWMyNHltS3FZMHRMcnRPR0NjdDBjZjJmbnlqTGJzVkdRR21GMUFhZEN6bDE2VU9kSXZHOXRRVnpDdWxKdXZqUVZwVF92YXk1Z2djSGpRVE52ZkFDakExdXVMR0dPa2gwY2hUN1NMNVVVcndkUFVhYzhGYmtGNWkxa3pXRUlPcS1TbzF3a29ENmRmdjAwR3lIaVBteFlfMGoyaVMw?oc=5",
     "692abd885f197be7",
-    "https://news.google.com/rss/articles/CBMiW0FVX3lxTE0zeEdlRkw5TDRiQ1FFRjAySWU0TklOWU8yQjRxNkV4UFI1NmdfdndnUnI0c3ItbUVLRmhtSmJidDZwZ0ZkWmFXVHkzVmZjRzliOFY1LVdRSjJua00?oc=5"
+    "https://news.google.com/rss/articles/CBMiW0FVX3lxTE0zeEdlRkw5TDRiQ1FFRjAySWU0TklOWU8yQjRxNkV4UFI1NmdfdndnUnI0c3ItbUVLRmhtSmJidDZwZ0ZkWmFXVHkzVmZjRzliOFY1LVdRSjJua00?oc=5",
+    "9dcaa6098ca3a97b",
+    "https://news.google.com/rss/articles/CBMikAFBVV95cUxQV3BwbzllTzlRVjJRVjFDS3Rvdm9USXJ2aVppdWZZdGRnb2FTNTc5c3F1dE1RcFJSRXhUWi1kaHJ5ZnBWN0Q3NlYtTmIxd3BmTkRKRGIwOHF0dS1PcDc5QXVERzczcExtWGg0ZzN2VEo0SHRuZ3N0TFB0NlQ2bVg5TnkyR3lpYlYwMlhBbHMxXzE?oc=5",
+    "56be530faa98b4f5",
+    "https://news.google.com/rss/articles/CBMiuwFBVV95cUxQa0dIbmJUTUhlN2ZsdGl3V3RDS0lmMFJsaldlY2ZxUFk0Y3hLZnVlbS1DcThjaEZGOU45Y1lDRXZjZ2ZJMUtiemFJWEdpQ3U4SkEwY08xM3dKSHl6Wm1WN2ZxeEUxR3RrekxGYlFsaEp4ejcwNEtQWFdZZEVhX0duZUI1aG94alVwV092LWM4RHV2WUVNOE9qazF0OUliWlJqdFhTMnZYY1o1QW5OZDU1cllvUmEyM0JCcUo4?oc=5",
+    "9b3c15b24cfbe59e",
+    "https://news.google.com/rss/articles/CBMijAFBVV95cUxPZlJkSDNpaG1XR0tZUldhSVltZWxYRkxrS09wZ0xUVlRUaVpjMm5lY0xuS1ItY19GcWJaalBMTkNsTFlVa1IyNUNydDVqUk01Z3JpMHFWRHNLRTdlZlNrMWs5X3lXT0o1bmVlSFRtNkFTSUcwTGZkbUxpY3IydGxMSzBIRVAweEJQSEkxMw?oc=5"
   ],
   "tweets": [
     "🚨 رسمياً: تيبو كورتوا يغيب عن مباراة الكلاسيكو أمام برشلونة بسبب الإنفلونزا، ولن يسافر مع الفريق إلى برشلونة.\n\n#ريال_مدريد\n\nالمصدر: Mundo Deportivo",
@@ -4967,8 +4973,8 @@
     "cover:marca:2026-10-29": 1793306964061,
     "cover:as:2026-10-29": 1793252280917,
     "onthisday:2026-10-29": 1793265760260,
-    "cover:marca:2026-10-30": 1793332433102,
-    "cover:as:2026-10-30": 1793332435278
+    "cover:marca:2026-10-30": 1793335226022,
+    "cover:as:2026-10-30": 1793335228044
   },
   "afIds": {},
   "fixtures": {
@@ -5030,7 +5036,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793332429727,
+  "lastNewsRun": 1793335222579,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2115923987935199356",
@@ -5103,7 +5109,7 @@
     "Carlos Espí": "كارلوس إسبي",
     "Yan Diomande": "يان ديوماندي"
   },
-  "officialXRun": 1793332432939,
+  "officialXRun": 1793335225913,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
