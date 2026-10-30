@@ -5228,10 +5228,10 @@
       }
     ]
   },
-  "lastNewsRun": 1793358062403,
+  "lastNewsRun": 1793360720295,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2116110798108160376",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2116132187678400851",
     "(from:MarioCortegana) -is:retweet -is:reply": "2115826869857632691"
   },
   "live": {
@@ -5301,12 +5301,12 @@
     "Carlos Espí": "كارلوس إسبي",
     "Yan Diomande": "يان ديوماندي"
   },
-  "officialXRun": 1793358064103,
+  "officialXRun": 1793360721711,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
     "2016: ثلاثية رونالدو تقود ريال مدريد للفوز على ألافيس",
     "2019: ريال مدريد يكتسح ليغانيس 5-0 في البرنابيو"
   ],
-  "officialSince": "2115881352759476551"
+  "officialSince": "2116130496501653694"
 }
