@@ -5167,16 +5167,16 @@
     "cover:marca:2026-10-30": 1793340796418,
     "cover:as:2026-10-30": 1793340810216,
     "onthisday:2026-10-30": 1793351961367,
-    "564734:pre:rm": 1793456547271,
-    "564734:pre:opp": 1793456547678,
-    "cover:marca:2026-10-31": 1793459014522,
-    "cover:as:2026-10-31": 1793459015676,
-    "onthisday:2026-10-31": 1793456551951,
-    "564734:absences": 1793454030918
+    "564734:pre:rm": 1793461186134,
+    "564734:pre:opp": 1793461186331,
+    "cover:marca:2026-10-31": 1793461188182,
+    "cover:as:2026-10-31": 1793461189096,
+    "onthisday:2026-10-31": 1793461189337,
+    "564734:absences": 1793461189265
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1793439584958,
+    "fetchedAt": 1793461186134,
     "list": [
       {
         "id": "564734",
@@ -5234,7 +5234,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793459011978,
+  "lastNewsRun": 1793461186412,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2116543958339686603",
@@ -5307,12 +5307,12 @@
     "Carlos Espí": "كارلوس إسبي",
     "Yan Diomande": "يان ديوماندي"
   },
-  "officialXRun": 1793459014404,
+  "officialXRun": 1793461187964,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
     "2016: ثلاثية رونالدو تقود ريال مدريد للفوز على ألافيس",
     "2019: ريال مدريد يكتسح ليغانيس 5-0 في البرنابيو"
   ],
-  "officialSince": "2116531890022756394"
+  "officialSince": "2116549505114157517"
 }
