@@ -5167,8 +5167,8 @@
     "cover:marca:2026-10-30": 1793340796418,
     "cover:as:2026-10-30": 1793340810216,
     "onthisday:2026-10-30": 1793351961367,
-    "564734:pre:rm": 1793479190966,
-    "564734:pre:opp": 1793479191177,
+    "564734:pre:rm": 1793483573595,
+    "564734:pre:opp": 1793483573766,
     "cover:marca:2026-10-31": 1793479193415,
     "cover:as:2026-10-31": 1793479194328,
     "onthisday:2026-10-31": 1793479194580,
@@ -5176,7 +5176,7 @@
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1793461186134,
+    "fetchedAt": 1793483573594,
     "list": [
       {
         "id": "564734",
@@ -5234,7 +5234,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793481336229,
+  "lastNewsRun": 1793483573838,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2116586103541055845",
@@ -5307,12 +5307,12 @@
     "Carlos Espí": "كارلوس إسبي",
     "Yan Diomande": "يان ديوماندي"
   },
-  "officialXRun": 1793481337528,
+  "officialXRun": 1793483574508,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
     "2016: ثلاثية رونالدو تقود ريال مدريد للفوز على ألافيس",
     "2019: ريال مدريد يكتسح ليغانيس 5-0 في البرنابيو"
   ],
-  "officialSince": "2116633184352031015"
+  "officialSince": "2116642775773098401"
 }
