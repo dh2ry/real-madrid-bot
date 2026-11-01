@@ -1,6 +1,6 @@
 // بوت ريال مدريد: أخبار + تشكيلة مصممة + مؤتمرات صحفية مترجمة ← حسابك في X
-import { DRY_RUN, loadState, saveState, saveOutput } from './lib/config.js';
-import { setPostLog } from './lib/x.js';
+import { config, DRY_RUN, loadState, saveState, saveOutput } from './lib/config.js';
+import { setPostLog, setBudget, budgetLeft } from './lib/x.js';
 import { runNews } from './lib/news.js';
 import { getFixtures } from './lib/fixtures.js';
 import { runLineup, buildLineupPost } from './lib/lineup.js';
@@ -39,12 +39,20 @@ async function main() {
   setPostLog((t) => state.tweets.push(t));
   let fixtures = [];
   await step('جدول المباريات', async () => { fixtures = await getFixtures(state); }, 2);
+  {
+    // حد النشر اليومي: لو فيه مباراة خلال 30 ساعة الجاية (أو قبل 3 ساعات) نحجز جزء من الحد لتغطيتها
+    const lim = config.xLimits || {};
+    const matchSoon = fixtures.some((f) => f.kickoff > Date.now() - 3 * 3600000 && f.kickoff < Date.now() + 30 * 3600000);
+    setBudget(state, { limit: lim.dailyLimit ?? 48, reserve: matchSoon ? (lim.matchReserve ?? 22) : 0 });
+    console.log(`🧮 حد النشر: باقي ${budgetLeft()} تغريدة (للأخبار والمحتوى العام: ${Math.max(0, budgetLeft(true))})`);
+  }
   await step('المباراة القادمة', () => runMatchInfo(state, fixtures));
   await step('التشكيلة', () => runLineup(state, fixtures));
   await step('المؤتمرات', () => runPressers(state, fixtures), 20);
-  await step('الأخبار', () => runNews(state), 10);
-  await step('الحساب الرسمي', () => runOfficialX(state));
-  await step('أغلفة الصحف', () => runCovers(state));
+  const lowOk = () => budgetLeft(true) > 0 && !((state.xBlockedUntil || 0) > Date.now());
+  if (lowOk()) await step('الأخبار', () => runNews(state), 10);
+  if (lowOk()) await step('الحساب الرسمي', () => runOfficialX(state, { fixtures }));
+  if (lowOk()) await step('أغلفة الصحف', () => runCovers(state));
   await step('أفضل لاعب', () => runMotm(state, fixtures));
   await step('الغيابات', () => runAbsences(state, fixtures));
   await step('الأرقام القياسية', () => runMilestones(state, fixtures));
@@ -58,8 +66,8 @@ async function main() {
   if (live) {
     await runLive(state, live, async () => {
       if (Date.now() < live.kickoff) await step('التشكيلة', () => runLineup(state, fixtures));
-      await step('الأخبار', () => runNews(state));
-      await step('الحساب الرسمي', () => runOfficialX(state, { liveNow: Date.now() > live.kickoff }));
+      if (lowOk()) await step('الأخبار', () => runNews(state));
+      if (lowOk()) await step('الحساب الرسمي', () => runOfficialX(state, { liveNow: Date.now() > live.kickoff, fixtures }));
       if (!DRY_RUN) saveState(state);
     });
     if (!DRY_RUN) saveState(state);

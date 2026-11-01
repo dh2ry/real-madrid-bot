@@ -202,5 +202,9 @@
     "hour": 10,
     "hoursBefore": 6,
     "waitForCommentatorHours": 4
+  },
+  "xLimits": {
+    "dailyLimit": 48,
+    "matchReserve": 22
   }
 }
