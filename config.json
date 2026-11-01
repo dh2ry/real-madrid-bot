@@ -196,5 +196,11 @@
     "enabled": true,
     "weekday": 1,
     "hour": 14
+  },
+  "matchInfo": {
+    "enabled": true,
+    "hour": 10,
+    "hoursBefore": 6,
+    "waitForCommentatorHours": 4
   }
 }

@@ -12,6 +12,7 @@ import { runMotm } from './lib/motm.js';
 import { runOfficialX } from './lib/officialx.js';
 import { runCovers } from './lib/covers.js';
 import { runOnThisDay, runStandings, runAbsences, runMilestones, runWeekly } from './lib/extras.js';
+import { runMatchInfo } from './lib/matchinfo.js';
 
 // كل قسم له وقت أقصى، عشان لو علق طلب ما يوقف البوت كله
 async function step(name, fn, minutes = 8) {
@@ -38,6 +39,7 @@ async function main() {
   setPostLog((t) => state.tweets.push(t));
   let fixtures = [];
   await step('جدول المباريات', async () => { fixtures = await getFixtures(state); }, 2);
+  await step('المباراة القادمة', () => runMatchInfo(state, fixtures));
   await step('التشكيلة', () => runLineup(state, fixtures));
   await step('المؤتمرات', () => runPressers(state, fixtures), 20);
   await step('الأخبار', () => runNews(state), 10);
