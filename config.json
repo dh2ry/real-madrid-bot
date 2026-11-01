@@ -81,7 +81,7 @@
   },
   "extraFixtures": [],
   "_extraFixtures_example": {
-    "kickoff": "2026-12-17T20:00:00Z",
+    "kickoff": "2026-12-17T23:00",
     "opponent": "Athletic Club",
     "competition": "Copa del Rey",
     "isHome": false

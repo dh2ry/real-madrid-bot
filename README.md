@@ -55,7 +55,7 @@
 
 ## الإعدادات (`config.json`)
 
-- `timezone` / `timezoneLabel`: التوقيت المكتوب على البطاقة
+- `timezone` / `timezoneLabel`: كل التوقيتات في البوت (المواعيد، البطاقات، النصوص) بتوقيت مكة المكرمة
 - `fontFile`: خط البطاقة (حالياً ثمانية Serif Display في `assets/fonts`). لتغييره حط ملف الخط في نفس المجلد وعدّل المسار
 - `crests`: الشعارات تتحمّل تلقائياً من football-data. لو تبي شعار معيّن لنادي، حط ملفه في `assets/crests` واكتب اسم النادي بالإنجليزي ومسار الملف (أو رابط صورة)، مثل:
   ```json
@@ -77,9 +77,9 @@
 - `lineup.startMinutesBefore`: متى يبدأ يدوّر على التشكيلة
 - `extraFixtures`: مباريات كأس الملك والسوبر الإسباني (مو موجودة في الخطة المجانية لـ football-data). مثال:
   ```json
-  "extraFixtures": [{ "kickoff": "2026-12-17T20:00:00Z", "opponent": "Athletic Club", "competition": "Copa del Rey", "isHome": false }]
+  "extraFixtures": [{ "kickoff": "2026-12-17T23:00", "opponent": "Athletic Club", "competition": "Copa del Rey", "isHome": false }]
   ```
-  (الوقت بتوقيت UTC، يعني توقيت مكة ناقص 3 ساعات)
+  (اكتب الوقت بتوقيت مكة المكرمة مباشرة)
 - `maxTweetsPerRun`, `maxAgeHours`, `style`, `feeds`, `keywords`: إعدادات الأخبار
 
 ## ملاحظات
