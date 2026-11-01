@@ -14,8 +14,12 @@ try {
 
 try {
   const c = new TwitterApi({ appKey: env.X_API_KEY, appSecret: env.X_API_SECRET, accessToken: env.X_ACCESS_TOKEN, accessSecret: env.X_ACCESS_SECRET });
-  const me = await c.v2.me();
-  note(true, 'X read', `OK @${me.data.username}`);
+  const me = await c.v2.me({ 'user.fields': ['protected', 'withheld', 'public_metrics', 'verified_type'] });
+  note(true, 'X read', `OK @${me.data.username} ${JSON.stringify({ protected: me.data.protected, withheld: me.data.withheld, metrics: me.data.public_metrics, verified: me.data.verified_type })}`);
+  if (env.DIAG_TIMELINE) {
+    const tl = await c.v2.userTimeline(me.data.id, { max_results: 40, 'tweet.fields': ['created_at'], exclude: ['replies'] });
+    for (const tw of tl.data?.data || []) console.log(`::notice title=${tw.created_at}::${tw.text.replace(/\s+/g, ' ').slice(0, 120)}`);
+  }
 } catch (e) { note(false, 'X read', `${e.code || ''} ${JSON.stringify(e.data || e.message)}`); }
 
 try {
