@@ -35,6 +35,8 @@ jobs:
     timeout-minutes: 330
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main # آخر نسخة (مع آخر حالة محفوظة)، مو النسخة اللي كانت وقت ما انضاف التشغيل للطابور
       - uses: actions/setup-node@v4
         with:
           node-version: 22
