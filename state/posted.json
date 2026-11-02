@@ -5932,10 +5932,10 @@
     "564734:milestones:post": 1793553469945,
     "564734:motm": 1793587010587,
     "564734:standings": 1793617294023,
-    "cover:marca:2026-11-02": 1793637894719,
-    "cover:as:2026-11-02": 1793637895783,
+    "cover:marca:2026-11-02": 1793641240721,
+    "cover:as:2026-11-02": 1793641241995,
     "onthisday:2026-11-02": 1793637896170,
-    "weekly:2026-11-02": 1793634057645
+    "weekly:2026-11-02": 1793641242393
   },
   "afIds": {},
   "fixtures": {
@@ -6003,7 +6003,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793637891089,
+  "lastNewsRun": 1793641238277,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2117250760425529399",
@@ -6162,14 +6162,14 @@
     "Celta": "سيلتا فيغو",
     "Alavés": "ألافيس"
   },
-  "officialXRun": 1793637894339,
+  "officialXRun": 1793641240391,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
     "2016: ثلاثية رونالدو تقود ريال مدريد للفوز على ألافيس",
     "2019: ريال مدريد يكتسح ليغانيس 5-0 في البرنابيو"
   ],
-  "officialSince": "2117293327536017529",
+  "officialSince": "2117309736089514019",
   "postTimes": [],
   "xBlockedUntil": 1793618696842
 }
