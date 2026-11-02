@@ -71,8 +71,8 @@
     "maxQuotes": 6,
     "retryMinutes": 60,
     "preHoursBefore": [
-      40,
-      1
+      30,
+      2
     ],
     "postHoursAfter": [
       1.75,
@@ -204,7 +204,8 @@
     "waitForCommentatorHours": 4
   },
   "xLimits": {
-    "dailyLimit": 48,
-    "matchReserve": 22
-  }
+    "dailyLimit": 300,
+    "matchReserve": 40
+  },
+  "claudeModelCheap": "claude-haiku-5-5"
 }
