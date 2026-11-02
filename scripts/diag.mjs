@@ -4,13 +4,15 @@ const env = process.env;
 const note = (ok, name, msg) => console.log(`::${ok ? 'notice' : 'error'} title=${name}::${String(msg).replace(/\s+/g, ' ').slice(0, 400)}`);
 const t = (ms) => AbortSignal.timeout(ms);
 
-try {
-  const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', signal: t(60000),
-    headers: { 'x-api-key': env.ANTHROPIC_API_KEY || '', 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({ model: 'claude-sonnet-5-5', max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] }) });
-  const b = await r.text();
-  note(r.ok, 'Claude', r.ok ? 'OK' : `${r.status} ${b}`);
-} catch (e) { note(false, 'Claude', e.message); }
+for (const model of ['claude-sonnet-5-5', 'claude-haiku-5-5']) {
+  try {
+    const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', signal: t(60000),
+      headers: { 'x-api-key': env.ANTHROPIC_API_KEY || '', 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify({ model, max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] }) });
+    const b = await r.text();
+    note(r.ok, `Claude ${model}`, r.ok ? 'OK' : `${r.status} ${b}`);
+  } catch (e) { note(false, `Claude ${model}`, e.message); }
+}
 
 try {
   const c = new TwitterApi({ appKey: env.X_API_KEY, appSecret: env.X_API_SECRET, accessToken: env.X_ACCESS_TOKEN, accessSecret: env.X_ACCESS_SECRET });
