@@ -5930,8 +5930,8 @@
     "564734:post:rm": 1793577103659,
     "564734:post:opp": 1793577119994,
     "564734:milestones:post": 1793553469945,
-    "564734:motm": 1793580447024,
-    "564734:standings": 1793580460721
+    "564734:motm": 1793584172300,
+    "564734:standings": 1793584172377
   },
   "afIds": {},
   "fixtures": {
@@ -5999,10 +5999,10 @@
       }
     ]
   },
-  "lastNewsRun": 1793561129302,
+  "lastNewsRun": 1793584171320,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2116968741581865307",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2117029268597166492",
     "(from:MarioCortegana) -is:retweet -is:reply": "2116952697421127691"
   },
   "live": {
@@ -6158,14 +6158,14 @@
     "Celta": "سيلتا فيغو",
     "Alavés": "ألافيس"
   },
-  "officialXRun": 1793561137190,
+  "officialXRun": 1793584172091,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
     "2016: ثلاثية رونالدو تقود ريال مدريد للفوز على ألافيس",
     "2019: ريال مدريد يكتسح ليغانيس 5-0 في البرنابيو"
   ],
-  "officialSince": "2116952754367180953",
+  "officialSince": "2116984560135315471",
   "postTimes": [],
-  "xBlockedUntil": 1793580719994
+  "xBlockedUntil": 1793587784499
 }
