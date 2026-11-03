@@ -6017,10 +6017,10 @@
       }
     ]
   },
-  "lastNewsRun": 1793727023104,
+  "lastNewsRun": 1793729991544,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2117635916978372696",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2117673942613721306",
     "(from:MarioCortegana) -is:retweet -is:reply": "2116952697421127691"
   },
   "live": {
@@ -6176,7 +6176,7 @@
     "Celta": "سيلتا فيغو",
     "Alavés": "ألافيس"
   },
-  "officialXRun": 1793727034935,
+  "officialXRun": 1793730000779,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6185,10 +6185,8 @@
     "1958: ريال مدريد يسحق أتلتيكو 5-0 في الديربي",
     "2018: ريال مدريد ينهي نزيف النقاط مع سولاري"
   ],
-  "officialSince": "2117659497250410547",
+  "officialSince": "2117674642374877493",
   "postTimes": [
-    1793642193430,
-    1793642214452,
     1793644662485,
     1793648094036,
     1793651031720,
