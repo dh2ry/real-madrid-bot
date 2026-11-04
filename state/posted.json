@@ -5787,7 +5787,13 @@
     "27c9bdc0c2a68a99",
     "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/actualidad/mourinho-y-un-jugador-compareceran-en-rueda-de-prensa-a-las-17-30-h-en-el-allwyn-arena-03-11-2026",
     "764e822277b38fd2",
-    "https://www.managingmadrid.com/real-madrid-cf-history/115061/aek-athens-the-club-with-real-madrid-in-their-anthem"
+    "https://www.managingmadrid.com/real-madrid-cf-history/115061/aek-athens-the-club-with-real-madrid-in-their-anthem",
+    "2e41a9128ddc1026",
+    "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/actualidad/minuto-de-silencio-antes-del-entrenamiento-03-11-2026",
+    "df473ec9c02dcc0d",
+    "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/actualidad/horarios-de-la-cuarta-jornada-de-la-champions-03-11-2026",
+    "130ba8fb31a3d0b6",
+    "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/entrenamientos/el-equipo-se-esta-entrenando-03-11-2026"
   ],
   "tweets": [
     "⚖️ ريال مدريد يطالب بتعويضات عن فشل مشروع السوبر ليغ. #ريال_مدريد المصدر: سكاي نيوز عربية",
@@ -5962,8 +5968,8 @@
     "575386:pre:rm": 1793727002977,
     "575386:pre:opp": 1793717482723,
     "575386:absences": 1793723808668,
-    "cover:marca:2026-11-04": 1793770741929,
-    "cover:as:2026-11-04": 1793770754985
+    "cover:marca:2026-11-04": 1793774555714,
+    "cover:as:2026-11-04": 1793774569121
   },
   "afIds": {},
   "fixtures": {
@@ -6031,7 +6037,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793770731203,
+  "lastNewsRun": 1793774540042,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2117773923819618587",
@@ -6190,7 +6196,7 @@
     "Celta": "سيلتا فيغو",
     "Alavés": "ألافيس"
   },
-  "officialXRun": 1793770741769,
+  "officialXRun": 1793774555540,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6201,7 +6207,6 @@
   ],
   "officialSince": "2117709814662910415",
   "postTimes": [
-    1793687658500,
     1793699482033,
     1793699482274,
     1793703065212,
