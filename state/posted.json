@@ -6134,10 +6134,10 @@
       }
     ]
   },
-  "lastNewsRun": 1793829888959,
+  "lastNewsRun": 1793832703028,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118091273815081415",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118112308199088407",
     "(from:MarioCortegana) -is:retweet -is:reply": "2117960517247492401"
   },
   "live": {
@@ -6374,7 +6374,7 @@
     "Oleksandr Zubkov": "زوبكوف",
     "Luka Jovic": "يوفيتش"
   },
-  "officialXRun": 1793829900631,
+  "officialXRun": 1793832713041,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6384,7 +6384,7 @@
     "2018: ريال مدريد ينهي نزيف النقاط مع سولاري",
     "2014: ريال مدريد يبلغ ثمن النهائي بفوزه الثاني عشر تواليًا"
   ],
-  "officialSince": "2118099911216406772",
+  "officialSince": "2118107793521586450",
   "postTimes": [
     1793779251260,
     1793782786590,
