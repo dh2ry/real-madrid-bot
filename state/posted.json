@@ -6053,16 +6053,18 @@
     "575386:pre:rm": 1793727002977,
     "575386:pre:opp": 1793717482723,
     "575386:absences": 1793723808668,
-    "cover:marca:2026-11-04": 1793813032021,
+    "cover:marca:2026-11-04": 1793821264975,
     "cover:as:2026-11-04": 1793782799520,
     "575386:matchinfo": 1793779242426,
     "onthisday:2026-11-04": 1793782818894,
     "575386:milestones:pre": 1793786440259,
-    "575386:lineup": 1793812976365
+    "575386:lineup": 1793812976365,
+    "575386:post:rm": 1793821245118,
+    "575386:post:opp": 1793821253160
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1793794142150,
+    "fetchedAt": 1793821245080,
     "list": [
       {
         "id": "564734",
@@ -6087,7 +6089,7 @@
       {
         "id": "575386",
         "kickoff": 1793814300000,
-        "status": "TIMED",
+        "status": "IN_PLAY",
         "competition": "UEFA Champions League",
         "isHome": false,
         "opponent": {
@@ -6098,8 +6100,8 @@
         "rmCrest": "https://crests.football-data.org/86.png",
         "venue": null,
         "score": {
-          "home": null,
-          "away": null
+          "home": 2,
+          "away": 3
         },
         "matchday": 4,
         "stage": "LEAGUE_STAGE"
@@ -6426,6 +6428,8 @@
     "575386:pre:opp": 2,
     "575386:absences": 1,
     "575386:matchinfo": 1,
-    "575386:milestones:pre": 1
+    "575386:milestones:pre": 1,
+    "575386:post:rm": 1,
+    "575386:post:opp": 1
   }
 }
