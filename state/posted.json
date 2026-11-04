@@ -5775,7 +5775,19 @@
     "acae47e402204edb",
     "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPclVLOG8wTi04UEJ1ZUUtbzdGV2Z5NXhyNUEzZzdkcWZtYnFFc2VHR3B4SUc5WTVrT3FCT0RIejBzd3FSUlRmMEQ2X01CTWRsa0xyMmJseG1tdFBVcXdqb0NHX2RlQXdNc3M4Y1JrRFpKNnA2UDRSY0NJZVNyRmREN2R1T2Zic3V4b2400gGYAUFVX3lxTE40UlNuT1FkT3NKUmw5c1R3RF9zcl95Y0Q4eF93dkJ3V1dvWGxsSloyVzVLWlM5WFpMa1RBTkM5bDVfWmFQVnFaYVB6cDNYeEVBbzBHcnZlWGQtaDVQXzdjaXBnVVpLQlJESDJwQVBTM2sxaDJicWxoRmVNTlcxMEdnc1d0S19lT04zaWNzRTlVMnpsQ2o0d1Rz?oc=5",
     "ba57f0b509d11e18",
-    "https://news.google.com/rss/articles/CBMiowFBVV95cUxPYUpkYkUxQ01VTU4zOEs0Sy11QWRNYWxFWEEtOW9DQWNhSndBbFkxTER4UmRheWJvMzNEenVjZHdFbkJXX0FwNXJnUFY4Wm5yR3E4cm95SHdRUE1lekhteWpXajY3VDJNU0hVcGJRbXBvWldIb3o1bE1GT0cxSVFMZXl4YW9NWG01YnhsRHY3UldOdVhxbWZncFpxVF9WaU5qS180?oc=5"
+    "https://news.google.com/rss/articles/CBMiowFBVV95cUxPYUpkYkUxQ01VTU4zOEs0Sy11QWRNYWxFWEEtOW9DQWNhSndBbFkxTER4UmRheWJvMzNEenVjZHdFbkJXX0FwNXJnUFY4Wm5yR3E4cm95SHdRUE1lekhteWpXajY3VDJNU0hVcGJRbXBvWldIb3o1bE1GT0cxSVFMZXl4YW9NWG01YnhsRHY3UldOdVhxbWZncFpxVF9WaU5qS180?oc=5",
+    "b1c83683d61c5e7b",
+    "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/previas/aek-de-atenas-real-madrid-a-prolongar-la-racha-de-victorias-en-la-champions-03-11-2026",
+    "69a71d1c0278a7e0",
+    "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/convocatorias/convocatoria-del-real-madrid-contra-el-aek-de-atenas-03-11-2026",
+    "130bdeee40bf0057",
+    "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/actualidad/viaje-atenas-03-11-2026",
+    "4377281ea8f4f298",
+    "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/actualidad/mourinho-las-palabras-y-los-sentimientos-van-todos-para-la-familia-y-los-amigos-03-11-2026",
+    "27c9bdc0c2a68a99",
+    "https://www.realmadrid.com/es-ES/noticias/futbol/primer-equipo/actualidad/mourinho-y-un-jugador-compareceran-en-rueda-de-prensa-a-las-17-30-h-en-el-allwyn-arena-03-11-2026",
+    "764e822277b38fd2",
+    "https://www.managingmadrid.com/real-madrid-cf-history/115061/aek-athens-the-club-with-real-madrid-in-their-anthem"
   ],
   "tweets": [
     "⚖️ ريال مدريد يطالب بتعويضات عن فشل مشروع السوبر ليغ. #ريال_مدريد المصدر: سكاي نيوز عربية",
@@ -5950,8 +5962,8 @@
     "575386:pre:rm": 1793727002977,
     "575386:pre:opp": 1793717482723,
     "575386:absences": 1793723808668,
-    "cover:marca:2026-11-04": 1793763910385,
-    "cover:as:2026-11-04": 1793763911318
+    "cover:marca:2026-11-04": 1793767162938,
+    "cover:as:2026-11-04": 1793767163569
   },
   "afIds": {},
   "fixtures": {
@@ -6019,7 +6031,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793763899399,
+  "lastNewsRun": 1793767146590,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2117773923819618587",
@@ -6178,7 +6190,7 @@
     "Celta": "سيلتا فيغو",
     "Alavés": "ألافيس"
   },
-  "officialXRun": 1793763910290,
+  "officialXRun": 1793767162848,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
