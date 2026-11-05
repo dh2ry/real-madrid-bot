@@ -6070,32 +6070,12 @@
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1793821245080,
+    "fetchedAt": 1793843004152,
     "list": [
-      {
-        "id": "564734",
-        "kickoff": 1793546100000,
-        "status": "FINISHED",
-        "competition": "Primera Division",
-        "isHome": false,
-        "opponent": {
-          "name": "Santander",
-          "fullName": "Real Racing Club de Santander",
-          "crest": "https://crests.football-data.org/5335.png"
-        },
-        "rmCrest": "https://crests.football-data.org/86.png",
-        "venue": null,
-        "score": {
-          "home": 0,
-          "away": 3
-        },
-        "matchday": 11,
-        "stage": "REGULAR_SEASON"
-      },
       {
         "id": "575386",
         "kickoff": 1793814300000,
-        "status": "IN_PLAY",
+        "status": "FINISHED",
         "competition": "UEFA Champions League",
         "isHome": false,
         "opponent": {
@@ -6134,7 +6114,7 @@
       }
     ]
   },
-  "lastNewsRun": 1793838158603,
+  "lastNewsRun": 1793843004193,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118112308199088407",
@@ -6374,7 +6354,7 @@
     "Oleksandr Zubkov": "زوبكوف",
     "Luka Jovic": "يوفيتش"
   },
-  "officialXRun": 1793838169040,
+  "officialXRun": 1793843015650,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
