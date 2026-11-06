@@ -6132,10 +6132,10 @@
       }
     ]
   },
-  "lastNewsRun": 1794006159741,
+  "lastNewsRun": 1794008537348,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118841461894693177",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118841966196851114",
     "(from:MarioCortegana) -is:retweet -is:reply": "2118648685638647904"
   },
   "live": {
@@ -6372,7 +6372,7 @@
     "Oleksandr Zubkov": "زوبكوف",
     "Luka Jovic": "يوفيتش"
   },
-  "officialXRun": 1794006168897,
+  "officialXRun": 1794008547639,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
