@@ -6017,7 +6017,8 @@
     "cover:as:2026-11-05": 1793865682424,
     "onthisday:2026-11-05": 1793869471000,
     "cover:as:2026-11-06": 1793943502020,
-    "cover:marca:2026-11-06": 1793947331936
+    "cover:marca:2026-11-06": 1793947331936,
+    "onthisday:2026-11-06": 1793962566684
   },
   "attempts": {
     "564723:pre:rm": 1792946076988,
@@ -6077,7 +6078,7 @@
     "onthisday:2026-11-05": 1793869457676,
     "cover:marca:2026-11-06": 1793947272004,
     "cover:as:2026-11-06": 1793943485809,
-    "onthisday:2026-11-06": 1793958910405
+    "onthisday:2026-11-06": 1793962545054
   },
   "afIds": {},
   "fixtures": {
@@ -6125,11 +6126,11 @@
       }
     ]
   },
-  "lastNewsRun": 1793958900948,
+  "lastNewsRun": 1793962534765,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118528193619493258",
-    "(from:MarioCortegana) -is:retweet -is:reply": "2117960517247492401"
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118648937435283870",
+    "(from:MarioCortegana) -is:retweet -is:reply": "2118648685638647904"
   },
   "live": {
     "564723": {
@@ -6365,7 +6366,7 @@
     "Oleksandr Zubkov": "زوبكوف",
     "Luka Jovic": "يوفيتش"
   },
-  "officialXRun": 1793958910314,
+  "officialXRun": 1793962544916,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6376,7 +6377,7 @@
     "2014: ريال مدريد يبلغ ثمن النهائي بفوزه الثاني عشر تواليًا",
     "1975: ريمونتادا تاريخية على ديربي كاونتي في البرنابيو"
   ],
-  "officialSince": "2118451829034111428",
+  "officialSince": "2118653405845762126",
   "postTimes": [
     1793889476367,
     1793913426127,
