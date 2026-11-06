@@ -5876,7 +5876,6 @@
     "https://news.google.com/rss/articles/CBMitgFBVV95cUxNYjY1Y05HbTh2bnRKV3NvdFZqVkdab3BaeU9US3psdnQwd09WQThzTURrcVRhaWtrUnVvY3pHUnl5b2xybVU2WjNVMUtBUS13SS1EUmFHQ0taVlZKTUs0WGRhS2FqLVZMakI4TFZLYVRfSXFybk8xb00xS3Z3Mjh2WXVMY0Y4cG15TUp5dTVmSjJCOURoSkdDbGowMUhIbWtBcHRLa3NCNTZOblJTOE0xRnhpTDhJdw?oc=5"
   ],
   "tweets": [
-    "🏛️ ريال مدريد: ⏱️ الدقيقة 10 | 0-0 | ركلة جزاء لريال مدريد. #ريال_مدريد",
     "🏛️ ريال مدريد: ⚽ الدقيقة 11 | 0-1 | هدددف! مبابي يسجل من نقطة ركلة الجزاء!!! #ريال_مدريد",
     "🏛️ ريال مدريد: 🩷 هيا يا فريق! 🩷 #ريال_مدريد",
     "🏛️ ريال مدريد: ⚽ الدقيقة 22 | 0-2 | هدددف! بيلينغهام يسجل!!! #ريال_مدريد",
@@ -5975,7 +5974,8 @@
     "🎙️ أبرز تصريحات جوزيه مورينيو مدرب ريال مدريد قبل مواجهة فالنسيا #ريال_مدريد",
     "🎙️ أبرز تصريحات خافيير أغيري مدرب فالنسيا قبل مواجهة ريال مدريد #ريال_مدريد",
     "🏛️ ريال مدريد: 📌 مباراة ريال مدريد وألافيس ستُلعب يوم السبت 28 نوفمبر الساعة 23:00 بتوقيت مكة المكرمة #ريال_مدريد",
-    "🩺 غيابات ريال مدريد أمام فالنسيا فينيسيوس جونيور، رودريغو، راؤول أسينسيو، فيرلان مندي #ريال_مدريد"
+    "🩺 غيابات ريال مدريد أمام فالنسيا فينيسيوس جونيور، رودريغو، راؤول أسينسيو، فيرلان مندي #ريال_مدريد",
+    "🏛️ ريال مدريد: 🔛 آخر حصة تدريبية قبل مواجهة فالنسيا #ريال_مدريد"
   ],
   "done": {
     "564723:pre:rm": 1792946102681,
@@ -6132,10 +6132,10 @@
       }
     ]
   },
-  "lastNewsRun": 1793989114977,
+  "lastNewsRun": 1793992798277,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118754879363531231",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118772827126149347",
     "(from:MarioCortegana) -is:retweet -is:reply": "2118648685638647904"
   },
   "live": {
@@ -6372,7 +6372,7 @@
     "Oleksandr Zubkov": "زوبكوف",
     "Luka Jovic": "يوفيتش"
   },
-  "officialXRun": 1793989124319,
+  "officialXRun": 1793992808151,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6383,7 +6383,7 @@
     "2014: ريال مدريد يبلغ ثمن النهائي بفوزه الثاني عشر تواليًا",
     "1975: ريمونتادا تاريخية على ديربي كاونتي في البرنابيو"
   ],
-  "officialSince": "2118758124207415530",
+  "officialSince": "2118772908919074819",
   "postTimes": [
     1793913426127,
     1793943502020,
@@ -6395,7 +6395,8 @@
     1793976687421,
     1793976708107,
     1793986145422,
-    1793989143927
+    1793989143927,
+    1793992810404
   ],
   "xBlockedUntil": 1793618696842,
   "tries": {
