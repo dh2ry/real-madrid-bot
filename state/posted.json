@@ -6085,12 +6085,12 @@
     "564741:pre:rm": 1793976662786,
     "564741:pre:opp": 1793976687422,
     "564741:absences": 1793989127056,
-    "cover:marca:2026-11-07": 1794024786701,
-    "cover:as:2026-11-07": 1794024787492
+    "cover:marca:2026-11-07": 1794028207613,
+    "cover:as:2026-11-07": 1794028208997
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1794006159470,
+    "fetchedAt": 1794028197781,
     "list": [
       {
         "id": "575386",
@@ -6131,10 +6131,30 @@
         },
         "matchday": 12,
         "stage": "REGULAR_SEASON"
+      },
+      {
+        "id": "564754",
+        "kickoff": 1795291200000,
+        "status": "TIMED",
+        "competition": "Primera Division",
+        "isHome": true,
+        "opponent": {
+          "name": "Celta",
+          "fullName": "RC Celta de Vigo",
+          "crest": "https://crests.football-data.org/558.png"
+        },
+        "rmCrest": "https://crests.football-data.org/86.png",
+        "venue": null,
+        "score": {
+          "home": null,
+          "away": null
+        },
+        "matchday": 13,
+        "stage": "REGULAR_SEASON"
       }
     ]
   },
-  "lastNewsRun": 1794024775710,
+  "lastNewsRun": 1794028197796,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118841966196851114",
@@ -6374,7 +6394,7 @@
     "Oleksandr Zubkov": "زوبكوف",
     "Luka Jovic": "يوفيتش"
   },
-  "officialXRun": 1794024786536,
+  "officialXRun": 1794028207472,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
