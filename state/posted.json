@@ -6300,10 +6300,10 @@
       }
     ]
   },
-  "lastNewsRun": 1794093573893,
+  "lastNewsRun": 1794095662451,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2119204049425748402",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2119212067030770050",
     "(from:MarioCortegana) -is:retweet -is:reply": "2118648685638647904"
   },
   "live": {
@@ -6625,7 +6625,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794093582486,
+  "officialXRun": 1794095672779,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6637,7 +6637,7 @@
     "1975: ريمونتادا تاريخية على ديربي كاونتي في البرنابيو",
     "2010: مورينيو يفتتح ديرباته بفوز على أتلتيكو"
   ],
-  "officialSince": "2119194730860867835",
+  "officialSince": "2119216895165386925",
   "postTimes": [
     1794031033303,
     1794037543900,
