@@ -6094,7 +6094,8 @@
     "cover:as:2026-11-07": 1794031011160,
     "564741:matchinfo": 1794037537082,
     "onthisday:2026-11-07": 1794043546612,
-    "564741:milestones:pre": 1794053915950
+    "564741:milestones:pre": 1794053915950,
+    "564741:lineup": 1794077255842
   },
   "afIds": {},
   "fixtures": {
@@ -6162,10 +6163,10 @@
       }
     ]
   },
-  "lastNewsRun": 1794074500734,
+  "lastNewsRun": 1794077255843,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2119040236730671143",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2119139016838656266",
     "(from:MarioCortegana) -is:retweet -is:reply": "2118648685638647904"
   },
   "live": {
@@ -6402,7 +6403,7 @@
     "Oleksandr Zubkov": "زوبكوف",
     "Luka Jovic": "يوفيتش"
   },
-  "officialXRun": 1794074510044,
+  "officialXRun": 1794077266305,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6414,9 +6415,8 @@
     "1975: ريمونتادا تاريخية على ديربي كاونتي في البرنابيو",
     "2010: مورينيو يفتتح ديرباته بفوز على أتلتيكو"
   ],
-  "officialSince": "2119097549604692410",
+  "officialSince": "2119137930622930991",
   "postTimes": [
-    1793989143927,
     1793992810404,
     1794031033303,
     1794037543900,
