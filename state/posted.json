@@ -6087,7 +6087,7 @@
     "564741:pre:rm": 1793976662786,
     "564741:pre:opp": 1793976687422,
     "564741:absences": 1793989127056,
-    "cover:marca:2026-11-07": 1794037554072,
+    "cover:marca:2026-11-07": 1794040437843,
     "cover:as:2026-11-07": 1794031011160,
     "564741:matchinfo": 1794037537082
   },
@@ -6157,7 +6157,7 @@
       }
     ]
   },
-  "lastNewsRun": 1794037543901,
+  "lastNewsRun": 1794040423865,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2118841966196851114",
@@ -6397,7 +6397,7 @@
     "Oleksandr Zubkov": "زوبكوف",
     "Luka Jovic": "يوفيتش"
   },
-  "officialXRun": 1794037553874,
+  "officialXRun": 1794040435100,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6408,7 +6408,7 @@
     "2014: ريال مدريد يبلغ ثمن النهائي بفوزه الثاني عشر تواليًا",
     "1975: ريمونتادا تاريخية على ديربي كاونتي في البرنابيو"
   ],
-  "officialSince": "2118810658657427892",
+  "officialSince": "2118981120687579418",
   "postTimes": [
     1793965584649,
     1793965584844,
