@@ -6236,32 +6236,12 @@
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1794074500709,
+    "fetchedAt": 1794098831194,
     "list": [
-      {
-        "id": "575386",
-        "kickoff": 1793814300000,
-        "status": "FINISHED",
-        "competition": "UEFA Champions League",
-        "isHome": false,
-        "opponent": {
-          "name": "PAE AEK",
-          "fullName": "PAE AEK",
-          "crest": "https://crests.football-data.org/1899.png"
-        },
-        "rmCrest": "https://crests.football-data.org/86.png",
-        "venue": null,
-        "score": {
-          "home": 2,
-          "away": 3
-        },
-        "matchday": 4,
-        "stage": "LEAGUE_STAGE"
-      },
       {
         "id": "564741",
         "kickoff": 1794081600000,
-        "status": "TIMED",
+        "status": "FINISHED",
         "competition": "Primera Division",
         "isHome": false,
         "opponent": {
@@ -6272,8 +6252,8 @@
         "rmCrest": "https://crests.football-data.org/86.png",
         "venue": null,
         "score": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 3
         },
         "matchday": 12,
         "stage": "REGULAR_SEASON"
@@ -6300,7 +6280,7 @@
       }
     ]
   },
-  "lastNewsRun": 1794095662451,
+  "lastNewsRun": 1794098831576,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2119212067030770050",
@@ -6625,7 +6605,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794095672779,
+  "officialXRun": 1794098843253,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6637,7 +6617,7 @@
     "1975: ريمونتادا تاريخية على ديربي كاونتي في البرنابيو",
     "2010: مورينيو يفتتح ديرباته بفوز على أتلتيكو"
   ],
-  "officialSince": "2119216895165386925",
+  "officialSince": "2119219592232870138",
   "postTimes": [
     1794031033303,
     1794037543900,
