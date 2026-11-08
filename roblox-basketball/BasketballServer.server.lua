@@ -1,12 +1,13 @@
 --==================================================================
--- 🏀 ملعب كرة السلة 1 ضد 1 + متجر — سكربت السيرفر
+-- 🏀 ملعب كرة السلة (1 ضد 1 أو 2 ضد 2) + متجر — سكربت السيرفر
 -- المكان: ServerScriptService  (نوعه Script عادي)
 --
 -- هذا السكربت يبني الماب كامل عند تشغيل اللعبة:
 --   • ملعب سلة بالخطوط والسلتين والمدرجات والإضاءة ولوحات النتيجة
---   • منطقة انتظار فيها مربعين (أحمر وأزرق) للانضمام للمباراة
+--   • منطقة انتظار فيها 4 مربعات (2 للفريق الأحمر و 2 للأزرق)
 --   • متجر لبيع الكرات والقمصان
--- ويشغّل نظام المباراة: لاعبين، وقت محدد، ومن يسجل نقاط أكثر يفوز.
+--   • لوحة أفضل اللاعبين (أكثر فوز)
+-- ويشغّل نظام المباراة: وقت محدد، ومن يسجّل نقاط أكثر يفوز.
 --==================================================================
 
 local Players = game:GetService("Players")
@@ -20,25 +21,41 @@ local DataStoreService = game:GetService("DataStoreService")
 local CONFIG = {
 	MATCH_TIME = 120,        -- مدة المباراة بالثواني
 	OVERTIME_TIME = 30,      -- وقت "السلة الذهبية" عند التعادل
-	COUNTDOWN = 5,           -- العد التنازلي قبل البداية
+	COUNTDOWN = 8,           -- العد التنازلي قبل البداية (يقدر لاعبين إضافيين ينضمون خلاله لـ 2 ضد 2)
 	RESULTS_TIME = 6,        -- مدة عرض النتيجة بعد النهاية
 	SHOT_CLOCK = 12,         -- أقصى وقت تمسك فيه الكرة بدون رمي
 
 	START_COINS = 100,       -- عملات اللاعب الجديد
-	COINS_PER_BASKET = 2,    -- عملات لكل سلة
-	COINS_WIN = 50,          -- عملات الفوز
+	COINS_PER_BASKET = 2,    -- عملات لكل سلة (للي سجّل)
+	COINS_WIN = 50,          -- عملات الفوز (لكل لاعب في الفريق الفائز)
 	COINS_LOSS = 15,         -- عملات المشاركة للخاسر
 	COINS_DRAW = 25,         -- عملات التعادل
 
 	STEAL_CHANCE = 0.4,      -- نسبة نجاح السرقة
 	STEAL_RANGE = 7,         -- أقصى مسافة للسرقة
 	STEAL_COOLDOWN = 1.5,    -- الانتظار بين محاولات السرقة
+	PASS_RANGE = 60,         -- أقصى مسافة للتمرير
 
 	BALL_GRAVITY = 80,       -- جاذبية الكرة (أقل = قوس أعلى وأبطأ)
 	PERFECT_POWER = 0.85,    -- منتصف المنطقة الخضراء في عداد القوة
 	PERFECT_WINDOW = 0.06,   -- نصف عرض المنطقة الخضراء
 
+	LEADERBOARD_REFRESH = 60, -- تحديث لوحة أفضل اللاعبين (ثواني)
 	DATASTORE_NAME = "Basketball1v1_v1",
+}
+
+------------------------------------------------------------------
+-- 🔊 الأصوات
+-- الأصوات الافتراضية مدمجة في روبلوكس وتشتغل بدون رفع.
+-- تقدر تبدلها بأصوات من Creator Store: حط "rbxassetid://الرقم".
+-- اترك Id = "" عشان تلغي الصوت.
+------------------------------------------------------------------
+local SOUNDS = {
+	Swish = { Id = "rbxasset://sounds/swoosh.wav", Volume = 1, Speed = 1.1 },          -- دخول السلة
+	Bounce = { Id = "rbxasset://sounds/action_jump_land.mp3", Volume = 0.7, Speed = 1.5 }, -- نطة الكرة
+	Rim = { Id = "rbxasset://sounds/action_jump_land.mp3", Volume = 0.8, Speed = 2.4 },    -- ضربة الحلقة
+	Steal = { Id = "rbxasset://sounds/swoosh.wav", Volume = 0.8, Speed = 1.7 },          -- سرقة ناجحة
+	Cheer = { Id = "", Volume = 0.7, Speed = 1 },                                        -- تشجيع الجمهور (حط رقم صوت من Creator Store)
 }
 
 ------------------------------------------------------------------
@@ -101,9 +118,12 @@ local THREE_R = 21.5                 -- نصف قطر خط الثلاث نقاط
 local THREE_CORNER_Z = 20
 
 local LOBBY_CF = CFrame.lookAt(Vector3.new(-78, 4, 0), Vector3.new(0, 4, 0))
-local SLOT_SPAWN = {
-	[1] = CFrame.lookAt(Vector3.new(-14, 4, 0), Vector3.new(0, 4, 0)),
-	[2] = CFrame.lookAt(Vector3.new(14, 4, 0), Vector3.new(0, 4, 0)),
+local function spawnCF(x, z)
+	return CFrame.lookAt(Vector3.new(x, 4, z), Vector3.new(0, 4, z))
+end
+local TEAM_SPAWN = {
+	[1] = { spawnCF(-14, -4), spawnCF(-14, 4) },
+	[2] = { spawnCF(14, -4), spawnCF(14, 4) },
 }
 
 local COLORS = {
@@ -119,6 +139,8 @@ local COLORS = {
 	Concrete = Color3.fromRGB(150, 150, 155),
 	Green = Color3.fromRGB(70, 200, 90),
 }
+local TEAM_NAME = { [1] = "🔴 الأحمر", [2] = "🔵 الأزرق" }
+local TEAM_COLOR = { [1] = COLORS.Red, [2] = COLORS.Blue }
 
 ------------------------------------------------------------------
 -- 📡 الريموتات (للتواصل مع سكربت اللاعب)
@@ -141,6 +163,7 @@ local function newRemote(className, name)
 end
 
 local ShootEvent = newRemote("RemoteEvent", "Shoot")
+local PassEvent = newRemote("RemoteEvent", "Pass")
 local StealEvent = newRemote("RemoteEvent", "Steal")
 local NotifyEvent = newRemote("RemoteEvent", "Notify")
 local OpenShopEvent = newRemote("RemoteEvent", "OpenShop")
@@ -234,6 +257,26 @@ local function addBillboard(part, text, color, offsetY, size, maxDistance)
 	return label
 end
 
+local function makeSound(parent, def, name)
+	if not def or def.Id == "" then
+		return nil
+	end
+	local s = Instance.new("Sound")
+	s.Name = name or "Sound"
+	s.SoundId = def.Id
+	s.Volume = def.Volume or 1
+	s.PlaybackSpeed = def.Speed or 1
+	s.RollOffMaxDistance = 200
+	s.Parent = parent
+	return s
+end
+
+local function playSound(sound)
+	if sound then
+		sound:Play()
+	end
+end
+
 ------------------------------------------------------------------
 -- 🎨 مظهر الكرة (يُستخدم للكرة الحقيقية ولكرات العرض في المتجر)
 ------------------------------------------------------------------
@@ -310,7 +353,7 @@ newPart({ Name = "CenterCircle", Shape = Enum.PartType.Cylinder, Size = Vector3.
 courtArc(Vector3.new(0, 0, 0), 6, 0, math.pi * 2, 32)
 local centerText = newPart({ Name = "CenterText", Size = Vector3.new(9, 0.05, 4), Position = Vector3.new(0, FLOOR_Y + 0.05, 0),
 	Transparency = 1, CanCollide = false, CanQuery = false, CanTouch = false, Parent = linesFolder })
-addSurfaceText(centerText, Enum.NormalId.Top, "1 ضد 1", COLORS.Gold, 30)
+addSurfaceText(centerText, Enum.NormalId.Top, "🏀", COLORS.Gold, 30)
 
 -- منطقة الرسم وخط الرمية الحرة وخط الثلاث نقاط (لكل جهة)
 local cornerX = math.sqrt(THREE_R ^ 2 - THREE_CORNER_Z ^ 2)
@@ -364,6 +407,11 @@ local function buildHoop(s)
 			CanCollide = false, CanQuery = false, CanTouch = false, CastShadow = false, Parent = folder })
 	end
 
+	-- نقطة غير مرئية في مركز الحلقة (مصدر صوت السلة)
+	local rimCenter = newPart({ Name = "RimCenter", Size = Vector3.new(0.2, 0.2, 0.2), Position = center,
+		Transparency = 1, CanCollide = false, CanQuery = false, CanTouch = false, Parent = folder })
+	local swish = makeSound(rimCenter, SOUNDS.Swish, "Swish")
+
 	-- اللوحة الخلفية
 	local boardX = s * (HOOP_X + RIM_R + 0.35)
 	newPart({ Name = "Backboard", Size = Vector3.new(0.3, 4.2, 7), Position = Vector3.new(boardX, RIM_Y + 1.6, 0),
@@ -390,14 +438,14 @@ local function buildHoop(s)
 	newPart({ Name = "PolePad", Size = Vector3.new(2, 5, 2), Position = Vector3.new(s * 48.7, 2.5, 0),
 		Color = COLORS.Purple, Parent = folder })
 
-	return { Side = s, Center = center, Ring = ring }
+	return { Side = s, Center = center, Ring = ring, Swish = swish }
 end
 
-hoops[1] = buildHoop(1)    -- يهاجمها اللاعب 1 (الأحمر)
-hoops[-1] = buildHoop(-1)  -- يهاجمها اللاعب 2 (الأزرق)
+hoops[1] = buildHoop(1)    -- يهاجمها الفريق 1 (الأحمر)
+hoops[-1] = buildHoop(-1)  -- يهاجمها الفريق 2 (الأزرق)
 
-local function hoopForSlot(i)
-	return hoops[i == 1 and 1 or -1]
+local function hoopForTeam(t)
+	return hoops[t == 1 and 1 or -1]
 end
 
 local function flashHoop(hoop)
@@ -411,6 +459,11 @@ local function flashHoop(hoop)
 			seg.Material = Enum.Material.Metal
 		end
 	end)
+end
+
+local cheerSound = makeSound(workspace, SOUNDS.Cheer, "CrowdCheer")
+if cheerSound then
+	cheerSound.Parent = arena
 end
 
 ------------------------------------------------------------------
@@ -496,24 +549,73 @@ newPart({ ClassName = "SpawnLocation", Name = "SpawnLocation", Size = Vector3.ne
 	CFrame = CFrame.lookAt(spawnPos, spawnPos + Vector3.new(1, 0, 0)), Color = COLORS.Gold,
 	Neutral = true, Duration = 0, Parent = workspace })
 
+-- 4 مربعات: 2 للأحمر و 2 للأزرق
+local PAD_DEFS = {
+	{ Team = 1, Z = -14 },
+	{ Team = 1, Z = -6.5 },
+	{ Team = 2, Z = 6.5 },
+	{ Team = 2, Z = 14 },
+}
 local pads = {}
 local padLabels = {}
-for i, z in ipairs({ -8, 8 }) do
-	local pad = newPart({ Name = "JoinPad" .. i, Size = Vector3.new(7, 0.5, 7), Position = Vector3.new(-60, 0.45, z),
-		Color = (i == 1) and COLORS.Red or COLORS.Blue, Material = Enum.Material.Neon, Parent = lobbyFolder })
+for i, def in ipairs(PAD_DEFS) do
+	local pad = newPart({ Name = "JoinPad" .. i, Size = Vector3.new(6, 0.5, 6), Position = Vector3.new(-60, 0.45, def.Z),
+		Color = TEAM_COLOR[def.Team], Material = Enum.Material.Neon, Parent = lobbyFolder })
 	pads[i] = pad
-	padLabels[i] = addBillboard(pad, "", COLORS.White, 4, UDim2.fromOffset(260, 70), 90)
+	padLabels[i] = addBillboard(pad, "", COLORS.White, 4, UDim2.fromOffset(220, 64), 90)
 end
 
 local infoPos = Vector3.new(-66, 7.5, 0)
 local infoSign = newPart({ Name = "InfoSign", Size = Vector3.new(12, 5, 0.5),
 	CFrame = CFrame.lookAt(infoPos, infoPos + Vector3.new(-1, 0, 0)), Color = COLORS.Navy, Parent = lobbyFolder })
 addSurfaceText(infoSign, Enum.NormalId.Front,
-	string.format("🏀 مباراة 1 ضد 1\nقف على المربع الأحمر أو الأزرق\nمن يسجّل أكثر خلال %d ثانية يفوز!", CONFIG.MATCH_TIME),
+	string.format("🏀 1 ضد 1 أو 2 ضد 2\nقف على مربع أحمر أو أزرق\nمن يسجّل أكثر خلال %d ثانية يفوز!", CONFIG.MATCH_TIME),
 	COLORS.White, 30)
 for _, z in ipairs({ -5.5, 5.5 }) do
 	newPart({ Name = "SignPost", Size = Vector3.new(0.5, 10, 0.5), Position = Vector3.new(-66, 5, z),
 		Color = COLORS.Dark, Parent = lobbyFolder })
+end
+
+------------------------------------------------------------------
+-- 🏆 لوحة أفضل اللاعبين
+------------------------------------------------------------------
+local LB_ROWS = 10
+local lbPos = Vector3.new(-74, 8, -36)
+local lbBoard = newPart({ Name = "Leaderboard", Size = Vector3.new(16, 12, 0.6),
+	CFrame = CFrame.lookAt(lbPos, lbPos + Vector3.new(0, 0, 1)), Color = COLORS.Navy, Parent = lobbyFolder })
+for _, x in ipairs({ -80, -68 }) do
+	newPart({ Name = "LeaderboardPost", Size = Vector3.new(0.6, 8, 0.6), Position = Vector3.new(x, 4, -36),
+		Color = COLORS.Dark, Parent = lobbyFolder })
+end
+local lbRows = {}
+do
+	local sg = Instance.new("SurfaceGui")
+	sg.Face = Enum.NormalId.Front
+	sg.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	sg.PixelsPerStud = 30
+	sg.LightInfluence = 0
+	sg.Parent = lbBoard
+	local title = Instance.new("TextLabel")
+	title.Size = UDim2.fromScale(1, 0.14)
+	title.BackgroundTransparency = 1
+	title.TextScaled = true
+	title.Font = Enum.Font.GothamBlack
+	title.TextColor3 = COLORS.Gold
+	title.Text = "🏆 أفضل اللاعبين (عدد الفوز)"
+	title.Parent = sg
+	for i = 1, LB_ROWS do
+		local row = Instance.new("TextLabel")
+		row.Position = UDim2.fromScale(0.05, 0.15 + (i - 1) * 0.084)
+		row.Size = UDim2.fromScale(0.9, 0.078)
+		row.BackgroundColor3 = (i % 2 == 0) and Color3.fromRGB(30, 40, 90) or Color3.fromRGB(25, 35, 80)
+		row.BorderSizePixel = 0
+		row.TextScaled = true
+		row.Font = Enum.Font.GothamBold
+		row.TextColor3 = (i == 1 and COLORS.Gold) or (i <= 3 and COLORS.White) or Color3.fromRGB(190, 190, 210)
+		row.Text = ""
+		row.Parent = sg
+		lbRows[i] = row
+	end
 end
 
 ------------------------------------------------------------------
@@ -582,9 +684,10 @@ end
 ------------------------------------------------------------------
 -- 💾 بيانات اللاعبين (عملات، فوز، المشتريات)
 ------------------------------------------------------------------
-local store
+local store, winsStore
 pcall(function()
 	store = DataStoreService:GetDataStore(CONFIG.DATASTORE_NAME)
+	winsStore = DataStoreService:GetOrderedDataStore(CONFIG.DATASTORE_NAME .. "_Wins")
 end)
 
 local profiles = {}
@@ -619,6 +722,16 @@ local function addCoins(plr, amount)
 	updateLeaderstats(plr)
 end
 
+local function saveWins(plr)
+	local prof = profiles[plr]
+	if not winsStore or not prof then
+		return
+	end
+	pcall(function()
+		winsStore:SetAsync(tostring(plr.UserId), prof.Wins)
+	end)
+end
+
 local function saveProfile(plr)
 	local prof = profiles[plr]
 	if not store or not prof then
@@ -630,6 +743,7 @@ local function saveProfile(plr)
 	if not ok then
 		warn("[Basketball] فشل حفظ بيانات " .. plr.Name .. ": " .. tostring(err))
 	end
+	saveWins(plr)
 end
 
 local function loadProfile(plr)
@@ -659,6 +773,64 @@ local function waitForProfile(plr)
 	end
 	return profiles[plr]
 end
+
+-- تحديث لوحة أفضل اللاعبين
+local nameCache = {}
+local function nameFromUserId(userId)
+	if nameCache[userId] then
+		return nameCache[userId]
+	end
+	local plr = Players:GetPlayerByUserId(userId)
+	if plr then
+		nameCache[userId] = plr.DisplayName
+		return plr.DisplayName
+	end
+	local ok, name = pcall(function()
+		return Players:GetNameFromUserIdAsync(userId)
+	end)
+	nameCache[userId] = ok and name or ("#" .. userId)
+	return nameCache[userId]
+end
+
+local function refreshLeaderboard()
+	local entries = {}
+	local ok = false
+	if winsStore then
+		ok = pcall(function()
+			local pages = winsStore:GetSortedAsync(false, LB_ROWS)
+			for _, entry in ipairs(pages:GetCurrentPage()) do
+				local userId = tonumber(entry.key)
+				if userId and entry.value > 0 then
+					table.insert(entries, { Name = nameFromUserId(userId), Wins = entry.value })
+				end
+			end
+		end)
+	end
+	if not ok then
+		-- بدون DataStore (مثلاً في Studio بدون API): نعرض لاعبين السيرفر الحالي
+		entries = {}
+		for plr, prof in pairs(profiles) do
+			if prof.Wins > 0 then
+				table.insert(entries, { Name = plr.DisplayName, Wins = prof.Wins })
+			end
+		end
+		table.sort(entries, function(a, b)
+			return a.Wins > b.Wins
+		end)
+	end
+	local medals = { "🥇", "🥈", "🥉" }
+	for i = 1, LB_ROWS do
+		local e = entries[i]
+		lbRows[i].Text = e and string.format("%s %d. %s — %d فوز", medals[i] or "", i, e.Name, e.Wins) or (i .. ". —")
+	end
+end
+
+task.spawn(function()
+	while true do
+		refreshLeaderboard()
+		task.wait(CONFIG.LEADERBOARD_REFRESH)
+	end
+end)
 
 ------------------------------------------------------------------
 -- 👕 تطبيق القميص على الشخصية
@@ -741,6 +913,10 @@ ball:SetAttribute("ShotDeadline", 0)
 ball.Parent = workspace
 applyBallSkin(ball, "classic")
 
+local bounceSound = makeSound(ball, SOUNDS.Bounce, "Bounce")
+local rimSound = makeSound(ball, SOUNDS.Rim, "RimHit")
+local stealSound = makeSound(ball, SOUNDS.Steal, "Steal")
+
 -- قوة ترفع الكرة جزئياً عشان يكون قوس الرمية جميل (جاذبية أخف للكرة فقط)
 local ballAttachment = Instance.new("Attachment")
 ballAttachment.Parent = ball
@@ -759,6 +935,7 @@ local ballState = {
 	LastShot = nil,
 	LastToucher = nil,
 	LooseSince = os.clock(),
+	LastBounce = 0,
 	NoPickup = {},
 	StealCooldown = {},
 	PrevPos = ball.Position,
@@ -795,24 +972,76 @@ local function resetBallCenter()
 	ball.AssemblyAngularVelocity = Vector3.zero
 end
 
-local Match -- (معرّف تحت)
+------------------------------------------------------------------
+-- 👥 الفرق
+------------------------------------------------------------------
+local Match = {
+	State = "Waiting",
+	Pads = {},              -- Pads[i] = اللاعب الواقف على المربع i (قبل المباراة)
+	Teams = { {}, {} },     -- لاعبين كل فريق (وقت المباراة)
+	Scores = { 0, 0 },
+	TimeLeft = CONFIG.MATCH_TIME,
+	Message = "",
+}
 
 local function isMatchLive()
 	return Match.State == "Playing" or Match.State == "Overtime"
 end
 
-local function slotIndex(plr)
+local function teamOf(plr)
 	if not plr then
 		return nil
 	end
-	if Match.Slots[1] == plr then
-		return 1
-	elseif Match.Slots[2] == plr then
-		return 2
+	for t = 1, 2 do
+		for _, p in ipairs(Match.Teams[t]) do
+			if p == plr then
+				return t
+			end
+		end
 	end
 	return nil
 end
 
+local function presentMembers(t)
+	local list = {}
+	for _, p in ipairs(Match.Teams[t]) do
+		if p.Parent then
+			table.insert(list, p)
+		end
+	end
+	return list
+end
+
+local function randomMember(t)
+	local list = presentMembers(t)
+	if #list == 0 then
+		return nil
+	end
+	return list[math.random(1, #list)]
+end
+
+local function padIndexOf(plr)
+	for i = 1, #pads do
+		if Match.Pads[i] == plr then
+			return i
+		end
+	end
+	return nil
+end
+
+local function padPlayers(t)
+	local list = {}
+	for i, def in ipairs(PAD_DEFS) do
+		if def.Team == t and Match.Pads[i] then
+			table.insert(list, Match.Pads[i])
+		end
+	end
+	return list
+end
+
+------------------------------------------------------------------
+-- ✋ مسك الكرة
+------------------------------------------------------------------
 local function giveBall(plr)
 	local char = plr and plr.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart")
@@ -844,12 +1073,22 @@ local function giveBall(plr)
 	applyBallSkin(ball, prof and prof.EquippedBall or "classic")
 end
 
+local function giveBallToTeam(t)
+	local p = randomMember(t)
+	if p then
+		giveBall(p)
+	else
+		resetBallCenter()
+	end
+	return p
+end
+
 local function canTouchBall(plr)
 	if Match.State == "Waiting" then
 		return true
 	end
 	if isMatchLive() then
-		return slotIndex(plr) ~= nil
+		return teamOf(plr) ~= nil
 	end
 	return false
 end
@@ -868,11 +1107,19 @@ local function playerFromHit(hit)
 end
 
 ball.Touched:Connect(function(hit)
-	if ballState.Holder or ballState.Locked then
+	if ballState.Holder then
 		return
 	end
 	local plr = playerFromHit(hit)
-	if not plr or not canTouchBall(plr) then
+	if not plr then
+		-- صوت نطة الكرة أو ضربة الحلقة
+		if os.clock() - ballState.LastBounce > 0.12 and ball.AssemblyLinearVelocity.Magnitude > 5 then
+			ballState.LastBounce = os.clock()
+			playSound(hit.Name == "Rim" and rimSound or bounceSound)
+		end
+		return
+	end
+	if ballState.Locked or not canTouchBall(plr) then
 		return
 	end
 	local blockedUntil = ballState.NoPickup[plr]
@@ -888,11 +1135,18 @@ end)
 local rng = Random.new()
 
 local function targetHoopFor(plr, pos)
-	local idx = isMatchLive() and slotIndex(plr)
-	if idx then
-		return hoopForSlot(idx)
+	local t = isMatchLive() and teamOf(plr)
+	if t then
+		return hoopForTeam(t)
 	end
 	return hoops[pos.X >= 0 and 1 or -1]
+end
+
+-- سرعة تخلي الكرة توصل من start إلى target خلال T ثانية
+local function launchVelocity(start, target, T)
+	local g = CONFIG.BALL_GRAVITY
+	local d = target - start
+	return Vector3.new(d.X / T, (d.Y + 0.5 * g * T * T) / T, d.Z / T)
 end
 
 ShootEvent.OnServerEvent:Connect(function(plr, power)
@@ -924,19 +1178,13 @@ ShootEvent.OnServerEvent:Connect(function(plr, power)
 	local lateral = (rng:NextNumber() - 0.5) * (dist * 0.025 + err * 0.6)
 	local target = rim + dir * (math.sign(diff) * err) + sideDir * lateral
 
-	-- نحسب السرعة اللازمة عشان الكرة توصل للهدف بقوس
-	local T = 0.55 + dist * 0.022
-	local g = CONFIG.BALL_GRAVITY
-	local d = target - start
-	local velocity = Vector3.new(d.X / T, (d.Y + 0.5 * g * T * T) / T, d.Z / T)
-
 	local rimFlat = Vector3.new(rim.X, 0, rim.Z)
 	local posFlat = Vector3.new(hrp.Position.X, 0, hrp.Position.Z)
 	local isThree = (posFlat - rimFlat).Magnitude > THREE_R or math.abs(hrp.Position.Z) > THREE_CORNER_Z
 
 	releaseBall()
 	ball.CFrame = CFrame.new(start)
-	ball.AssemblyLinearVelocity = velocity
+	ball.AssemblyLinearVelocity = launchVelocity(start, target, 0.55 + dist * 0.022)
 	ball.AssemblyAngularVelocity = sideDir * -8
 	ballState.LastShot = { Shooter = plr, Points = isThree and 3 or 2, Time = os.clock() }
 	ballState.LastToucher = plr
@@ -944,10 +1192,64 @@ ShootEvent.OnServerEvent:Connect(function(plr, power)
 end)
 
 ------------------------------------------------------------------
+-- 🤝 التمرير (لزميلك في 2 ضد 2، أو لأقرب لاعب وقت التدريب)
+------------------------------------------------------------------
+PassEvent.OnServerEvent:Connect(function(plr)
+	if ballState.Holder ~= plr then
+		return
+	end
+	local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then
+		return
+	end
+
+	local candidates
+	local myTeam = isMatchLive() and teamOf(plr)
+	if myTeam then
+		candidates = presentMembers(myTeam)
+	elseif Match.State == "Waiting" then
+		candidates = Players:GetPlayers()
+	else
+		return
+	end
+
+	local best, bestDist
+	for _, other in ipairs(candidates) do
+		local ohrp = other ~= plr and other.Character and other.Character:FindFirstChild("HumanoidRootPart")
+		local hum = ohrp and other.Character:FindFirstChildOfClass("Humanoid")
+		if ohrp and hum and hum.Health > 0 then
+			local d = (ohrp.Position - hrp.Position).Magnitude
+			if d <= CONFIG.PASS_RANGE and (not bestDist or d < bestDist) then
+				best, bestDist = ohrp, d
+			end
+		end
+	end
+	if not best then
+		notify(plr, myTeam and "زميلك بعيد أو مو موجود" or "ما فيه أحد قريب تمرر له", COLORS.Red)
+		return
+	end
+
+	local dir = (best.Position - hrp.Position) * Vector3.new(1, 0, 1)
+	dir = dir.Magnitude > 0.01 and dir.Unit or hrp.CFrame.LookVector
+	local start = hrp.Position + Vector3.new(0, 1, 0) + dir * 1.6
+	local T = math.clamp(bestDist / 45, 0.3, 0.9)
+	local lead = best.AssemblyLinearVelocity * Vector3.new(1, 0, 1) * T
+	local target = best.Position + lead + Vector3.new(0, 0.5, 0)
+
+	releaseBall()
+	ball.CFrame = CFrame.new(start)
+	ball.AssemblyLinearVelocity = launchVelocity(start, target, T)
+	ballState.LastShot = nil
+	ballState.LastToucher = plr
+	ballState.NoPickup[plr] = os.clock() + 0.5
+end)
+
+------------------------------------------------------------------
 -- 🥷 السرقة
 ------------------------------------------------------------------
 StealEvent.OnServerEvent:Connect(function(plr)
-	if not (Match.State == "Waiting" or (isMatchLive() and slotIndex(plr))) then
+	local myTeam = teamOf(plr)
+	if not (Match.State == "Waiting" or (isMatchLive() and myTeam)) then
 		return
 	end
 	local now = os.clock()
@@ -959,6 +1261,9 @@ StealEvent.OnServerEvent:Connect(function(plr)
 	if not holder or holder == plr or now < ballState.StealProtect then
 		return
 	end
+	if isMatchLive() and teamOf(holder) == myTeam then
+		return -- ما تسرق من زميلك
+	end
 	local myHrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
 	local hisHrp = holder.Character and holder.Character:FindFirstChild("HumanoidRootPart")
 	if not myHrp or not hisHrp or (myHrp.Position - hisHrp.Position).Magnitude > CONFIG.STEAL_RANGE then
@@ -967,6 +1272,7 @@ StealEvent.OnServerEvent:Connect(function(plr)
 	end
 	if rng:NextNumber() < CONFIG.STEAL_CHANCE then
 		giveBall(plr)
+		playSound(stealSound)
 		notify(plr, "🥷 سرقت الكرة!", COLORS.Green)
 		notify(holder, "انسرقت منك الكرة!", COLORS.Red)
 	else
@@ -977,14 +1283,6 @@ end)
 ------------------------------------------------------------------
 -- 🏆 نظام المباراة
 ------------------------------------------------------------------
-Match = {
-	State = "Waiting",
-	Slots = {},
-	Scores = { 0, 0 },
-	TimeLeft = CONFIG.MATCH_TIME,
-	Message = "",
-}
-
 local STATE_TEXT = {
 	Waiting = "بانتظار لاعبين",
 	Countdown = "استعداد...",
@@ -993,15 +1291,34 @@ local STATE_TEXT = {
 	Ended = "انتهت المباراة",
 }
 
+local function namesOf(list)
+	local names = {}
+	for _, p in ipairs(list) do
+		table.insert(names, p.DisplayName)
+	end
+	return #names > 0 and table.concat(names, " و ") or "—"
+end
+
+local function currentTeamLists()
+	if #Match.Teams[1] > 0 or #Match.Teams[2] > 0 then
+		return Match.Teams[1], Match.Teams[2]
+	end
+	return padPlayers(1), padPlayers(2)
+end
+
 local function refresh()
-	local n1 = Match.Slots[1] and Match.Slots[1].DisplayName or "—"
-	local n2 = Match.Slots[2] and Match.Slots[2].DisplayName or "—"
+	local team1, team2 = currentTeamLists()
+	local n1, n2 = namesOf(team1), namesOf(team2)
+	local size = math.max(#team1, #team2, 1)
+	local mode = string.format("%d ضد %d", size, size)
+
 	remotes:SetAttribute("State", Match.State)
 	remotes:SetAttribute("TimeLeft", Match.TimeLeft)
 	remotes:SetAttribute("Score1", Match.Scores[1])
 	remotes:SetAttribute("Score2", Match.Scores[2])
 	remotes:SetAttribute("P1Name", n1)
 	remotes:SetAttribute("P2Name", n2)
+	remotes:SetAttribute("Mode", mode)
 	remotes:SetAttribute("Message", Match.Message)
 
 	local t = math.max(0, Match.TimeLeft)
@@ -1012,13 +1329,12 @@ local function refresh()
 		refs.Score1.Text = tostring(Match.Scores[1])
 		refs.Score2.Text = tostring(Match.Scores[2])
 		refs.Time.Text = timeText
-		refs.Status.Text = STATE_TEXT[Match.State] or ""
+		refs.Status.Text = (STATE_TEXT[Match.State] or "") .. " • " .. mode
 	end
 
-	for i = 1, 2 do
-		local plr = Match.Slots[i]
-		local tag = (i == 1) and "🔴 اللاعب 1" or "🔵 اللاعب 2"
-		padLabels[i].Text = plr and (tag .. "\n" .. plr.DisplayName) or (tag .. "\nقف هنا للعب")
+	for i, def in ipairs(PAD_DEFS) do
+		local plr = Match.Pads[i]
+		padLabels[i].Text = TEAM_NAME[def.Team] .. "\n" .. (plr and plr.DisplayName or "قف هنا للعب")
 	end
 end
 
@@ -1028,37 +1344,47 @@ local function setState(state, message)
 	refresh()
 end
 
--- الانضمام عن طريق الوقوف على المربع
+-- الانضمام عن طريق الوقوف على المربع (مسموح وقت الانتظار والعد التنازلي)
 for i, pad in ipairs(pads) do
 	pad.Touched:Connect(function(hit)
-		if Match.State ~= "Waiting" then
+		if Match.State ~= "Waiting" and Match.State ~= "Countdown" then
 			return
 		end
 		local plr = playerFromHit(hit)
-		if not plr or slotIndex(plr) or Match.Slots[i] then
+		if not plr or padIndexOf(plr) or Match.Pads[i] then
 			return
 		end
-		Match.Slots[i] = plr
-		notify(plr, "انضممت كلاعب " .. i .. "! انتظر خصمك 🏀", COLORS.Gold)
+		Match.Pads[i] = plr
+		local team = PAD_DEFS[i].Team
+		notify(plr, "انضممت للفريق " .. TEAM_NAME[team] .. "! 🏀", TEAM_COLOR[team])
 		refresh()
 	end)
 end
 
-local function validateSlots()
-	for i = 1, 2 do
-		local plr = Match.Slots[i]
+local function validatePads()
+	for i = 1, #pads do
+		local plr = Match.Pads[i]
 		if plr then
 			local hrp = plr.Parent and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
 			local padPos = pads[i].Position
 			local offPad = not hrp
-				or Vector2.new(hrp.Position.X - padPos.X, hrp.Position.Z - padPos.Z).Magnitude > 6
+				or Vector2.new(hrp.Position.X - padPos.X, hrp.Position.Z - padPos.Z).Magnitude > 5
 			if offPad then
-				Match.Slots[i] = nil
+				Match.Pads[i] = nil
 				notify(plr, "خرجت من المربع، تم إلغاء انضمامك", COLORS.Red)
 			end
 		end
 	end
 	refresh()
+end
+
+-- ترجع حجم الفريق إذا الفرق متساوية (1 ضد 1 أو 2 ضد 2)
+local function balancedSize()
+	local c1, c2 = #padPlayers(1), #padPlayers(2)
+	if c1 >= 1 and c1 == c2 then
+		return c1
+	end
+	return nil
 end
 
 local function teleport(plr, cf)
@@ -1068,9 +1394,22 @@ local function teleport(plr, cf)
 	end
 end
 
+local function spawnFor(plr)
+	local t = teamOf(plr)
+	if not t then
+		return nil
+	end
+	for k, p in ipairs(Match.Teams[t]) do
+		if p == plr then
+			return TEAM_SPAWN[t][k] or TEAM_SPAWN[t][1]
+		end
+	end
+	return nil
+end
+
 local function kickSpectatorsOffCourt()
 	for _, plr in ipairs(Players:GetPlayers()) do
-		if not slotIndex(plr) then
+		if not teamOf(plr) then
 			local hrp = plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
 			if hrp then
 				local p = hrp.Position
@@ -1087,11 +1426,10 @@ local function checkLiveBall()
 	local holder = ballState.Holder
 	if holder then
 		if os.clock() - ballState.HeldSince > CONFIG.SHOT_CLOCK then
-			local idx = slotIndex(holder)
-			local other = idx and Match.Slots[3 - idx]
-			if other then
-				notifyAll("⏱️ انتهى وقت الهجمة! الكرة لـ " .. other.DisplayName, COLORS.Gold)
-				giveBall(other)
+			local t = teamOf(holder)
+			if t then
+				local p = giveBallToTeam(3 - t)
+				notifyAll("⏱️ انتهى وقت الهجمة! الكرة لـ " .. (p and p.DisplayName or "الخصم"), COLORS.Gold)
 			end
 		end
 		return
@@ -1104,11 +1442,10 @@ local function checkLiveBall()
 	local resting = p.Y < FLOOR_Y + 3 or ball.AssemblyLinearVelocity.Magnitude < 2
 	local stale = os.clock() - ballState.LooseSince > 10
 	if (outside and resting) or p.Y < -20 or stale then
-		local idx = slotIndex(ballState.LastToucher)
-		local other = idx and Match.Slots[3 - idx]
-		if other and other.Parent then
-			notifyAll("🚫 خرجت الكرة! الاستحواذ لـ " .. other.DisplayName, COLORS.Gold)
-			giveBall(other)
+		local t = teamOf(ballState.LastToucher)
+		if t then
+			local receiver = giveBallToTeam(3 - t)
+			notifyAll("🚫 خرجت الكرة! الاستحواذ لـ " .. (receiver and receiver.DisplayName or "الخصم"), COLORS.Gold)
 		else
 			resetBallCenter()
 		end
@@ -1117,27 +1454,27 @@ end
 
 local function onBasket(hoop)
 	flashHoop(hoop)
+	playSound(hoop.Swish)
 	local shot = ballState.LastShot
 	local recentShooter = shot and (os.clock() - shot.Time < 4) and shot.Shooter or nil
 	ballState.LastShot = nil
 
 	if isMatchLive() then
-		local idx = (hoop.Side == 1) and 1 or 2
-		local scorer = Match.Slots[idx]
-		if not scorer then
-			return
-		end
-		local points = (recentShooter == scorer and shot) and shot.Points or 2
-		Match.Scores[idx] += points
+		local t = (hoop.Side == 1) and 1 or 2
+		local shooterOnTeam = recentShooter and teamOf(recentShooter) == t
+		local points = (shooterOnTeam and shot) and shot.Points or 2
+		local scorer = shooterOnTeam and recentShooter or randomMember(t)
+		Match.Scores[t] += points
 		addCoins(scorer, CONFIG.COINS_PER_BASKET)
-		notifyAll(string.format("🏀 %s سجّل %d نقاط!", scorer.DisplayName, points), idx == 1 and COLORS.Red or COLORS.Blue)
+		notifyAll(string.format("🏀 %s سجّل %d نقاط للفريق %s!", scorer and scorer.DisplayName or "؟", points, TEAM_NAME[t]),
+			TEAM_COLOR[t])
+		playSound(cheerSound)
 		refresh()
 		ballState.Locked = true
-		local other = Match.Slots[3 - idx]
 		task.delay(1.2, function()
 			ballState.Locked = false
-			if isMatchLive() and other and other.Parent then
-				giveBall(other)
+			if isMatchLive() then
+				giveBallToTeam(3 - t)
 			end
 		end)
 	elseif recentShooter and shot then
@@ -1189,59 +1526,75 @@ task.spawn(function()
 	end
 end)
 
-local function finishMatch(winnerIdx, reason)
-	local p1, p2 = Match.Slots[1], Match.Slots[2]
+local function finishMatch(winnerTeam, reason)
 	local message
-	if winnerIdx then
-		local winner = Match.Slots[winnerIdx]
-		local loser = Match.Slots[3 - winnerIdx]
-		addCoins(winner, CONFIG.COINS_WIN)
-		addCoins(loser, CONFIG.COINS_LOSS)
-		local prof = winner and profiles[winner]
-		if prof then
-			prof.Wins += 1
-			updateLeaderstats(winner)
+	if winnerTeam then
+		local loserTeam = 3 - winnerTeam
+		for _, p in ipairs(Match.Teams[winnerTeam]) do
+			addCoins(p, CONFIG.COINS_WIN)
+			local prof = profiles[p]
+			if prof then
+				prof.Wins += 1
+				updateLeaderstats(p)
+				task.spawn(saveWins, p)
+			end
+			notify(p, "🏆 فزت! +" .. CONFIG.COINS_WIN .. " 🪙", COLORS.Gold)
 		end
-		message = string.format("🏆 الفائز: %s (%d - %d)%s", winner and winner.DisplayName or "؟",
-			Match.Scores[1], Match.Scores[2], reason and ("\n" .. reason) or "")
-		notify(winner, "🏆 فزت! +" .. CONFIG.COINS_WIN .. " 🪙", COLORS.Gold)
-		notify(loser, "خسرت هالمرة، +" .. CONFIG.COINS_LOSS .. " 🪙 للمشاركة", COLORS.White)
+		for _, p in ipairs(Match.Teams[loserTeam]) do
+			addCoins(p, CONFIG.COINS_LOSS)
+			notify(p, "خسرت هالمرة، +" .. CONFIG.COINS_LOSS .. " 🪙 للمشاركة", COLORS.White)
+		end
+		message = string.format("🏆 فاز الفريق %s: %s (%d - %d)%s", TEAM_NAME[winnerTeam],
+			namesOf(Match.Teams[winnerTeam]), Match.Scores[1], Match.Scores[2], reason and ("\n" .. reason) or "")
 	else
-		addCoins(p1, CONFIG.COINS_DRAW)
-		addCoins(p2, CONFIG.COINS_DRAW)
+		for t = 1, 2 do
+			for _, p in ipairs(Match.Teams[t]) do
+				addCoins(p, CONFIG.COINS_DRAW)
+			end
+		end
 		message = string.format("🤝 تعادل! (%d - %d)", Match.Scores[1], Match.Scores[2])
 	end
 	notifyAll(message, COLORS.Gold)
 	resetBallCenter()
 	setState("Ended", message)
+	task.delay(1, refreshLeaderboard)
 	task.wait(CONFIG.RESULTS_TIME)
-	for _, plr in ipairs({ p1, p2 }) do
-		if plr and plr.Parent then
-			teleport(plr, LOBBY_CF * CFrame.new(0, 0, plr == p1 and -3 or 3))
+
+	local k = 0
+	for t = 1, 2 do
+		for _, p in ipairs(Match.Teams[t]) do
+			if p.Parent then
+				k += 1
+				teleport(p, LOBBY_CF * CFrame.new(0, 0, (k - 2.5) * 3))
+			end
 		end
 	end
-	Match.Slots = {}
+	Match.Teams = { {}, {} }
 	Match.Scores = { 0, 0 }
 	Match.TimeLeft = CONFIG.MATCH_TIME
 	resetBallCenter()
 end
 
-local function runMatch()
-	local p1, p2 = Match.Slots[1], Match.Slots[2]
+local function runMatch(teams)
+	Match.Teams = teams
 	Match.Scores = { 0, 0 }
 	ballState.NoPickup = {}
-	teleport(p1, SLOT_SPAWN[1])
-	teleport(p2, SLOT_SPAWN[2])
+	for t = 1, 2 do
+		for k, p in ipairs(teams[t]) do
+			teleport(p, TEAM_SPAWN[t][k] or TEAM_SPAWN[t][1])
+		end
+	end
 	resetBallCenter()
 	setState("Playing")
-	notifyAll(string.format("🏀 بدأت المباراة: %s ضد %s!", p1.DisplayName, p2.DisplayName), COLORS.Gold)
+	notifyAll(string.format("🏀 بدأت المباراة (%d ضد %d): %s ضد %s!", #teams[1], #teams[2],
+		namesOf(teams[1]), namesOf(teams[2])), COLORS.Gold)
 
 	local endTime = os.clock() + CONFIG.MATCH_TIME
 	while true do
-		-- انسحاب أحد اللاعبين
-		local p1Here, p2Here = p1.Parent ~= nil, p2.Parent ~= nil
-		if not p1Here or not p2Here then
-			finishMatch(p1Here and 1 or (p2Here and 2 or nil), "انسحب الخصم")
+		-- انسحاب فريق كامل
+		local here1, here2 = #presentMembers(1) > 0, #presentMembers(2) > 0
+		if not here1 or not here2 then
+			finishMatch(here1 and 1 or (here2 and 2 or nil), "انسحب الفريق الخصم")
 			return
 		end
 
@@ -1280,8 +1633,8 @@ task.spawn(function()
 	while true do
 		Match.TimeLeft = CONFIG.MATCH_TIME
 		setState("Waiting")
-		while not (Match.Slots[1] and Match.Slots[2]) do
-			validateSlots()
+		while not balancedSize() do
+			validatePads()
 			task.wait(0.25)
 		end
 
@@ -1292,8 +1645,8 @@ task.spawn(function()
 			refresh()
 			for _ = 1, 4 do
 				task.wait(0.25)
-				validateSlots()
-				if not (Match.Slots[1] and Match.Slots[2]) then
+				validatePads()
+				if not balancedSize() then
 					ready = false
 					break
 				end
@@ -1304,10 +1657,12 @@ task.spawn(function()
 		end
 
 		if ready then
+			local teams = { padPlayers(1), padPlayers(2) }
+			Match.Pads = {}
 			Match.TimeLeft = CONFIG.MATCH_TIME
-			runMatch()
+			runMatch(teams)
 		else
-			notifyAll("أُلغي العد التنازلي، أحد اللاعبين نزل من المربع", COLORS.Red)
+			notifyAll("⏸️ توقف العد التنازلي: لازم الفريقين يكونون بنفس العدد", COLORS.Red)
 		end
 	end
 end)
@@ -1383,11 +1738,11 @@ local function onPlayerAdded(plr)
 		applyJersey(plr)
 	end)
 	plr.CharacterAdded:Connect(function(char)
-		local idx = slotIndex(plr)
-		if idx and isMatchLive() then
+		if isMatchLive() and teamOf(plr) then
 			task.wait(0.2)
-			if char.Parent then
-				char:PivotTo(SLOT_SPAWN[idx])
+			local cf = spawnFor(plr)
+			if cf and char.Parent then
+				char:PivotTo(cf)
 			end
 		end
 	end)
@@ -1407,12 +1762,9 @@ Players.PlayerRemoving:Connect(function(plr)
 	if ballState.Holder == plr then
 		releaseBall()
 	end
-	if Match.State == "Waiting" or Match.State == "Countdown" then
-		for i = 1, 2 do
-			if Match.Slots[i] == plr then
-				Match.Slots[i] = nil
-			end
-		end
+	local padIdx = padIndexOf(plr)
+	if padIdx then
+		Match.Pads[padIdx] = nil
 	end
 	ballState.NoPickup[plr] = nil
 	ballState.StealCooldown[plr] = nil

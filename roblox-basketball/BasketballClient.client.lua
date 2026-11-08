@@ -3,9 +3,9 @@
 -- المكان: StarterPlayer > StarterPlayerScripts  (نوعه LocalScript)
 --
 -- التحكم:
---   • كمبيوتر: اضغط مطولاً على زر الماوس الأيسر ثم أفلت للرمي، و F للسرقة
---   • جوال: أزرار "رمي" و "سرقة" على الشاشة
---   • يد تحكم: R2 للرمي، X للسرقة
+--   • كمبيوتر: اضغط مطولاً على زر الماوس الأيسر ثم أفلت للرمي، Q للتمرير، F للسرقة
+--   • جوال: أزرار "رمي" و "تمرير" و "سرقة" على الشاشة
+--   • يد تحكم: R2 للرمي، Y للتمرير، X للسرقة
 --==================================================================
 
 local Players = game:GetService("Players")
@@ -13,11 +13,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
 
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("Basketball")
 local ShootEvent = remotes:WaitForChild("Shoot")
 local StealEvent = remotes:WaitForChild("Steal")
+local PassEvent = remotes:WaitForChild("Pass")
 local NotifyEvent = remotes:WaitForChild("Notify")
 local OpenShopEvent = remotes:WaitForChild("OpenShop")
 local GetDataFn = remotes:WaitForChild("GetData")
@@ -34,6 +36,36 @@ local GOLD = Color3.fromRGB(240, 195, 60)
 local GREEN = Color3.fromRGB(70, 200, 90)
 local DARK = Color3.fromRGB(18, 18, 28)
 local WHITE = Color3.new(1, 1, 1)
+
+------------------------------------------------------------------
+-- 🔊 أصوات الواجهة (تقدر تبدلها بـ "rbxassetid://الرقم" من Creator Store)
+------------------------------------------------------------------
+local UI_SOUNDS = {
+	Beep = { Id = "rbxasset://sounds/electronicpingshort.wav", Volume = 0.6, Speed = 1 },   -- العد التنازلي
+	Buzzer = { Id = "rbxasset://sounds/electronicpingshort.wav", Volume = 1, Speed = 0.45 }, -- بداية ونهاية المباراة
+	Buy = { Id = "rbxasset://sounds/electronicpingshort.wav", Volume = 0.7, Speed = 1.6 },  -- شراء ناجح
+	Click = { Id = "rbxasset://sounds/clickfast.wav", Volume = 0.6, Speed = 1 },            -- أزرار المتجر
+}
+
+local soundObjects = {}
+for name, def in pairs(UI_SOUNDS) do
+	if def.Id ~= "" then
+		local s = Instance.new("Sound")
+		s.Name = "BasketballUI_" .. name
+		s.SoundId = def.Id
+		s.Volume = def.Volume
+		s.PlaybackSpeed = def.Speed
+		s.Parent = SoundService
+		soundObjects[name] = s
+	end
+end
+
+local function playUi(name)
+	local s = soundObjects[name]
+	if s then
+		s:Play()
+	end
+end
 
 ------------------------------------------------------------------
 -- أدوات بناء الواجهة
@@ -156,16 +188,29 @@ local STATE_TEXT = {
 	Ended = "انتهت المباراة",
 }
 
+local lastState, lastTime = nil, nil
+
 local function updateHud()
 	local state = remotes:GetAttribute("State") or "Waiting"
 	local t = remotes:GetAttribute("TimeLeft") or 0
+
+	-- أصوات العد التنازلي والصافرة
+	if state == "Countdown" and (t ~= lastTime or lastState ~= "Countdown") then
+		playUi("Beep")
+	end
+	if state ~= lastState and (state == "Playing" or state == "Overtime" or state == "Ended") then
+		playUi("Buzzer")
+	end
+	lastState, lastTime = state, t
+
 	p1NameL.Text = remotes:GetAttribute("P1Name") or "—"
 	p2NameL.Text = remotes:GetAttribute("P2Name") or "—"
 	p1ScoreL.Text = tostring(remotes:GetAttribute("Score1") or 0)
 	p2ScoreL.Text = tostring(remotes:GetAttribute("Score2") or 0)
 	timeL.Text = string.format("%d:%02d", t // 60, t % 60)
 	timeL.TextColor3 = (state == "Playing" and t <= 10) and RED or GOLD
-	stateL.Text = STATE_TEXT[state] or ""
+	local mode = remotes:GetAttribute("Mode") or ""
+	stateL.Text = (state == "Waiting" or mode == "") and (STATE_TEXT[state] or "") or ((STATE_TEXT[state] or "") .. " • " .. mode)
 
 	if state == "Countdown" then
 		banner.Text = tostring(t)
@@ -252,7 +297,7 @@ RunService.RenderStepped:Connect(function()
 	fill.Size = UDim2.fromScale(p, 1)
 	marker.Position = UDim2.fromScale(p, 0)
 
-	local hint = charging and "أفلت في المنطقة الخضراء! 🎯" or "اضغط مطوّلاً للرمي"
+	local hint = charging and "أفلت في المنطقة الخضراء! 🎯" or "اضغط مطوّلاً للرمي  •  Q تمرير"
 	local deadline = ball:GetAttribute("ShotDeadline") or 0
 	if deadline > 0 then
 		local remaining = math.max(0, math.ceil(deadline - workspace:GetServerTimeNow()))
@@ -276,6 +321,11 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
 		beginCharge()
 	elseif input.KeyCode == Enum.KeyCode.F or input.KeyCode == Enum.KeyCode.ButtonX then
 		StealEvent:FireServer()
+	elseif input.KeyCode == Enum.KeyCode.Q or input.KeyCode == Enum.KeyCode.ButtonY then
+		if isHolding() then
+			charging = false
+			PassEvent:FireServer()
+		end
 	end
 end)
 
@@ -298,6 +348,17 @@ if UserInputService.TouchEnabled then
 		Size = UDim2.fromOffset(70, 70), BackgroundColor3 = Color3.fromRGB(70, 70, 90), Text = "🥷\nسرقة",
 		TextColor3 = WHITE, Font = Enum.Font.GothamBlack, TextScaled = true, Parent = gui },
 		{ make("UICorner", { CornerRadius = UDim.new(0.5, 0) }), stroke(WHITE, 2) })
+
+	local passBtn = make("TextButton", { AnchorPoint = Vector2.new(1, 1), Position = UDim2.new(1, -24, 1, -270),
+		Size = UDim2.fromOffset(70, 70), BackgroundColor3 = Color3.fromRGB(40, 140, 90), Text = "🤝\nتمرير",
+		TextColor3 = WHITE, Font = Enum.Font.GothamBlack, TextScaled = true, Parent = gui },
+		{ make("UICorner", { CornerRadius = UDim.new(0.5, 0) }), stroke(WHITE, 2) })
+	passBtn.Activated:Connect(function()
+		if isHolding() then
+			charging = false
+			PassEvent:FireServer()
+		end
+	end)
 
 	shootBtn.InputBegan:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.Touch then
@@ -353,6 +414,7 @@ local function onItemClicked(item, owned)
 		return
 	end
 	busy = true
+	playUi("Click")
 	local ok, res = pcall(function()
 		if owned then
 			return EquipFn:InvokeServer(currentTab, item.Id)
@@ -362,6 +424,9 @@ local function onItemClicked(item, owned)
 	busy = false
 	if ok and type(res) == "table" then
 		toast(res.Message or "", res.Success and GREEN or RED)
+		if res.Success and not owned then
+			playUi("Buy")
+		end
 		if res.Profile then
 			shopData.Profile = res.Profile
 		end
@@ -440,6 +505,7 @@ end
 for name, tab in pairs(tabs) do
 	tab.Activated:Connect(function()
 		currentTab = name
+		playUi("Click")
 		render()
 	end)
 end
