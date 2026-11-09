@@ -562,7 +562,8 @@ for i, def in ipairs(PAD_DEFS) do
 	local pad = newPart({ Name = "JoinPad" .. i, Size = Vector3.new(6, 0.5, 6), Position = Vector3.new(-60, 0.45, def.Z),
 		Color = TEAM_COLOR[def.Team], Material = Enum.Material.Neon, Parent = lobbyFolder })
 	pads[i] = pad
-	padLabels[i] = addBillboard(pad, "", COLORS.White, 4, UDim2.fromOffset(220, 64), 90)
+	-- الحجم بالـ studs (مو بالبكسل) عشان الكتابات ما تركب على بعض من بعيد
+	padLabels[i] = addBillboard(pad, "", COLORS.White, 3.5, UDim2.fromScale(6, 2.6), 90)
 end
 
 local infoPos = Vector3.new(-66, 7.5, 0)
@@ -654,7 +655,7 @@ prompt.Triggered:Connect(function(plr)
 end)
 
 local function priceText(item)
-	return item.Price == 0 and "مجاني" or (tostring(item.Price) .. " 🪙")
+	return item.Price == 0 and "مجاني" or (tostring(item.Price) .. " 💰")
 end
 
 -- كرات العرض على الطاولات
@@ -1538,11 +1539,11 @@ local function finishMatch(winnerTeam, reason)
 				updateLeaderstats(p)
 				task.spawn(saveWins, p)
 			end
-			notify(p, "🏆 فزت! +" .. CONFIG.COINS_WIN .. " 🪙", COLORS.Gold)
+			notify(p, "🏆 فزت! +" .. CONFIG.COINS_WIN .. " 💰", COLORS.Gold)
 		end
 		for _, p in ipairs(Match.Teams[loserTeam]) do
 			addCoins(p, CONFIG.COINS_LOSS)
-			notify(p, "خسرت هالمرة، +" .. CONFIG.COINS_LOSS .. " 🪙 للمشاركة", COLORS.White)
+			notify(p, "خسرت هالمرة، +" .. CONFIG.COINS_LOSS .. " 💰 للمشاركة", COLORS.White)
 		end
 		message = string.format("🏆 فاز الفريق %s: %s (%d - %d)%s", TEAM_NAME[winnerTeam],
 			namesOf(Match.Teams[winnerTeam]), Match.Scores[1], Match.Scores[2], reason and ("\n" .. reason) or "")
@@ -1701,7 +1702,7 @@ BuyFn.OnServerInvoke = function(plr, category, id)
 		return { Success = false, Message = "تملكه من قبل!", Profile = prof }
 	end
 	if prof.Coins < item.Price then
-		return { Success = false, Message = "ما عندك عملات كافية 🪙", Profile = prof }
+		return { Success = false, Message = "ما عندك عملات كافية 💰", Profile = prof }
 	end
 	prof.Coins -= item.Price
 	prof[category][id] = true

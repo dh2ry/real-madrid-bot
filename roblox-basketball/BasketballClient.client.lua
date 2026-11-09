@@ -131,7 +131,7 @@ local banner = label({ AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fro
 local coinsFrame = make("Frame", { AnchorPoint = Vector2.new(0, 1), Position = UDim2.new(0, 12, 1, -12),
 	Size = UDim2.fromOffset(130, 40), BackgroundColor3 = DARK, BackgroundTransparency = 0.15, Parent = gui },
 	{ corner(10), stroke(GOLD, 2) })
-local coinsL = label({ Size = UDim2.fromScale(1, 1), TextColor3 = GOLD, Text = "🪙 0", Parent = coinsFrame },
+local coinsL = label({ Size = UDim2.fromScale(1, 1), TextColor3 = GOLD, Text = "💰 0", Parent = coinsFrame },
 	{ make("UIPadding", { PaddingTop = UDim.new(0, 6), PaddingBottom = UDim.new(0, 6) }) })
 
 ------------------------------------------------------------------
@@ -230,7 +230,7 @@ task.spawn(function()
 	local leaderstats = player:WaitForChild("leaderstats")
 	local coins = leaderstats:WaitForChild("عملات")
 	local function update()
-		coinsL.Text = "🪙 " .. coins.Value
+		coinsL.Text = "💰 " .. coins.Value
 	end
 	coins.Changed:Connect(update)
 	update()
@@ -446,7 +446,7 @@ render = function()
 		return
 	end
 	local profile = shopData.Profile
-	shopCoinsL.Text = "🪙 " .. profile.Coins
+	shopCoinsL.Text = "💰 " .. profile.Coins
 	for name, tab in pairs(tabs) do
 		tab.BackgroundColor3 = (name == currentTab) and GOLD or Color3.fromRGB(50, 50, 70)
 		tab.TextColor3 = (name == currentTab) and DARK or WHITE
@@ -478,7 +478,7 @@ render = function()
 		label({ Position = UDim2.new(0, 6, 0, 90), Size = UDim2.new(1, -12, 0, 24), Text = item.Name,
 			Font = Enum.Font.GothamBold, ZIndex = 12, Parent = card })
 		label({ Position = UDim2.new(0, 6, 0, 116), Size = UDim2.new(1, -12, 0, 20),
-			Text = item.Price == 0 and "مجاني" or (item.Price .. " 🪙"), TextColor3 = GOLD,
+			Text = item.Price == 0 and "مجاني" or (item.Price .. " 💰"), TextColor3 = GOLD,
 			Font = Enum.Font.GothamBold, ZIndex = 12, Parent = card })
 
 		local btnText, btnColor
