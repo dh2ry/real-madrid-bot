@@ -1,0 +1,89 @@
+{
+  "name": "TheForgottenHotel",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedFirst": {
+      "$className": "ReplicatedFirst",
+      "Loading": { "$path": "src/first/Loading.client.luau" }
+    },
+
+    "ReplicatedStorage": {
+      "$className": "ReplicatedStorage",
+      "Shared": { "$path": "src/shared" }
+    },
+
+    "ServerScriptService": {
+      "$className": "ServerScriptService",
+      "Server": { "$path": "src/server" }
+    },
+
+    "StarterPlayer": {
+      "$className": "StarterPlayer",
+      "$properties": {
+        "CameraMaxZoomDistance": 14,
+        "CameraMinZoomDistance": 0.5,
+        "CharacterWalkSpeed": 12,
+        "CharacterUseJumpPower": true,
+        "CharacterJumpPower": 30,
+        "EnableMouseLockOption": false,
+        "LoadCharacterAppearance": true
+      },
+      "StarterPlayerScripts": {
+        "$className": "StarterPlayerScripts",
+        "Client": { "$path": "src/client" }
+      },
+      "StarterCharacterScripts": {
+        "$className": "StarterCharacterScripts",
+        "Health": { "$path": "src/character/Health.server.luau" }
+      }
+    },
+
+    "StarterGui": {
+      "$className": "StarterGui",
+      "$properties": {
+        "ResetPlayerGuiOnSpawn": false
+      }
+    },
+
+    "Players": {
+      "$className": "Players",
+      "$properties": {
+        "CharacterAutoLoads": true,
+        "RespawnTime": 5
+      }
+    },
+
+    "Workspace": {
+      "$className": "Workspace",
+      "$properties": {
+        "StreamingEnabled": true,
+        "StreamingMinRadius": 96,
+        "StreamingTargetRadius": 320,
+        "Gravity": 196.2
+      }
+    },
+
+    "Lighting": {
+      "$className": "Lighting",
+      "$properties": {
+        "Technology": "Future",
+        "ClockTime": 0.4,
+        "Brightness": 0.6,
+        "Ambient": [0.063, 0.055, 0.078],
+        "OutdoorAmbient": [0.141, 0.157, 0.212],
+        "GlobalShadows": true,
+        "EnvironmentDiffuseScale": 0.2,
+        "EnvironmentSpecularScale": 0.35
+      }
+    },
+
+    "SoundService": {
+      "$className": "SoundService",
+      "$properties": {
+        "AmbientReverb": "Hallway",
+        "RespectFilteringEnabled": true
+      }
+    }
+  }
+}
