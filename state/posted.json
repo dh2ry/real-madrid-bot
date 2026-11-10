@@ -6002,7 +6002,6 @@
     "https://news.google.com/rss/articles/CBMixwFBVV95cUxQQ3M2cWo4VzdjbFY1a0k5OG5YaWpSV2ctVW92WXVxNnMwN2RRcmNIOVpXOExFRlllQnR6bmZ1UjhmaGhFQm1HNnpXdjNuOENkV3JtZW92Nlh2TG5ObGd5d2VEbmtraEFyQ2JOaXhadEdielBwbF9BTkJOc0llZzVaVE1SQzJvVU5CbGR6NU5wVkxXTGpILVh4WF9DVUxZdTFVOFpESi1WS2p5ai1tOHFzazlmVTFaam5PZWdJYWlfVjhBNU4xUnc4?oc=5"
   ],
   "tweets": [
-    "🔄 تبديل في أيك أثينا ⬆️ دخول: بارنابا فارغا ⬇️ خروج: كان كايرينن ⏱️ الدقيقة 60 #ريال_مدريد",
     "🚑 إصابة لازاروس روتا (أيك أثينا) ⏱️ الدقيقة 59 #ريال_مدريد",
     "🟨 بطاقة صفراء كوكوريا (ريال مدريد) ⏱️ الدقيقة 65 #ريال_مدريد",
     "🔄 تبديل في ريال مدريد ⬆️ دخول: فالفيردي ⬇️ خروج: برناردو سيلفا ⏱️ الدقيقة 67 #ريال_مدريد",
@@ -6101,7 +6100,8 @@
     "🏛️ ريال مدريد: 🏆 تشكيلة FIFPRO العالمية للرجال لعام 2026 🏆 👏 مبروك لكيليان مبابي وجود بيلينغهام! #ريال_مدريد",
     "🗞️ غلاف صحيفة ماركا اليوم: راؤول يعود إلى الليغا #ريال_مدريد",
     "🗞️ غلاف صحيفة آس اليوم: إيانا.. سحر خالص #ريال_مدريد",
-    "🏛️ ريال مدريد: 🎂 عيد ميلاد سعيد يا كامافينجا! #ريال_مدريد"
+    "🏛️ ريال مدريد: 🎂 عيد ميلاد سعيد يا كامافينجا! #ريال_مدريد",
+    "🏛️ ريال مدريد: هدف رائع لفيديريكو فالفيردي من خارج المنطقة! ☝️ لا يهم متى تقرأ هذا. #ريال_مدريد"
   ],
   "done": {
     "564723:pre:rm": 1792946102681,
@@ -6319,7 +6319,7 @@
       }
     ]
   },
-  "lastNewsRun": 1794310205424,
+  "lastNewsRun": 1794313468925,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120080768084930914",
@@ -6644,7 +6644,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794310216030,
+  "officialXRun": 1794313480592,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6658,12 +6658,13 @@
     "2023: ريال مدريد يحسم تأهله لثمن النهائي أمام براغا",
     "2013: هاتريك رونالدو يقود الريال لسحق سوسيداد 5-1"
   ],
-  "officialSince": "2120112986761113633",
+  "officialSince": "2120124323977371888",
   "postTimes": [
     1794246313853,
     1794291811444,
     1794291824530,
-    1794303593959
+    1794303593959,
+    1794313483367
   ],
   "xBlockedUntil": 1793618696842,
   "tries": {
