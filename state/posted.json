@@ -6002,7 +6002,6 @@
     "https://news.google.com/rss/articles/CBMixwFBVV95cUxQQ3M2cWo4VzdjbFY1a0k5OG5YaWpSV2ctVW92WXVxNnMwN2RRcmNIOVpXOExFRlllQnR6bmZ1UjhmaGhFQm1HNnpXdjNuOENkV3JtZW92Nlh2TG5ObGd5d2VEbmtraEFyQ2JOaXhadEdielBwbF9BTkJOc0llZzVaVE1SQzJvVU5CbGR6NU5wVkxXTGpILVh4WF9DVUxZdTFVOFpESi1WS2p5ai1tOHFzazlmVTFaam5PZWdJYWlfVjhBNU4xUnc4?oc=5"
   ],
   "tweets": [
-    "🔄 تبديل في أيك أثينا ⬆️ دخول: رازفان مارين ⬇️ خروج: ميجات غاتشينوفيتش ⏱️ الدقيقة 60 #ريال_مدريد",
     "🔄 تبديل في أيك أثينا ⬆️ دخول: بارنابا فارغا ⬇️ خروج: كان كايرينن ⏱️ الدقيقة 60 #ريال_مدريد",
     "🚑 إصابة لازاروس روتا (أيك أثينا) ⏱️ الدقيقة 59 #ريال_مدريد",
     "🟨 بطاقة صفراء كوكوريا (ريال مدريد) ⏱️ الدقيقة 65 #ريال_مدريد",
@@ -6101,7 +6100,8 @@
     "🏛️ ريال مدريد: هل تستطيع مجاراة إيقاع أردا غولر؟ 👀 #ريال_مدريد",
     "🏛️ ريال مدريد: 🏆 تشكيلة FIFPRO العالمية للرجال لعام 2026 🏆 👏 مبروك لكيليان مبابي وجود بيلينغهام! #ريال_مدريد",
     "🗞️ غلاف صحيفة ماركا اليوم: راؤول يعود إلى الليغا #ريال_مدريد",
-    "🗞️ غلاف صحيفة آس اليوم: إيانا.. سحر خالص #ريال_مدريد"
+    "🗞️ غلاف صحيفة آس اليوم: إيانا.. سحر خالص #ريال_مدريد",
+    "🏛️ ريال مدريد: 🎂 عيد ميلاد سعيد يا كامافينجا! #ريال_مدريد"
   ],
   "done": {
     "564723:pre:rm": 1792946102681,
@@ -6166,7 +6166,8 @@
     "cover:as:2026-11-09": 1794207367765,
     "onthisday:2026-11-09": 1794217061996,
     "cover:marca:2026-11-10": 1794291811445,
-    "cover:as:2026-11-10": 1794291824530
+    "cover:as:2026-11-10": 1794291824530,
+    "onthisday:2026-11-10": 1794303605089
   },
   "attempts": {
     "564723:pre:rm": 1792946076988,
@@ -6249,7 +6250,8 @@
     "onthisday:2026-11-09": 1794217038650,
     "weekly:2026-11-09": 1794253131192,
     "cover:marca:2026-11-10": 1794291799304,
-    "cover:as:2026-11-10": 1794291811445
+    "cover:as:2026-11-10": 1794291811445,
+    "onthisday:2026-11-10": 1794303593962
   },
   "afIds": {},
   "fixtures": {
@@ -6317,10 +6319,10 @@
       }
     ]
   },
-  "lastNewsRun": 1794300104496,
+  "lastNewsRun": 1794303581499,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120049952101421411",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120080768084930914",
     "(from:MarioCortegana) -is:retweet -is:reply": "2119749305980301595"
   },
   "live": {
@@ -6642,7 +6644,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794300113567,
+  "officialXRun": 1794303591439,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6656,13 +6658,13 @@
     "2023: ريال مدريد يحسم تأهله لثمن النهائي أمام براغا",
     "2013: هاتريك رونالدو يقود الريال لسحق سوسيداد 5-1"
   ],
-  "officialSince": "2119852530545131600",
+  "officialSince": "2120079740476469447",
   "postTimes": [
-    1794217061995,
     1794220164174,
     1794246313853,
     1794291811444,
-    1794291824530
+    1794291824530,
+    1794303593959
   ],
   "xBlockedUntil": 1793618696842,
   "tries": {
