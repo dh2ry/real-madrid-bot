@@ -6255,7 +6255,7 @@
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1794284680314,
+    "fetchedAt": 1794307032881,
     "list": [
       {
         "id": "564741",
@@ -6319,7 +6319,7 @@
       }
     ]
   },
-  "lastNewsRun": 1794303581499,
+  "lastNewsRun": 1794307032907,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120080768084930914",
@@ -6644,7 +6644,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794303591439,
+  "officialXRun": 1794307044026,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6658,9 +6658,8 @@
     "2023: ريال مدريد يحسم تأهله لثمن النهائي أمام براغا",
     "2013: هاتريك رونالدو يقود الريال لسحق سوسيداد 5-1"
   ],
-  "officialSince": "2120079740476469447",
+  "officialSince": "2120102747525574938",
   "postTimes": [
-    1794220164174,
     1794246313853,
     1794291811444,
     1794291824530,
