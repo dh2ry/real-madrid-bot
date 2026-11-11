@@ -6259,28 +6259,8 @@
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1794354774654,
+    "fetchedAt": 1794378914815,
     "list": [
-      {
-        "id": "564741",
-        "kickoff": 1794081600000,
-        "status": "FINISHED",
-        "competition": "Primera Division",
-        "isHome": false,
-        "opponent": {
-          "name": "Valencia",
-          "fullName": "Valencia CF",
-          "crest": "https://crests.football-data.org/95.png"
-        },
-        "rmCrest": "https://crests.football-data.org/86.png",
-        "venue": null,
-        "score": {
-          "home": 0,
-          "away": 3
-        },
-        "matchday": 12,
-        "stage": "REGULAR_SEASON"
-      },
       {
         "id": "564754",
         "kickoff": 1795291200000,
@@ -6323,7 +6303,7 @@
       }
     ]
   },
-  "lastNewsRun": 1794375284639,
+  "lastNewsRun": 1794378914838,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120231506526232988",
@@ -6648,7 +6628,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794375294356,
+  "officialXRun": 1794378925940,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6664,8 +6644,6 @@
   ],
   "officialSince": "2120230006509260892",
   "postTimes": [
-    1794291811444,
-    1794291824530,
     1794303593959,
     1794313483367,
     1794317840539,
