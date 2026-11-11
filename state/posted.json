@@ -6305,10 +6305,10 @@
       }
     ]
   },
-  "lastNewsRun": 1794390711945,
+  "lastNewsRun": 1794394392318,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120452125402812652",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120457734806196697",
     "(from:MarioCortegana) -is:retweet -is:reply": "2119749305980301595"
   },
   "live": {
@@ -6630,7 +6630,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794390729245,
+  "officialXRun": 1794394400969,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6645,7 +6645,7 @@
     "2013: هاتريك رونالدو يقود الريال لسحق سوسيداد 5-1",
     "2023: بيري يصبح الرئيس الشرفي لريال مدريد"
   ],
-  "officialSince": "2120434821566779866",
+  "officialSince": "2120456504746606737",
   "postTimes": [
     1794313483367,
     1794317840539,
