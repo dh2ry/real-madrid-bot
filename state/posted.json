@@ -6311,10 +6311,10 @@
       }
     ]
   },
-  "lastNewsRun": 1794484291253,
+  "lastNewsRun": 1794488219370,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120831769234551242",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120862117251424590",
     "(from:MarioCortegana) -is:retweet -is:reply": "2120804754531958828"
   },
   "live": {
@@ -6636,7 +6636,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794484301360,
+  "officialXRun": 1794488228195,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6652,7 +6652,7 @@
     "2023: بيري يصبح الرئيس الشرفي لريال مدريد",
     "1944: ريال مدريد يتغلب على برشلونة 1-0 في الكلاسيكو"
   ],
-  "officialSince": "2120841542634012736",
+  "officialSince": "2120856638001442961",
   "postTimes": [
     1794421913125,
     1794469905703,
