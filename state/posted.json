@@ -6002,7 +6002,6 @@
     "https://news.google.com/rss/articles/CBMixwFBVV95cUxQQ3M2cWo4VzdjbFY1a0k5OG5YaWpSV2ctVW92WXVxNnMwN2RRcmNIOVpXOExFRlllQnR6bmZ1UjhmaGhFQm1HNnpXdjNuOENkV3JtZW92Nlh2TG5ObGd5d2VEbmtraEFyQ2JOaXhadEdielBwbF9BTkJOc0llZzVaVE1SQzJvVU5CbGR6NU5wVkxXTGpILVh4WF9DVUxZdTFVOFpESi1WS2p5ai1tOHFzazlmVTFaam5PZWdJYWlfVjhBNU4xUnc4?oc=5"
   ],
   "tweets": [
-    "🔄 تبديل في أيك أثينا ⬆️ دخول: زوبكوف ⬇️ خروج: يوفيتش ⏱️ الدقيقة 88 #ريال_مدريد",
     "⚽️ قوووووول لريال مدريد! فالفيردي ⏱️ الدقيقة 90+2 أيك أثينا 2 - 3 ريال مدريد #ريال_مدريد",
     "🔚 نهاية المباراة أيك أثينا 2 - 3 ريال مدريد ✅ فوز ريال مدريد #ريال_مدريد",
     "📊 المباراة بالأرقام أيك أثينا 2 - 3 ريال مدريد #ريال_مدريد",
@@ -6101,7 +6100,8 @@
     "🏛️ ريال مدريد: 🏋️ حصة بدنية في مدينة ريال مدريد الرياضية! #ريال_مدريد",
     "🗞️ غلاف صحيفة ماركا اليوم: بطل العالم لا يُناقَش! دي لا فوينتي ينفجر ويبرر عدم استدعاء لامين لمباراة اليوم #ريال_مدريد",
     "🗞️ غلاف صحيفة آس اليوم: زوبيمندي يمسك بالدفة #ريال_مدريد",
-    "📅 في مثل هذا اليوم من عام 1944: ريال مدريد يفوز على غريمه برشلونة 1-0 في كلاسيكو الجولة الثامنة من الدوري الإسباني، بهدف سجّله مولييرو في الدقيقة 21. ⚪🔥 #ريال_مدريد #الكلاسيكو #ريال_مدريد"
+    "📅 في مثل هذا اليوم من عام 1944: ريال مدريد يفوز على غريمه برشلونة 1-0 في كلاسيكو الجولة الثامنة من الدوري الإسباني، بهدف سجّله مولييرو في الدقيقة 21. ⚪🔥 #ريال_مدريد #الكلاسيكو #ريال_مدريد",
+    "🏛️ ريال مدريد: 😁 من هو أول من يصل إلى اجتماعات الفريق؟ #ريال_مدريد"
   ],
   "done": {
     "564723:pre:rm": 1792946102681,
@@ -6311,10 +6311,10 @@
       }
     ]
   },
-  "lastNewsRun": 1794477189748,
+  "lastNewsRun": 1794480876748,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
-    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120813996295303594",
+    "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2120831769234551242",
     "(from:MarioCortegana) -is:retweet -is:reply": "2120804754531958828"
   },
   "live": {
@@ -6636,7 +6636,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794477198849,
+  "officialXRun": 1794480885961,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6652,12 +6652,13 @@
     "2023: بيري يصبح الرئيس الشرفي لريال مدريد",
     "1944: ريال مدريد يتغلب على برشلونة 1-0 في الكلاسيكو"
   ],
-  "officialSince": "2120584846095405220",
+  "officialSince": "2120827719474708518",
   "postTimes": [
     1794421913125,
     1794469905703,
     1794469920334,
-    1794477214876
+    1794477214876,
+    1794480889393
   ],
   "xBlockedUntil": 1793618696842,
   "tries": {
