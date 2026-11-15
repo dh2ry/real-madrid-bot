@@ -1,0 +1,12 @@
+{
+  "name": "carb-insulin-calculator",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "حاسبة الكربوهيدرات والإنسولين — تطبيق ويب PWA بدون خادم",
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "test": "node --test tests/calc.test.mjs",
+    "test:e2e": "node tests/e2e.cjs"
+  }
+}

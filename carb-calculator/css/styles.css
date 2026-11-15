@@ -1,0 +1,381 @@
+/* حاسبة الكربوهيدرات والإنسولين — التصميم */
+:root {
+  --bg: #f3f6f5;
+  --surface: #ffffff;
+  --surface-2: #f7faf9;
+  --text: #17302d;
+  --muted: #5e7470;
+  --border: #dde7e4;
+  --primary: #0f766e;
+  --primary-2: #14b8a6;
+  --primary-soft: #e0f2ef;
+  --on-primary: #ffffff;
+  --accent: #b45309;
+  --accent-soft: #fef3e2;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --warn: #8a5a00;
+  --warn-soft: #fff4d6;
+  --shadow: 0 1px 2px rgba(16, 40, 36, .06), 0 4px 16px rgba(16, 40, 36, .06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --nav-h: 64px;
+
+  --cat-bread: #f7ead2;
+  --cat-grains: #efeadf;
+  --cat-vegetables: #dcf1df;
+  --cat-fruits: #fbe1e1;
+  --cat-dairy: #e3eef9;
+  --cat-meat: #f7e3d6;
+  --cat-sweets: #eedfd6;
+  --cat-biscuits: #f5ead6;
+  --cat-drinks: #fdecd0;
+  --cat-other: #e8e8f1;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1514;
+    --surface: #13201e;
+    --surface-2: #182826;
+    --text: #e3efec;
+    --muted: #93aaa5;
+    --border: #253835;
+    --primary: #2dd4bf;
+    --primary-2: #5eead4;
+    --primary-soft: #133b36;
+    --on-primary: #04211d;
+    --accent: #fbbf24;
+    --accent-soft: #3a2c10;
+    --danger: #f97066;
+    --danger-soft: #3b1714;
+    --warn: #fcd34d;
+    --warn-soft: #3a2f10;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+    --cat-bread: #3a3122;
+    --cat-grains: #34312a;
+    --cat-vegetables: #213a26;
+    --cat-fruits: #3d2525;
+    --cat-dairy: #22313f;
+    --cat-meat: #3b2a20;
+    --cat-sweets: #36291f;
+    --cat-biscuits: #3a3222;
+    --cat-drinks: #3d321d;
+    --cat-other: #2a2a36;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "SF Arabic", "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px);
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2 { margin: 0; line-height: 1.35; }
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.1rem; }
+a { color: var(--primary); }
+button, input, select { font: inherit; color: inherit; }
+img { max-width: 100%; }
+
+.container { max-width: 1180px; margin: 0 auto; padding: 16px; }
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+.sr { font-size: 0; }
+.loading { padding: 40px; text-align: center; color: var(--muted); }
+
+/* ── الترويسة والتنقل ── */
+.app-header {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(1.6) blur(12px);
+  -webkit-backdrop-filter: saturate(1.6) blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; color: var(--primary); }
+.top-nav { display: none; gap: 4px; }
+.nav-link {
+  display: flex; align-items: center; gap: 6px; text-decoration: none; color: var(--muted);
+  padding: 8px 14px; border-radius: 999px; font-weight: 600;
+}
+.nav-link:hover { background: var(--surface-2); }
+.nav-link.active { background: var(--primary-soft); color: var(--primary); }
+
+.bottom-nav {
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 30;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  height: calc(var(--nav-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--surface); border-top: 1px solid var(--border);
+}
+.bottom-nav .nav-link {
+  flex-direction: column; gap: 0; justify-content: center; border-radius: 0; font-size: .75rem; padding: 4px;
+}
+.bottom-nav .nav-link.active { background: transparent; }
+.bottom-nav .nav-icon { font-size: 1.35rem; line-height: 1.2; }
+.bottom-nav .nav-link.active .nav-icon { transform: scale(1.12); }
+
+@media (min-width: 900px) {
+  .top-nav { display: flex; }
+  .bottom-nav { display: none; }
+  body { padding-bottom: 24px; }
+}
+
+/* ── عناصر عامة ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 16px; margin-bottom: 16px;
+}
+.card > h2 { margin-bottom: 8px; }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 16px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 44px; padding: 8px 16px; border-radius: 12px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); font-weight: 600; text-decoration: none; color: var(--text);
+  transition: transform .08s, background .15s;
+}
+.btn:active { transform: scale(.97); }
+.btn.primary { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn.danger-ghost { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, var(--border)); }
+.btn.ghost { background: transparent; }
+.btn.small { min-height: 36px; padding: 4px 12px; font-size: .9rem; }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 10px;
+  border: none; background: transparent; cursor: pointer; font-size: 1.05rem;
+}
+.icon-btn:hover { background: var(--surface-2); }
+.link-btn { background: none; border: none; color: var(--primary); cursor: pointer; padding: 0 4px; font-weight: 600; text-decoration: underline; font-size: .9rem; }
+
+.input {
+  width: 100%; min-height: 46px; padding: 10px 14px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface); font-size: 16px; /* 16px يمنع التكبير في iOS */
+}
+.input:focus, .btn:focus-visible, .chip:focus-visible, .icon-btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 40%, transparent); outline-offset: 1px; border-color: var(--primary);
+}
+.input.search {
+  padding-inline-start: 42px;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%2393aaa5' stroke-width='2'%3E%3Ccircle cx='9' cy='9' r='6'/%3E%3Cpath d='m14 14 4 4'/%3E%3C/svg%3E") no-repeat right 14px center;
+}
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field > span { font-weight: 600; font-size: .95rem; }
+.fieldset { border: 1px dashed var(--border); border-radius: 12px; padding: 10px 14px 0; margin: 0 0 14px; }
+.fieldset legend { font-weight: 600; padding: 0 6px; }
+.fieldset > small { display: block; margin-bottom: 10px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.check { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.check input { width: 20px; height: 20px; accent-color: var(--primary); }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 4px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface); cursor: pointer; font-weight: 600; font-size: .9rem; white-space: nowrap;
+}
+.chip.active { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.chip.small { padding: 5px 12px; font-size: .85rem; }
+
+.badge { flex: none; padding: 3px 10px; border-radius: 999px; font-size: .82rem; font-weight: 700; white-space: nowrap; }
+.badge.carbs { background: var(--accent-soft); color: var(--accent); }
+.badge.warn { background: var(--warn-soft); color: var(--warn); }
+.badge.tiny { font-size: .7rem; padding: 1px 6px; margin-inline-start: 6px; }
+.note { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 8px 12px; font-size: .9rem; }
+.banner {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--primary-soft); color: var(--primary); border-radius: 10px; padding: 8px 12px; margin-bottom: 12px; font-weight: 600; font-size: .9rem;
+}
+
+.empty { text-align: center; padding: 28px 12px; color: var(--muted); }
+.empty-icon { font-size: 2.4rem; }
+.empty p { margin: 8px 0 14px; }
+
+.row-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.row-actions .btn { flex: 1 1 auto; }
+
+/* ── تخطيط الحاسبة ── */
+.calc-layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+.calc-layout > * { min-width: 0; }
+@media (min-width: 900px) {
+  .calc-layout { grid-template-columns: minmax(0, 1fr) 420px; align-items: start; }
+  .col-meal { position: sticky; top: 80px; }
+}
+.search-bar {
+  position: sticky; top: calc(57px + env(safe-area-inset-top)); z-index: 10;
+  background: var(--bg); padding: 4px 0 8px; margin: -4px 0 4px;
+}
+
+.cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (min-width: 560px) { .cat-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1100px) { .cat-grid { grid-template-columns: repeat(4, 1fr); } }
+.cat-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: start;
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; cursor: pointer; min-height: 112px;
+  transition: transform .1s;
+}
+.cat-card:active { transform: scale(.97); }
+.cat-icon { font-size: 2rem; line-height: 1.2; }
+.cat-name { font-weight: 700; font-size: .95rem; line-height: 1.35; }
+.cat-count { font-size: .8rem; color: var(--muted); }
+
+.food-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.food-row {
+  width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; cursor: pointer; text-align: start;
+}
+.food-row:not(.static):active { transform: scale(.99); background: var(--surface-2); }
+.thumb {
+  flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+  font-size: 1.4rem; object-fit: cover;
+}
+.food-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.food-name { font-weight: 700; line-height: 1.4; }
+.food-ref { color: var(--muted); font-size: .85rem; }
+.food-note { color: var(--warn); font-size: .8rem; }
+.add-icon {
+  flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--primary); color: var(--on-primary); font-weight: 700; font-size: 1.2rem;
+}
+.row-btns { display: flex; flex: none; }
+@media (max-width: 520px) {
+  .food-list.manage .food-row { flex-wrap: wrap; }
+  .food-list.manage .food-info { flex-basis: calc(100% - 60px); }
+  .food-list.manage .badge { margin-inline-start: 56px; }
+  .food-list.manage .row-btns { margin-inline-start: auto; }
+}
+
+/* ── جدول الوجبة ── */
+.table-wrap { overflow-x: auto; margin: 0 -4px; }
+.meal-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.meal-table th, .meal-table td { padding: 8px 4px; text-align: start; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.meal-table thead th { color: var(--muted); font-size: .8rem; font-weight: 600; }
+.td-name { font-weight: 600; }
+.td-qty { color: var(--muted); white-space: nowrap; font-size: .9rem; }
+.td-carbs { font-weight: 700; white-space: nowrap; color: var(--accent); }
+.td-actions { white-space: nowrap; width: 1%; }
+.td-actions .icon-btn { width: 36px; height: 36px; }
+.meal-table tfoot th { border-bottom: none; padding-top: 12px; font-size: 1.05rem; }
+.meal-table .total { font-size: 1.2rem; }
+
+/* ── الإنسولين ── */
+.insulin { border-color: color-mix(in srgb, var(--primary) 30%, var(--border)); }
+.insulin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 12px; }
+.insulin-grid > div { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
+.insulin-grid dt { font-size: .8rem; color: var(--muted); }
+.insulin-grid dd { margin: 2px 0 0; }
+.insulin-grid strong { font-size: 1.3rem; }
+.dose {
+  text-align: center; border-radius: var(--radius); padding: 16px;
+  background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 70%, var(--primary-2)));
+  color: var(--on-primary);
+}
+.dose-label { font-weight: 600; opacity: .9; }
+.dose-value { font-size: 3rem; font-weight: 800; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.dose-value span { font-size: 1.1rem; font-weight: 600; }
+.dose .equation { opacity: .85; color: inherit; }
+.equation { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .85rem; color: var(--muted); }
+.disclaimer {
+  font-size: .82rem; color: var(--muted); background: var(--surface-2); border-radius: 10px;
+  padding: 10px 12px; margin: 12px 0 0; line-height: 1.7;
+}
+
+/* ── نافذة الكمية ── */
+.modal {
+  border: none; padding: 0; border-radius: 20px; width: min(480px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px); background: var(--surface); color: var(--text); box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+}
+.modal.wide { width: min(620px, calc(100vw - 24px)); }
+.modal::backdrop { background: rgba(8, 20, 18, .5); backdrop-filter: blur(2px); }
+.modal[open] { display: flex; flex-direction: column; animation: pop .16s ease-out; }
+@keyframes pop { from { transform: translateY(12px); opacity: 0; } }
+@media (max-width: 600px) {
+  .modal { margin: auto auto 0; width: 100vw; max-width: 100vw; border-radius: 20px 20px 0 0; max-height: 92dvh; }
+  .modal.wide { width: 100vw; }
+}
+.modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 16px 6px; }
+.modal-body { padding: 8px 16px; overflow-y: auto; }
+.modal-actions {
+  display: flex; gap: 8px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+}
+.modal-actions .btn { flex: 1; }
+.confirm-text { white-space: pre-line; }
+
+.qty-head { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.segmented { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 3px; margin-bottom: 12px; }
+.segmented button { flex: 1; border: none; background: transparent; padding: 8px; border-radius: 9px; cursor: pointer; font-weight: 600; }
+.segmented button.active { background: var(--surface); box-shadow: var(--shadow); color: var(--primary); }
+.stepper { display: flex; align-items: center; gap: 8px; }
+.step-btn {
+  flex: none; width: 48px; height: 48px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surface-2); font-size: 1.5rem; cursor: pointer;
+}
+.qty-input { text-align: center; font-size: 1.3rem; font-weight: 700; flex: 1; min-width: 0; }
+.qty-unit { flex: none; color: var(--muted); font-weight: 600; max-width: 30%; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 12px; }
+.qty-result { text-align: center; background: var(--accent-soft); border-radius: 14px; padding: 12px; min-height: 76px; }
+.qty-carbs { font-size: 1.1rem; color: var(--accent); }
+.qty-carbs strong { font-size: 1.8rem; }
+
+/* ── الوجبات المحفوظة ── */
+.meal-cards { display: grid; gap: 12px; }
+@media (min-width: 760px) { .meal-cards { grid-template-columns: 1fr 1fr; } }
+.meal-saved .card-head { align-items: flex-start; }
+.meal-total { text-align: center; background: var(--accent-soft); color: var(--accent); border-radius: 12px; padding: 6px 12px; flex: none; }
+.meal-total strong { display: block; font-size: 1.4rem; line-height: 1.2; }
+.meal-total span { font-size: .75rem; }
+details summary { cursor: pointer; color: var(--primary); font-weight: 600; }
+.meal-items { list-style: none; padding: 0; margin: 8px 0; }
+.meal-items li { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .92rem; }
+
+/* ── الإدارة والإعدادات ── */
+.filters { display: grid; gap: 10px; margin-bottom: 12px; }
+@media (min-width: 700px) { .filters { grid-template-columns: 1fr 240px auto; align-items: center; } }
+.img-preview { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.img-preview img { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; }
+.form-errors ul { margin: 0; padding: 10px 28px 10px 12px; background: var(--danger-soft); color: var(--danger); border-radius: 10px; }
+.form-errors:empty { display: none; }
+.ratio-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ratio-input { width: 110px; text-align: center; font-size: 1.2rem; font-weight: 700; }
+.row-actions.wrap .btn { flex: 1 1 220px; }
+
+/* ── تنبيه عائم ── */
+.toast {
+  position: fixed; inset-inline: 16px; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px); z-index: 100;
+  margin: 0 auto; max-width: 420px; padding: 12px 16px; border-radius: 12px; text-align: center; font-weight: 600;
+  background: var(--text); color: var(--bg); box-shadow: var(--shadow);
+  opacity: 0; transform: translateY(10px); pointer-events: none; transition: .2s;
+}
+.toast.show { opacity: 1; transform: none; }
+.toast.error { background: var(--danger); color: #fff; }
+@media (min-width: 900px) { .toast { bottom: 24px; } }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* ── الشريط العائم للوجبة (جوال) ── */
+.meal-fab {
+  position: fixed; z-index: 25; inset-inline: 12px;
+  bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 8px);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 16px; border: none; border-radius: 16px; cursor: pointer;
+  background: var(--primary); color: var(--on-primary); box-shadow: 0 8px 24px rgba(15, 118, 110, .35);
+  font-size: .95rem;
+}
+.meal-fab[hidden] { display: none; }
+.meal-fab strong { font-size: 1.15rem; }
+.fab-dose { background: rgba(255, 255, 255, .18); padding: 2px 10px; border-radius: 999px; }
+body:has(.meal-fab:not([hidden])) { padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 76px); }
+body:has(.meal-fab:not([hidden])) .toast { bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 76px); }
+@media (min-width: 900px) { .meal-fab { display: none !important; } }

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>حاسبة الكربوهيدرات والإنسولين</title>
+  <meta name="description" content="احسب كربوهيدرات وجبتك والناتج الحسابي لجرعة الإنسولين بسهولة">
+  <meta name="theme-color" content="#0f766e" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1514" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="حاسبة الكارب">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="brand">
+      <img src="icons/icon.svg" alt="" width="36" height="36">
+      <span>حاسبة الكربوهيدرات والإنسولين</span>
+    </div>
+    <nav id="top-nav" class="top-nav" aria-label="التنقل الرئيسي"></nav>
+  </header>
+
+  <main id="view" class="container">
+    <div class="loading" aria-live="polite">جارِ التحميل…</div>
+  </main>
+
+  <nav id="bottom-nav" class="bottom-nav" aria-label="التنقل"></nav>
+
+  <noscript>يحتاج هذا التطبيق إلى تفعيل JavaScript.</noscript>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
