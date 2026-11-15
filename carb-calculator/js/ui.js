@@ -118,7 +118,20 @@ export function promptDialog(title, { label = '', value = '', okLabel = 'حفظ'
   });
 }
 
-export function download(filename, text, type = 'application/json') {
+/** تنزيل ملف: داخل Claude عبر خاصية التنزيل (يطلب تأكيد المستخدم)، وخارجه عبر رابط عادي */
+export async function download(filename, text, type = 'application/json') {
+  if (window.claude?.use) {
+    const dl = await window.claude.use('downloads');
+    if (dl) {
+      try {
+        await dl.save({ filename, data: text });
+        return true;
+      } catch (e) {
+        if (e?.code !== 'declined') toast('تعذر حفظ الملف في هذا العرض', 'error');
+        return false;
+      }
+    }
+  }
   const blob = new Blob([text], { type: `${type};charset=utf-8` });
   const url = URL.createObjectURL(blob);
   const a = h('a', { href: url, download: filename });
@@ -126,6 +139,7 @@ export function download(filename, text, type = 'application/json') {
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 2000);
+  return true;
 }
 
 export function pickFile(accept) {

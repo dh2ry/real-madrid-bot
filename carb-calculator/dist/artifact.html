@@ -1,0 +1,2122 @@
+<title>حاسبة الكربوهيدرات والإنسولين</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="احسب كربوهيدرات وجبتك والناتج الحسابي لجرعة الإنسولين">
+<style>
+html { direction: rtl; }
+/* حاسبة الكربوهيدرات والإنسولين — التصميم */
+:root {
+  --bg: #f3f6f5;
+  --surface: #ffffff;
+  --surface-2: #f7faf9;
+  --text: #17302d;
+  --muted: #5e7470;
+  --border: #dde7e4;
+  --primary: #0f766e;
+  --primary-2: #14b8a6;
+  --primary-soft: #e0f2ef;
+  --on-primary: #ffffff;
+  --accent: #b45309;
+  --accent-soft: #fef3e2;
+  --danger: #b42318;
+  --danger-soft: #fdecea;
+  --warn: #8a5a00;
+  --warn-soft: #fff4d6;
+  --shadow: 0 1px 2px rgba(16, 40, 36, .06), 0 4px 16px rgba(16, 40, 36, .06);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --nav-h: 64px;
+
+  --cat-bread: #f7ead2;
+  --cat-grains: #efeadf;
+  --cat-vegetables: #dcf1df;
+  --cat-fruits: #fbe1e1;
+  --cat-dairy: #e3eef9;
+  --cat-meat: #f7e3d6;
+  --cat-sweets: #eedfd6;
+  --cat-biscuits: #f5ead6;
+  --cat-drinks: #fdecd0;
+  --cat-other: #e8e8f1;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0b1514;
+    --surface: #13201e;
+    --surface-2: #182826;
+    --text: #e3efec;
+    --muted: #93aaa5;
+    --border: #253835;
+    --primary: #2dd4bf;
+    --primary-2: #5eead4;
+    --primary-soft: #133b36;
+    --on-primary: #04211d;
+    --accent: #fbbf24;
+    --accent-soft: #3a2c10;
+    --danger: #f97066;
+    --danger-soft: #3b1714;
+    --warn: #fcd34d;
+    --warn-soft: #3a2f10;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+    --cat-bread: #3a3122;
+    --cat-grains: #34312a;
+    --cat-vegetables: #213a26;
+    --cat-fruits: #3d2525;
+    --cat-dairy: #22313f;
+    --cat-meat: #3b2a20;
+    --cat-sweets: #36291f;
+    --cat-biscuits: #3a3222;
+    --cat-drinks: #3d321d;
+    --cat-other: #2a2a36;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0b1514;
+  --surface: #13201e;
+  --surface-2: #182826;
+  --text: #e3efec;
+  --muted: #93aaa5;
+  --border: #253835;
+  --primary: #2dd4bf;
+  --primary-2: #5eead4;
+  --primary-soft: #133b36;
+  --on-primary: #04211d;
+  --accent: #fbbf24;
+  --accent-soft: #3a2c10;
+  --danger: #f97066;
+  --danger-soft: #3b1714;
+  --warn: #fcd34d;
+  --warn-soft: #3a2f10;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 4px 16px rgba(0, 0, 0, .25);
+  --cat-bread: #3a3122;
+  --cat-grains: #34312a;
+  --cat-vegetables: #213a26;
+  --cat-fruits: #3d2525;
+  --cat-dairy: #22313f;
+  --cat-meat: #3b2a20;
+  --cat-sweets: #36291f;
+  --cat-biscuits: #3a3222;
+  --cat-drinks: #3d321d;
+  --cat-other: #2a2a36;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 21; background: var(--surface);
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "SF Arabic", "Segoe UI", Tahoma, "Noto Sans Arabic", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px);
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2 { margin: 0; line-height: 1.35; }
+h1 { font-size: 1.4rem; }
+h2 { font-size: 1.1rem; }
+a { color: var(--primary); }
+button, input, select { font: inherit; color: inherit; }
+img { max-width: 100%; }
+
+.container {
+  max-width: 1180px; margin: 0 auto; padding-block: 16px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.muted { color: var(--muted); }
+.small { font-size: .85rem; }
+.sr { font-size: 0; }
+.loading { padding: 40px; text-align: center; color: var(--muted); }
+
+/* ── الترويسة والتنقل ── */
+.app-header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  backdrop-filter: saturate(1.6) blur(12px);
+  -webkit-backdrop-filter: saturate(1.6) blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.05rem; color: var(--primary); }
+.top-nav { display: none; gap: 4px; }
+.nav-link {
+  display: flex; align-items: center; gap: 6px; text-decoration: none; color: var(--muted);
+  padding: 8px 14px; border-radius: 999px; font-weight: 600;
+}
+.nav-link:hover { background: var(--surface-2); }
+.nav-link.active { background: var(--primary-soft); color: var(--primary); }
+
+.bottom-nav {
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 30;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  height: calc(var(--nav-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
+  background: var(--surface); border-top: 1px solid var(--border);
+}
+.bottom-nav .nav-link {
+  flex-direction: column; gap: 0; justify-content: center; border-radius: 0; font-size: .75rem; padding: 4px;
+}
+.bottom-nav .nav-link.active { background: transparent; }
+.bottom-nav .nav-icon { font-size: 1.35rem; line-height: 1.2; }
+.bottom-nav .nav-link.active .nav-icon { transform: scale(1.12); }
+
+@media (min-width: 900px) {
+  .top-nav { display: flex; }
+  .bottom-nav { display: none; }
+  body { padding-bottom: 24px; }
+}
+
+/* ── عناصر عامة ── */
+.card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 16px; margin-bottom: 16px;
+}
+.card > h2 { margin-bottom: 8px; }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 4px 0 16px; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 44px; padding: 8px 16px; border-radius: 12px; cursor: pointer;
+  border: 1px solid var(--border); background: var(--surface); font-weight: 600; text-decoration: none; color: var(--text);
+  transition: transform .08s, background .15s;
+}
+.btn:active { transform: scale(.97); }
+.btn.primary { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.btn.danger { background: var(--danger); border-color: var(--danger); color: #fff; }
+.btn.danger-ghost { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, var(--border)); }
+.btn.ghost { background: transparent; }
+.btn.small { min-height: 36px; padding: 4px 12px; font-size: .9rem; }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 10px;
+  border: none; background: transparent; cursor: pointer; font-size: 1.05rem;
+}
+.icon-btn:hover { background: var(--surface-2); }
+.link-btn { background: none; border: none; color: var(--primary); cursor: pointer; padding: 0 4px; font-weight: 600; text-decoration: underline; font-size: .9rem; }
+
+.input {
+  width: 100%; min-height: 46px; padding: 10px 14px; border-radius: 12px;
+  border: 1px solid var(--border); background: var(--surface); font-size: 16px; /* 16px يمنع التكبير في iOS */
+}
+.input:focus, .btn:focus-visible, .chip:focus-visible, .icon-btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 40%, transparent); outline-offset: 1px; border-color: var(--primary);
+}
+.input.search {
+  padding-inline-start: 42px;
+  background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none' stroke='%2393aaa5' stroke-width='2'%3E%3Ccircle cx='9' cy='9' r='6'/%3E%3Cpath d='m14 14 4 4'/%3E%3C/svg%3E") no-repeat right 14px center;
+}
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.field > span { font-weight: 600; font-size: .95rem; }
+.fieldset { border: 1px dashed var(--border); border-radius: 12px; padding: 10px 14px 0; margin: 0 0 14px; }
+.fieldset legend { font-weight: 600; padding: 0 6px; }
+.fieldset > small { display: block; margin-bottom: 10px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.check { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.check input { width: 20px; height: 20px; accent-color: var(--primary); }
+
+.chips { display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 4px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--surface); cursor: pointer; font-weight: 600; font-size: .9rem; white-space: nowrap;
+}
+.chip.active { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.chip.small { padding: 5px 12px; font-size: .85rem; }
+
+.badge { flex: none; padding: 3px 10px; border-radius: 999px; font-size: .82rem; font-weight: 700; white-space: nowrap; }
+.badge.carbs { background: var(--accent-soft); color: var(--accent); }
+.badge.warn { background: var(--warn-soft); color: var(--warn); }
+.badge.tiny { font-size: .7rem; padding: 1px 6px; margin-inline-start: 6px; }
+.note { background: var(--warn-soft); color: var(--warn); border-radius: 10px; padding: 8px 12px; font-size: .9rem; }
+.banner {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: var(--primary-soft); color: var(--primary); border-radius: 10px; padding: 8px 12px; margin-bottom: 12px; font-weight: 600; font-size: .9rem;
+}
+
+.empty { text-align: center; padding: 28px 12px; color: var(--muted); }
+.empty-icon { font-size: 2.4rem; }
+.empty p { margin: 8px 0 14px; }
+
+.row-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.row-actions .btn { flex: 1 1 auto; }
+
+/* ── تخطيط الحاسبة ── */
+.calc-layout { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); }
+.calc-layout > * { min-width: 0; }
+@media (min-width: 900px) {
+  .calc-layout { grid-template-columns: minmax(0, 1fr) 420px; align-items: start; }
+  .col-meal { position: sticky; top: 80px; }
+}
+.search-bar {
+  position: sticky; top: calc(57px + env(safe-area-inset-top, 0px)); z-index: 10;
+  background: var(--bg); padding: 4px 0 8px; margin: -4px 0 4px;
+}
+
+.cat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (min-width: 560px) { .cat-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1100px) { .cat-grid { grid-template-columns: repeat(4, 1fr); } }
+.cat-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: start;
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; cursor: pointer; min-height: 112px;
+  transition: transform .1s;
+}
+.cat-card:active { transform: scale(.97); }
+.cat-icon { font-size: 2rem; line-height: 1.2; }
+.cat-name { font-weight: 700; font-size: .95rem; line-height: 1.35; }
+.cat-count { font-size: .8rem; color: var(--muted); }
+
+.food-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.food-row {
+  width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 14px; cursor: pointer; text-align: start;
+}
+.food-row:not(.static):active { transform: scale(.99); background: var(--surface-2); }
+.thumb {
+  flex: none; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+  font-size: 1.4rem; object-fit: cover;
+}
+.food-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.food-name { font-weight: 700; line-height: 1.4; }
+.food-ref { color: var(--muted); font-size: .85rem; }
+.food-note { color: var(--warn); font-size: .8rem; }
+.add-icon {
+  flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--primary); color: var(--on-primary); font-weight: 700; font-size: 1.2rem;
+}
+.row-btns { display: flex; flex: none; }
+@media (max-width: 520px) {
+  .food-list.manage .food-row { flex-wrap: wrap; }
+  .food-list.manage .food-info { flex-basis: calc(100% - 60px); }
+  .food-list.manage .badge { margin-inline-start: 56px; }
+  .food-list.manage .row-btns { margin-inline-start: auto; }
+}
+
+/* ── جدول الوجبة ── */
+.table-wrap { overflow-x: auto; margin: 0 -4px; }
+.meal-table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.meal-table th, .meal-table td { padding: 8px 4px; text-align: start; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.meal-table thead th { color: var(--muted); font-size: .8rem; font-weight: 600; }
+.td-name { font-weight: 600; }
+.td-qty { color: var(--muted); white-space: nowrap; font-size: .9rem; }
+.td-carbs { font-weight: 700; white-space: nowrap; color: var(--accent); }
+.td-actions { white-space: nowrap; width: 1%; }
+.td-actions .icon-btn { width: 36px; height: 36px; }
+.meal-table tfoot th { border-bottom: none; padding-top: 12px; font-size: 1.05rem; }
+.meal-table .total { font-size: 1.2rem; }
+
+/* ── الإنسولين ── */
+.insulin { border-color: color-mix(in srgb, var(--primary) 30%, var(--border)); }
+.insulin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 0 12px; }
+.insulin-grid > div { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
+.insulin-grid dt { font-size: .8rem; color: var(--muted); }
+.insulin-grid dd { margin: 2px 0 0; }
+.insulin-grid strong { font-size: 1.3rem; }
+.dose {
+  text-align: center; border-radius: var(--radius); padding: 16px;
+  background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 70%, var(--primary-2)));
+  color: var(--on-primary);
+}
+.dose-label { font-weight: 600; opacity: .9; }
+.dose-value { font-size: 3rem; font-weight: 800; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.dose-value span { font-size: 1.1rem; font-weight: 600; }
+.dose .equation { opacity: .85; color: inherit; }
+.equation { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .85rem; color: var(--muted); }
+.disclaimer {
+  font-size: .82rem; color: var(--muted); background: var(--surface-2); border-radius: 10px;
+  padding: 10px 12px; margin: 12px 0 0; line-height: 1.7;
+}
+
+/* ── نافذة الكمية ── */
+.modal {
+  border: none; padding: 0; border-radius: 20px; width: min(480px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px); background: var(--surface); color: var(--text); box-shadow: 0 20px 60px rgba(0, 0, 0, .3);
+}
+.modal.wide { width: min(620px, calc(100vw - 24px)); }
+.modal::backdrop { background: rgba(8, 20, 18, .5); backdrop-filter: blur(2px); }
+.modal[open] { display: flex; flex-direction: column; animation: pop .16s ease-out; }
+@keyframes pop { from { transform: translateY(12px); opacity: 0; } }
+@media (max-width: 600px) {
+  .modal { margin: auto auto 0; width: 100vw; max-width: 100vw; border-radius: 20px 20px 0 0; max-height: 92dvh; }
+  .modal.wide { width: 100vw; }
+}
+.modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 16px 6px; }
+.modal-body { padding: 8px 16px; overflow-y: auto; }
+.modal-actions {
+  display: flex; gap: 8px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+}
+.modal-actions .btn { flex: 1; }
+.confirm-text { white-space: pre-line; }
+
+.qty-head { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.segmented { display: flex; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: 3px; margin-bottom: 12px; }
+.segmented button { flex: 1; border: none; background: transparent; padding: 8px; border-radius: 9px; cursor: pointer; font-weight: 600; }
+.segmented button.active { background: var(--surface); box-shadow: var(--shadow); color: var(--primary); }
+.stepper { display: flex; align-items: center; gap: 8px; }
+.step-btn {
+  flex: none; width: 48px; height: 48px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--surface-2); font-size: 1.5rem; cursor: pointer;
+}
+.qty-input { text-align: center; font-size: 1.3rem; font-weight: 700; flex: 1; min-width: 0; }
+.qty-unit { flex: none; color: var(--muted); font-weight: 600; max-width: 30%; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 12px; }
+.qty-result { text-align: center; background: var(--accent-soft); border-radius: 14px; padding: 12px; min-height: 76px; }
+.qty-carbs { font-size: 1.1rem; color: var(--accent); }
+.qty-carbs strong { font-size: 1.8rem; }
+
+/* ── الوجبات المحفوظة ── */
+.meal-cards { display: grid; gap: 12px; }
+@media (min-width: 760px) { .meal-cards { grid-template-columns: 1fr 1fr; } }
+.meal-saved .card-head { align-items: flex-start; }
+.meal-total { text-align: center; background: var(--accent-soft); color: var(--accent); border-radius: 12px; padding: 6px 12px; flex: none; }
+.meal-total strong { display: block; font-size: 1.4rem; line-height: 1.2; }
+.meal-total span { font-size: .75rem; }
+details summary { cursor: pointer; color: var(--primary); font-weight: 600; }
+.meal-items { list-style: none; padding: 0; margin: 8px 0; }
+.meal-items li { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: .92rem; }
+
+/* ── الإدارة والإعدادات ── */
+.filters { display: grid; gap: 10px; margin-bottom: 12px; }
+@media (min-width: 700px) { .filters { grid-template-columns: 1fr 240px auto; align-items: center; } }
+.img-preview { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.img-preview img { width: 64px; height: 64px; object-fit: cover; border-radius: 12px; }
+.form-errors ul { margin: 0; padding: 10px 28px 10px 12px; background: var(--danger-soft); color: var(--danger); border-radius: 10px; }
+.form-errors:empty { display: none; }
+.ratio-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ratio-input { width: 110px; text-align: center; font-size: 1.2rem; font-weight: 700; }
+.row-actions.wrap .btn { flex: 1 1 220px; }
+
+/* ── تنبيه عائم ── */
+.toast {
+  position: fixed; inset-inline: 16px; bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 12px); z-index: 100;
+  margin: 0 auto; max-width: 420px; padding: 12px 16px; border-radius: 12px; text-align: center; font-weight: 600;
+  background: var(--text); color: var(--bg); box-shadow: var(--shadow);
+  opacity: 0; transform: translateY(10px); pointer-events: none; transition: .2s;
+}
+.toast.show { opacity: 1; transform: none; }
+.toast.error { background: var(--danger); color: #fff; }
+@media (min-width: 900px) { .toast { bottom: 24px; } }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+/* ── الشريط العائم للوجبة (جوال) ── */
+.meal-fab {
+  position: fixed; z-index: 25;
+  left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px));
+  bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 8px);
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 16px; border: none; border-radius: 16px; cursor: pointer;
+  background: var(--primary); color: var(--on-primary); box-shadow: 0 8px 24px rgba(15, 118, 110, .35);
+  font-size: .95rem;
+}
+.meal-fab[hidden] { display: none; }
+.meal-fab strong { font-size: 1.15rem; }
+.fab-dose { background: rgba(255, 255, 255, .18); padding: 2px 10px; border-radius: 999px; }
+body:has(.meal-fab:not([hidden])) { padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 76px); }
+body:has(.meal-fab:not([hidden])) .toast { bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 76px); }
+@media (min-width: 900px) { .meal-fab { display: none !important; } }
+
+</style>
+<div dir="rtl" lang="ar">
+<header class="app-header">
+    <div class="brand">
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjExMiIgZmlsbD0iIzBmNzY2ZSIvPgogIDxjaXJjbGUgY3g9IjI1NiIgY3k9IjI2OCIgcj0iMTUwIiBmaWxsPSIjZmZmZmZmIiBvcGFjaXR5PSIuMTQiLz4KICA8cGF0aCBkPSJNMjU2IDkyYy0zMCAwLTQ4IDI2LTQ4IDU2IDAgMjIgMTAgMzYgMjIgNDgtMzggNi03NCA0MC03NCA5MiAwIDY2IDQ2IDEzMiAxMDAgMTMyczEwMC02NiAxMDAtMTMyYzAtNTItMzYtODYtNzQtOTIgMTItMTIgMjItMjYgMjItNDggMC0zMC0xOC01Ni00OC01NnoiIGZpbGw9IiNmZWYzZTIiLz4KICA8cGF0aCBkPSJNMjU2IDkyYzEwIDE4IDEwIDQwIDAgNjAiIHN0cm9rZT0iIzBmNzY2ZSIgc3Ryb2tlLXdpZHRoPSIxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CiAgPHRleHQgeD0iMjU2IiB5PSIzNTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1zaXplPSI5MiIgZmlsbD0iIzBmNzY2ZSI+QzwvdGV4dD4KPC9zdmc+" alt="" width="36" height="36">
+      <span>حاسبة الكربوهيدرات والإنسولين</span>
+    </div>
+    <nav id="top-nav" class="top-nav" aria-label="التنقل الرئيسي"></nav>
+  </header>
+
+  <main id="view" class="container">
+    <div class="loading" aria-live="polite">جارِ التحميل…</div>
+  </main>
+
+  <nav id="bottom-nav" class="bottom-nav" aria-label="التنقل"></nav>
+
+  <noscript>يحتاج هذا التطبيق إلى تفعيل JavaScript.</noscript>
+</div>
+<script>
+document.documentElement.lang = 'ar';
+document.documentElement.dir = 'rtl';
+(() => {
+'use strict';
+const __m = {};
+__m["categories"] = (() => {
+// التصنيفات الرئيسية — المعرّف ثابت، والاسم والأيقونة للعرض
+const CATEGORIES = [
+  { id: 'bread', name: 'الخبز والنشويات', icon: '🍞', color: '#f4e3c3' },
+  { id: 'grains', name: 'الأرز والمعكرونة والحبوب', icon: '🍚', color: '#efe9da' },
+  { id: 'vegetables', name: 'الخضروات', icon: '🥦', color: '#d8f0dc' },
+  { id: 'fruits', name: 'الفواكه', icon: '🍎', color: '#fbdcdc' },
+  { id: 'dairy', name: 'الحليب ومشتقاته', icon: '🥛', color: '#e3eef9' },
+  { id: 'meat', name: 'اللحوم والأطعمة الجاهزة', icon: '🍗', color: '#f6e0d2' },
+  { id: 'sweets', name: 'الحلويات والشوكولاتة', icon: '🍫', color: '#ead9cf' },
+  { id: 'biscuits', name: 'البسكويت والمقرمشات', icon: '🍪', color: '#f3e6cf' },
+  { id: 'drinks', name: 'العصائر والمشروبات', icon: '🧃', color: '#fde9c9' },
+  { id: 'other', name: 'أصناف أخرى', icon: '🍽️', color: '#e6e6ef' },
+];
+
+const byId = new Map(CATEGORIES.map((c) => [c.id, c]));
+
+function getCategory(id) {
+  return byId.get(id) || byId.get('other');
+}
+
+/** يقبل معرّف التصنيف أو اسمه العربي (للاستيراد) */
+function resolveCategory(v) {
+  const s = String(v || '').trim();
+  if (byId.has(s)) return s;
+  const found = CATEGORIES.find((c) => c.name === s || c.name.includes(s) && s.length > 2);
+  return found ? found.id : 'other';
+}
+
+return { CATEGORIES, getCategory, resolveCategory };
+})();
+
+__m["calc"] = (() => {
+// منطق الحساب — دوال نقية بدون أي اعتماد على الواجهة (قابلة للاختبار)
+
+/** الوحدات التي تُعتبر وزناً/حجماً يُدخل المستخدم قيمته مباشرة */
+const WEIGHT_UNITS = ['جرام', 'مل'];
+
+/** الوحدات المقترحة في النماذج (يمكن كتابة أي وحدة أخرى) */
+const UNIT_SUGGESTIONS = [
+  'جرام', 'مل', 'حبة', 'كوب', 'قطعة', 'كيس', 'ملعقة كبيرة', 'ملعقة صغيرة',
+  'شريحة', 'علبة', 'صحن', 'رغيف', 'كأس', 'لوح', 'باكيت', 'حصة',
+];
+
+const DEFAULT_RATIO = 25;
+
+function isWeightUnit(unit) {
+  return WEIGHT_UNITS.includes(String(unit || '').trim());
+}
+
+/** هل بيانات الصنف مكتملة للحساب؟ (بعض صفوف الجداول ينقصها رقم) */
+function isComplete(food) {
+  return !!food && Number(food.refQty) > 0 && food.carbs !== null && food.carbs !== '' && Number(food.carbs) >= 0;
+}
+
+/** هل للصنف قياس مكافئ؟ مثال: 1 كوب = 250 مل، 2 حبة = 32 جرام، 10 كبيرة = 15 صغيرة */
+function hasAlt(food) {
+  return Number(food?.altQty) > 0 && !!String(food?.altUnit || '').trim();
+}
+
+/**
+ * يحسب الكربوهيدرات لكمية من صنف.
+ * mode = 'unit' → qty بالوحدة المرجعية للصنف (جرام، كوب، حبة...)
+ * mode = 'alt'  → qty بالقياس المكافئ (مثلاً بالمل أو بالجرام)
+ * المعادلة: الكمية المختارة ÷ الكمية المرجعية × كربوهيدرات المرجع
+ */
+function carbsFor(food, qty, mode = 'unit') {
+  qty = Number(qty);
+  if (!isComplete(food)) return NaN;
+  if (!(qty > 0)) return 0;
+  const carbs = Number(food.carbs);
+  if (mode === 'alt') {
+    if (!hasAlt(food)) return NaN;
+    return (qty / Number(food.altQty)) * carbs;
+  }
+  return (qty / Number(food.refQty)) * carbs;
+}
+
+function sumCarbs(values) {
+  return values.reduce((s, v) => s + (Number.isFinite(v) ? v : 0), 0);
+}
+
+/** تقريب للعرض فقط */
+function roundTo(n, d = 1) {
+  const f = 10 ** d;
+  return Math.round((n + Number.EPSILON) * f) / f;
+}
+
+/** جرعة الإنسولين الحسابية = إجمالي الكربوهيدرات ÷ المعامل (بدون أي تقريب للجرعة) */
+function insulinDose(totalCarbs, ratio) {
+  ratio = Number(ratio);
+  if (!(ratio > 0)) return NaN;
+  return Number(totalCarbs) / ratio;
+}
+
+/** عرض الجرعة بمنزلتين عشريتين بالضبط */
+function formatDose(dose) {
+  return Number.isFinite(dose) ? dose.toFixed(2) : '—';
+}
+
+/** عرض رقم بدون أصفار زائدة (حتى منزلة واحدة افتراضياً) */
+function fmt(n, d = 1) {
+  if (!Number.isFinite(n)) return '—';
+  return String(roundTo(n, d));
+}
+
+/** تحويل الأرقام العربية/الفارسية والفاصلة العربية إلى رقم */
+function parseNum(v) {
+  if (typeof v === 'number') return v;
+  const s = String(v ?? '')
+    .replace(/[٠-٩]/g, (c) => c.charCodeAt(0) - 0x660)
+    .replace(/[۰-۹]/g, (c) => c.charCodeAt(0) - 0x6f0)
+    .replace(/[٫,]/g, '.')
+    .replace(/\s/g, '');
+  if (s === '') return NaN;
+  // دعم الكسور مثل 1/2
+  const frac = s.match(/^(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)$/);
+  if (frac) return Number(frac[1]) / Number(frac[2]);
+  return Number(s);
+}
+
+/** توحيد النص العربي للبحث */
+function normalizeAr(s) {
+  return String(s || '')
+    .toLowerCase()
+    .replace(/[ً-ٰٟـ]/g, '') // تشكيل وتطويل
+    .replace(/[أإآٱ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/ى/g, 'ي')
+    .replace(/ؤ/g, 'و')
+    .replace(/ئ/g, 'ي')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function matchesQuery(name, query) {
+  const q = normalizeAr(query);
+  if (!q) return true;
+  const n = normalizeAr(name);
+  return q.split(' ').every((w) => n.includes(w));
+}
+
+/** عرض الكميات بكسور مألوفة: 0.5 → ½ */
+const FRACTIONS = { 0.25: '¼', 0.5: '½', 0.75: '¾', 0.33: '⅓', 0.67: '⅔' };
+function fmtQty(n) {
+  n = Number(n);
+  if (!Number.isFinite(n)) return '—';
+  const whole = Math.floor(n);
+  const frac = roundTo(n - whole, 2);
+  if (frac === 0) return String(whole);
+  if (FRACTIONS[frac]) return whole ? `${whole}${FRACTIONS[frac]}` : FRACTIONS[frac];
+  return String(roundTo(n, 2));
+}
+
+/** نص يصف الكمية المرجعية للصنف: "1 كوب (250 مل)" */
+function refLabel(food) {
+  if (!(Number(food.refQty) > 0)) return 'الكمية غير محددة';
+  let s = `${fmtQty(food.refQty)} ${food.unit}`;
+  if (hasAlt(food)) s += ` (${fmtQty(food.altQty)} ${food.altUnit})`;
+  return s;
+}
+
+/** نص الكمية المختارة لعنصر في الوجبة */
+function qtyLabel(item, food) {
+  const unit = item.mode === 'alt' ? food.altUnit : food.unit;
+  return `${fmtQty(item.qty)} ${unit}`;
+}
+
+/** التحقق من بيانات صنف قبل الحفظ؛ يُرجع قائمة أخطاء */
+function validateFood(f) {
+  const errors = [];
+  if (!String(f.name || '').trim()) errors.push('اسم الصنف مطلوب');
+  if (!String(f.category || '').trim()) errors.push('التصنيف مطلوب');
+  if (!(Number(f.refQty) > 0)) errors.push('الكمية المرجعية يجب أن تكون أكبر من صفر');
+  if (!String(f.unit || '').trim()) errors.push('نوع الوحدة مطلوب');
+  if (!(Number(f.carbs) >= 0) || f.carbs === '' || f.carbs == null) errors.push('كمية الكربوهيدرات مطلوبة (صفر أو أكثر)');
+  const hasAltQty = f.altQty !== '' && f.altQty != null;
+  if (hasAltQty && !(Number(f.altQty) > 0)) errors.push('القياس المكافئ يجب أن يكون أكبر من صفر أو يُترك فارغاً');
+  if (hasAltQty && !String(f.altUnit || '').trim()) errors.push('حدد وحدة القياس المكافئ');
+  return errors;
+}
+
+return { WEIGHT_UNITS, UNIT_SUGGESTIONS, DEFAULT_RATIO, isWeightUnit, isComplete, hasAlt, carbsFor, sumCarbs, roundTo, insulinDose, formatDose, fmt, parseNum, normalizeAr, matchesQuery, fmtQty, refLabel, qtyLabel, validateFood };
+})();
+
+__m["foods"] = (() => {
+// قاعدة بيانات الأطعمة الأولية — مستخرجة حرفياً من صور الجداول الغذائية المرفقة.
+//
+// الحقول:
+//   seedId   معرّف ثابت للصنف الأصلي (لا تغيّره)
+//   name     اسم الصنف كما في الجدول
+//   category معرّف التصنيف (انظر js/categories.js)
+//   refQty   الكمية المرجعية كما في الجدول (null إذا لم يذكرها الجدول)
+//   unit     وحدة الكمية المرجعية
+//   carbs    جرامات الكربوهيدرات في الكمية المرجعية (null إذا لم يذكرها الجدول)
+//   altQty/altUnit  قياس مكافئ مذكور في الجدول، مثل: 1 كوب (250 مل)
+//   note     ملاحظة مراجعة (مثل نطاق أو خانة فارغة في الجدول)
+//   source   الصورة والجدول الأصلي
+//
+// لم تُخترع أي قيمة: الخانات الفارغة في الجداول بقيت null وتظهر كأصناف "ناقصة البيانات"
+// يمكن إكمالها من صفحة إدارة الأطعمة.
+// عند رفع SEED_VERSION تُضاف الأصناف الجديدة فقط دون المساس بتعديلات المستخدم.
+
+const SEED_VERSION = 1;
+
+const S1 = 'IMG_2505 – البسكوت';
+const S1b = 'IMG_2505 – ملعقة الطعام (عسل/مربى/سكر)';
+const S2 = 'IMG_2504 – مجموعة الحليب';
+const S2b = 'IMG_2504 – مجموعة الفواكه';
+const S3 = 'IMG_2503 – مجموعة النشويات';
+const S4 = 'IMG_2502';
+const S5 = 'IMG_2501';
+const S6 = 'IMG_2500 – دليل كمية الكربوهيدرات في الأطعمة';
+
+const f = (seedId, name, category, refQty, unit, carbs, source, extra = {}) =>
+  ({ seedId, name, category, refQty, unit, carbs, altQty: null, altUnit: '', note: '', source, ...extra });
+
+const SEED_FOODS = [
+  // ── IMG_2505: البسكوت ──
+  f('s001', 'بسكوت ماري – بسكوت بيتي بور', 'biscuits', 4, 'حبة', 15, S1),
+  f('s002', 'بسكوت نايس المطاحن', 'biscuits', 2, 'قطعة', 15, S1),
+  f('s003', 'بسكوت دايجستيف المطاحن', 'biscuits', 3, 'قطعة', 15, S1),
+  f('s004', 'بسكوت تك المطاحن', 'biscuits', 4, 'قطعة', 15, S1),
+  // ── IMG_2505: ملعقة الطعام تحتوي على عسل أو مربى أو سكر ──
+  f('s005', 'عسل أو مربى أو سكر – ملعقة كبيرة', 'sweets', 1, 'ملعقة كبيرة', 15, S1b),
+  f('s006', 'عسل أو مربى أو سكر – ملعقة وسط', 'sweets', 1, 'ملعقة وسط', 5, S1b),
+  f('s007', 'عسل أو مربى أو سكر – ملعقة صغيرة', 'sweets', 1, 'ملعقة صغيرة', 2.5, S1b),
+
+  // ── IMG_2504: مجموعة الحليب ──
+  f('s008', 'حليب (كامل الدسم أو قليل الدسم أو خالي الدسم)', 'dairy', 1, 'كوب', 12, S2, { altQty: 250, altUnit: 'مل' }),
+  f('s009', 'روب (كامل الدسم أو قليل الدسم أو خالي الدسم)', 'dairy', 1, 'كوب', 16, S2, { altQty: 250, altUnit: 'مل' }),
+  f('s010', 'لبن خاثر', 'dairy', 1, 'كوب', 12, S2, { altQty: 250, altUnit: 'مل' }),
+  f('s011', 'شراب لبن', 'dairy', 1, 'كوب', 6, S2),
+  f('s012', 'حليب شوكولاتة', 'dairy', 0.5, 'كوب', 12, S2, { altQty: 125, altUnit: 'مل' }),
+
+  // ── IMG_2504: مجموعة الفواكه ──
+  f('s013', 'برتقال – تفاح – كمثرى – خوخ', 'fruits', 1, 'حبة متوسطة', 15, S2b),
+  f('s014', 'كيوي', 'fruits', 1, 'حبة كبيرة', 15, S2b),
+  f('s015', 'تين – أفندي – مشمش', 'fruits', 2, 'حبة متوسطة', 15, S2b),
+  f('s016', 'موز', 'fruits', 1, 'حبة صغيرة', 15, S2b),
+  f('s017', 'مانجا', 'fruits', 0.5, 'حبة متوسطة', 15, S2b),
+  f('s018', 'رمان', 'fruits', 0.5, 'حبة', 15, S2b),
+  f('s019', 'عنب – كرز', 'fruits', 10, 'حبة كبيرة', 15, S2b, { altQty: 15, altUnit: 'حبة صغيرة' }),
+  f('s020', 'شمام (بطيخ أصفر)', 'fruits', 1.25, 'كوب', 15, S2b),
+  f('s021', 'أناناس – توت', 'fruits', null, 'كوب', 15, S2b, { note: 'خانة الكمية فارغة في الجدول — أدخل الكمية المرجعية قبل الاستخدام' }),
+  f('s022', 'سلطة فواكه (بدون عصير)', 'fruits', 0.5, 'كوب', 15, S2b),
+  f('s023', 'تمر', 'fruits', 3, 'حبة', 15, S2b),
+  f('s024', 'مشمش مجفف', 'fruits', 3, 'حبة', 15, S2b, { note: 'الجدول يذكر 3–4 حبات؛ استُخدم الحد الأدنى 3' }),
+  f('s025', 'تين مجفف', 'fruits', 2, 'حبة', null, S2b, { note: 'خانة الكربوهيدرات فارغة في الجدول — أدخل القيمة قبل الاستخدام' }),
+  f('s026', 'عصير فواكه', 'drinks', 0.5, 'كوب', null, S2b, { note: 'خانة الكربوهيدرات فارغة في الجدول — أدخل القيمة قبل الاستخدام' }),
+
+  // ── IMG_2503: مجموعة النشويات ──
+  f('s027', 'توست (أسمر أو أبيض)', 'bread', 1, 'حبة', 15, S3),
+  f('s028', 'خبز لبناني ثقيل (أسمر أو أبيض)', 'bread', 1, 'حبة', 45, S3),
+  f('s029', 'خبز خفيف (أسمر أو أبيض)', 'bread', 1, 'حبة', 30, S3),
+  f('s030', 'صمون كبير', 'bread', 1, 'حبة', 30, S3),
+  f('s031', 'صمون صغير', 'bread', 1, 'حبة', 15, S3),
+  f('s032', 'صمون الهمبرجر', 'bread', 1, 'حبة', 30, S3),
+  f('s033', 'خبز إيراني', 'bread', 0.25, 'حبة', 15, S3),
+  f('s034', 'خبز صاج', 'bread', 0.5, 'حبة', 15, S3),
+  f('s035', 'شابورا', 'bread', 2, 'حبة', 15, S3),
+  f('s036', 'بان كيك', 'bread', 1, 'حبة', 15, S3),
+  f('s037', 'أرز (حجم كوب الروب)', 'grains', 1, 'كوب', 45, S3),
+  f('s038', 'جريش أو هريس أو برغل أو حمص حب', 'grains', 0.5, 'كوب', 15, S3),
+  f('s039', 'معكرونة سباغيتي', 'grains', 1 / 3, 'كوب', 15, S3),
+  f('s040', 'معكرونة بها فراغات', 'grains', 0.5, 'كوب', 15, S3),
+  f('s041', 'معجنات', 'bread', 30, 'جرام', 15, S3),
+  f('s042', 'أرز حليب', 'grains', 0.5, 'كوب', 15, S3),
+  f('s043', 'باستا (حجم نص كوب)', 'grains', 0.5, 'كوب', 15, S3),
+  f('s044', 'شوربة العدس (حجم نص كوب)', 'grains', 0.5, 'كوب', 15, S3),
+  f('s045', 'فول أو نخي أو فاصوليا أو ماش أو لوبياء', 'grains', 0.5, 'كوب', 15, S3),
+  f('s046', 'ذرة', 'grains', 0.5, 'كوب', 15, S3),
+  f('s047', 'كورن فلكس', 'grains', 0.5, 'كوب', 15, S3),
+  f('s048', 'بطاطة صغيرة', 'bread', 1, 'حبة', 15, S3),
+  f('s049', 'بطاط شبس', 'biscuits', 1, 'حبة', 1, S3, { note: 'الجدول: الحبة الواحدة 1 غرام، و15 حبة = 15 غرام' }),
+
+  // ── IMG_2502 ──
+  f('s050', 'عصير مانجا (كبير)', 'drinks', 1, 'حبة', 38, S4),
+  f('s051', 'بيضة كندر', 'sweets', 1, 'حبة', 11, S4),
+  f('s052', 'كاكاو عصار', 'sweets', 1, 'حبة', 20, S4),
+  f('s053', 'كتكات', 'sweets', 2, 'إصبع', 11.5, S4),
+  f('s054', 'كندر', 'sweets', 1, 'إصبع', 6.7, S4),
+  f('s055', 'بطاطا عيدان (Stix)', 'biscuits', 30, 'جرام', 32, S4, { note: 'كما في الجدول: 30 جم = 32 جم كربوهيدرات — يُنصح بالتحقق من العبوة' }),
+  f('s056', 'بطاط نايس (خل وملح)', 'biscuits', 18, 'جرام', 11, S4),
+  f('s057', 'بطاط نايس (كاتشب)', 'biscuits', 18, 'جرام', 11, S4),
+  f('s058', 'مالتيزرز', 'sweets', 1, 'كيس', 23, S4),
+  f('s059', 'تويكس (صغير)', 'sweets', 1, 'حبة', 13, S4),
+  f('s060', 'مارس (صغير)', 'sweets', 1, 'حبة', 13, S4),
+  f('s061', 'سنيكرز (صغير)', 'sweets', 1, 'حبة', 10, S4),
+  f('s062', 'ميلكي وي (صغير)', 'sweets', 1, 'حبة', 11, S4),
+  f('s063', 'باونتي (صغير)', 'sweets', 1, 'حبة', 16, S4),
+
+  // ── IMG_2501 ──
+  f('s064', 'كنافة (بدون شيرة)', 'sweets', 1, 'كف اليد', 75, S5),
+  f('s065', 'زلابية', 'sweets', 1, 'حبة', 6, S5),
+  f('s066', 'خبز عروق', 'bread', 1, 'حبة', 10, S5),
+  f('s067', 'كاسترد', 'sweets', 1, 'كوب صغير', 26, S5),
+  f('s068', 'خبز رقاق', 'bread', 1, 'حبة', 25, S5),
+  f('s069', 'جيلي', 'sweets', 1, 'كوب صغير', 20, S5),
+  f('s070', 'فيمتو', 'drinks', 1, 'كوب', 30, S5),
+  f('s071', 'مهلبية', 'sweets', 1, 'كوب صغير', 20, S5),
+  f('s072', 'اش', 'other', 1, 'علبة كاملة', 48, S5),
+  f('s073', 'تشريبة', 'meat', 1, 'كوب', 33, S5),
+  f('s074', 'كبة برغل', 'meat', 1, 'حبة', 4, S5),
+  f('s075', 'كبة بطاط', 'meat', 1, 'حبة', 5, S5),
+  f('s076', 'لقيمات', 'sweets', 2, 'حبة', 15, S5),
+  f('s077', 'بسكويت بونجوم', 'biscuits', 1, 'حبة', 10.6, S5),
+  f('s078', 'كيكة مالو (جوز الهند)', 'sweets', 1, 'حبة', 16, S5),
+  f('s079', 'كاكاو جواهر', 'sweets', 1, 'حبة', 8, S5),
+  f('s080', 'برنجلز', 'biscuits', 40, 'جرام', 21, S5),
+  f('s081', 'بفك سفينة', 'biscuits', 1, 'كيس', 12, S5),
+  f('s082', 'كب كيك (سويتز)', 'sweets', 2, 'حبة', 15, S5, { altQty: 32, altUnit: 'جرام' }),
+  f('s083', 'كراميل', 'sweets', 1, 'حبة', 22, S5),
+  f('s084', 'حلاو توفو', 'sweets', 4, 'حبة', 14, S5),
+  f('s085', 'كاكاو لونين بو قفشة', 'sweets', 1, 'حبة', 5, S5),
+  f('s086', 'بوب كيك', 'sweets', 1, 'حبة', 27.5, S5),
+  f('s087', 'كاكاو باندا', 'sweets', 1, 'كيس', 21, S5, { altQty: 35, altUnit: 'جرام' }),
+  f('s088', 'حليب كاكاو (صغير)', 'dairy', 1, 'حبة', 15, S5),
+  f('s089', 'عصير سانكست', 'drinks', 1, 'علبة', 24, S5),
+  f('s090', 'سن توب (صغير)', 'drinks', 1, 'حبة', 17.5, S5),
+  f('s091', 'بيبسي (صغير)', 'drinks', 1, 'حبة', 16.5, S5),
+  f('s092', 'عصير كوكتيل (صغير)', 'drinks', 1, 'حبة', 16.5, S5),
+  f('s093', 'عصير كوكتيل (كبير)', 'drinks', 1, 'حبة', 33, S5),
+  f('s094', 'عصير مانجا (صغير)', 'drinks', 1, 'حبة', 19, S5),
+
+  // ── IMG_2500: دليل كمية الكربوهيدرات في الأطعمة ──
+  f('s095', 'جباتي', 'bread', 1, 'حبة', 40, S6),
+  f('s096', 'سمبوسة', 'meat', 1, 'حبة', 5, S6),
+  f('s097', 'اندومي (كوب)', 'grains', 1, 'كوب', 30, S6),
+  f('s098', 'اندومي (كيس)', 'grains', 1, 'كيس', 45, S6),
+  f('s099', 'اندومي (شعرية مقلية)', 'grains', 1, 'كيس', 50, S6),
+  f('s100', 'دجاج بافلو', 'meat', 2, 'قطعة', 10, S6),
+  f('s101', 'صمونة إيطالية (صب وي)', 'bread', 6, 'إنش', 50, S6),
+  f('s102', 'ورق عنب', 'meat', 6, 'حبة', 15, S6),
+  f('s103', 'فلافل', 'meat', 3, 'حبة', 15, S6),
+  f('s104', 'لفائف سبرينغ', 'meat', 1, 'حبة', 15, S6),
+  f('s105', 'ناغتس الدجاج', 'meat', 4.5, 'حبة', 15, S6),
+  f('s106', 'كوسا محشية', 'meat', 1.25, 'حبة', 15, S6),
+  f('s107', 'كستن', 'other', 3, 'حبة', 15, S6),
+  f('s108', 'بقصم طويل', 'biscuits', 1, 'حبة', 15, S6),
+  f('s109', 'بقصم صغير', 'biscuits', 1, 'حبة', 10, S6),
+  f('s110', 'كاتشب', 'other', 1, 'ملعقة طعام', 8, S6),
+  f('s111', 'عصير تانج', 'drinks', 1, 'ملعقة طعام', 15, S6),
+  f('s112', 'وربات', 'sweets', 1, 'حبة', 15, S6),
+  f('s113', 'قطايف', 'sweets', 1, 'حبة', 30, S6),
+  f('s114', 'داربيل', 'sweets', 1, 'حبة', 20, S6),
+  f('s115', 'كبدة الفرس', 'other', 1, 'حبة', 10, S6),
+  f('s116', 'سمسية', 'sweets', 3, 'حبة', 10, S6),
+  f('s117', 'صب القفشة', 'other', 1, 'حبة', 15, S6),
+  f('s118', 'غريبة', 'sweets', 3, 'حبة', 12, S6),
+  f('s119', 'رهش', 'sweets', 1, 'قطعة صغيرة', 30, S6),
+  f('s120', 'تمرية', 'sweets', 3, 'حبة', 30, S6),
+  f('s121', 'قرص عقيلي (صغير)', 'sweets', 1, 'حبة', 22, S6),
+  f('s122', 'كورن فليكس (إضافة بخط اليد)', 'grains', 1, 'كوب', 20, S6, { note: 'مكتوب بخط اليد أسفل الجدول؛ كلمة بعد "كوب" غير واضحة — يُرجى التحقق' }),
+];
+
+return { SEED_VERSION, SEED_FOODS };
+})();
+
+__m["ui"] = (() => {
+// مكونات واجهة صغيرة قابلة لإعادة الاستخدام
+
+/** إنشاء عنصر: h('button', {class:'btn', onclick}, 'نص', child) */
+function h(tag, attrs = {}, ...children) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2), v);
+    else if (k === 'class') el.className = v;
+    else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
+    else if (k === 'dataset') Object.assign(el.dataset, v);
+    else if (k in el && typeof v !== 'string') el[k] = v;
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  append(el, children);
+  return el;
+}
+
+function append(el, children) {
+  for (const c of children.flat(Infinity)) {
+    if (c == null || c === false) continue;
+    el.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  }
+}
+
+function clear(el, ...children) {
+  el.replaceChildren();
+  append(el, children);
+  return el;
+}
+
+let toastTimer;
+function toast(msg, type = 'ok') {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = h('div', { id: 'toast', role: 'status', 'aria-live': 'polite' });
+    document.body.append(t);
+  }
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/**
+ * نافذة منبثقة. تُرجع { el, body, close }.
+ * actions: [{label, class, onClick(close) → false لإبقاء النافذة مفتوحة}]
+ */
+function modal({ title, content, actions = [], onClose, wide = false }) {
+  const dlg = h('dialog', { class: `modal${wide ? ' wide' : ''}` });
+  const close = () => {
+    dlg.close();
+  };
+  dlg.addEventListener('close', () => {
+    dlg.remove();
+    onClose?.();
+  });
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg) close();
+  });
+  const body = h('div', { class: 'modal-body' }, content);
+  const footer = h('div', { class: 'modal-actions' },
+    actions.map((a) => h('button', {
+      type: 'button',
+      class: `btn ${a.class || ''}`,
+      onclick: async () => {
+        const r = await a.onClick?.(close);
+        if (r !== false) close();
+      },
+    }, a.label)));
+  dlg.append(
+    h('div', { class: 'modal-head' },
+      h('h2', {}, title),
+      h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'إغلاق', onclick: close }, '✕')),
+    body,
+    actions.length ? footer : null,
+  );
+  document.body.append(dlg);
+  dlg.showModal();
+  return { el: dlg, body, close };
+}
+
+function confirmDialog(message, { okLabel = 'تأكيد', danger = false } = {}) {
+  return new Promise((resolve) => {
+    let ok = false;
+    modal({
+      title: 'تأكيد',
+      content: h('p', { class: 'confirm-text' }, message),
+      actions: [
+        { label: okLabel, class: danger ? 'danger' : 'primary', onClick: () => { ok = true; } },
+        { label: 'إلغاء', class: 'ghost' },
+      ],
+      onClose: () => resolve(ok),
+    });
+  });
+}
+
+function promptDialog(title, { label = '', value = '', okLabel = 'حفظ' } = {}) {
+  return new Promise((resolve) => {
+    let result = null;
+    const input = h('input', { class: 'input', value, 'aria-label': label || title });
+    const { close } = modal({
+      title,
+      content: h('label', { class: 'field' }, label && h('span', {}, label), input),
+      actions: [
+        { label: okLabel, class: 'primary', onClick: () => {
+          if (!input.value.trim()) { input.focus(); return false; }
+          result = input.value.trim();
+        } },
+        { label: 'إلغاء', class: 'ghost' },
+      ],
+      onClose: () => resolve(result),
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && input.value.trim()) { result = input.value.trim(); close(); }
+    });
+    setTimeout(() => input.select(), 50);
+  });
+}
+
+/** تنزيل ملف: داخل Claude عبر خاصية التنزيل (يطلب تأكيد المستخدم)، وخارجه عبر رابط عادي */
+async function download(filename, text, type = 'application/json') {
+  if (window.claude?.use) {
+    const dl = await window.claude.use('downloads');
+    if (dl) {
+      try {
+        await dl.save({ filename, data: text });
+        return true;
+      } catch (e) {
+        if (e?.code !== 'declined') toast('تعذر حفظ الملف في هذا العرض', 'error');
+        return false;
+      }
+    }
+  }
+  const blob = new Blob([text], { type: `${type};charset=utf-8` });
+  const url = URL.createObjectURL(blob);
+  const a = h('a', { href: url, download: filename });
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  return true;
+}
+
+function pickFile(accept) {
+  return new Promise((resolve) => {
+    const input = h('input', { type: 'file', accept, style: { display: 'none' } });
+    input.addEventListener('change', () => {
+      resolve(input.files[0] || null);
+      input.remove();
+    });
+    document.body.append(input);
+    input.click();
+  });
+}
+
+/** تصغير صورة إلى مربع صغير وحفظها كنص (data URL) */
+function resizeImage(file, max = 240) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      const scale = Math.min(1, max / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * scale);
+      c.height = Math.round(img.height * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL('image/jpeg', 0.82));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
+return { h, clear, toast, modal, confirmDialog, promptDialog, download, pickFile, resizeImage };
+})();
+
+__m["db"] = (() => {
+// طبقة التخزين الدائم — IndexedDB داخل المتصفح (تبقى البيانات بعد التحديث والإغلاق)
+const { SEED_FOODS, SEED_VERSION } = __m["foods"];
+
+// ── الواجهة الخلفية للتخزين ──
+// 1) داخل Claude: قاعدة بيانات الصفحة في مساحة المستخدم الخاصة data/users/<id>/ (لا يراها غيره،
+//    وتتزامن بين أجهزته). 2) خارج Claude: IndexedDB في المتصفح.
+const STORES = { foods: 'id', meals: 'id', settings: 'key' };
+let backendPromise;
+
+const storageInfo = { kind: 'none' };
+
+function withTimeout(promise, ms, msg) {
+  return Promise.race([promise, new Promise((_, rej) => setTimeout(() => rej(new Error(msg)), ms))]);
+}
+
+async function pickBackend() {
+  if (window.claude?.use) {
+    const [cdb, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+    const id = cdb && user ? await user.id() : null;
+    if (cdb && id) {
+      storageInfo.kind = 'cloud';
+      return cloudBackend(cdb, id);
+    }
+  }
+  storageInfo.kind = 'local';
+  return idbBackend();
+}
+
+function backend() {
+  if (!backendPromise) backendPromise = pickBackend();
+  return backendPromise;
+}
+
+function cloudBackend(cdb, uid) {
+  const base = cdb.doc(`data/users/${uid}/app`);
+  const col = (store) => base.collection(store);
+  const clone = (v) => JSON.parse(JSON.stringify(v));
+  // تنفيذ عدد محدود من الكتابات في وقت واحد
+  async function pool(items, fn, size = 6) {
+    const queue = [...items];
+    const workers = Array.from({ length: Math.min(size, queue.length) }, async () => {
+      while (queue.length) await fn(queue.shift());
+    });
+    await Promise.all(workers);
+  }
+  // إعادة المحاولة عند الضغط المؤقت فقط (unavailable / resource_exhausted)
+  const call = async (fn, tries = 4) => {
+    for (let i = 0; ; i++) {
+      try {
+        return await withTimeout(fn(), 20000, 'تعذر الوصول إلى البيانات. تحقق من الاتصال بالإنترنت.');
+      } catch (e) {
+        const transient = e?.code === 'unavailable' || e?.code === 'resource_exhausted';
+        if (!transient || i >= tries - 1) throw e;
+        await new Promise((r) => setTimeout(r, 400 * 2 ** i + Math.random() * 300));
+      }
+    }
+  };
+  return {
+    async getAll(store) {
+      const snap = await call(() => col(store).limit(1000).get());
+      return snap.docs.filter((d) => d.exists).map((d) => clone(d.data()));
+    },
+    async get(store, key) {
+      const d = await call(() => col(store).doc(key).get());
+      return d.exists ? clone(d.data()) : undefined;
+    },
+    put: (store, v) => call(() => col(store).doc(String(v[STORES[store]])).set(clone(v))),
+    del: (store, key) => call(() => col(store).doc(String(key)).delete()),
+    putMany: (store, list) => pool(list, (v) => call(() => col(store).doc(String(v[STORES[store]])).set(clone(v)))),
+    async replaceAll(store, list) {
+      const keep = new Set(list.map((v) => String(v[STORES[store]])));
+      const existing = await this.getAll(store);
+      await pool(existing.filter((v) => !keep.has(String(v[STORES[store]]))), (v) => call(() => col(store).doc(String(v[STORES[store]])).delete()));
+      await this.putMany(store, list);
+    },
+  };
+}
+
+function idbBackend() {
+  let dbp;
+  const open = () => dbp || (dbp = new Promise((resolve, reject) => {
+    const req = indexedDB.open('carb-calculator', 1);
+    req.onupgradeneeded = () => {
+      for (const [name, keyPath] of Object.entries(STORES)) {
+        if (!req.result.objectStoreNames.contains(name)) req.result.createObjectStore(name, { keyPath });
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  }));
+  const done = (tx) => new Promise((resolve, reject) => {
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error);
+  });
+  const read = async (store, fn) => {
+    const db = await open();
+    return new Promise((resolve, reject) => {
+      const r = fn(db.transaction(store).objectStore(store));
+      r.onsuccess = () => resolve(r.result);
+      r.onerror = () => reject(r.error);
+    });
+  };
+  const write = async (store, fn) => {
+    const db = await open();
+    const tx = db.transaction(store, 'readwrite');
+    fn(tx.objectStore(store));
+    await done(tx);
+  };
+  return {
+    getAll: (store) => read(store, (os) => os.getAll()),
+    get: (store, key) => read(store, (os) => os.get(key)),
+    put: (store, v) => write(store, (os) => os.put(v)),
+    del: (store, key) => write(store, (os) => os.delete(key)),
+    putMany: (store, list) => write(store, (os) => list.forEach((v) => os.put(v))),
+    replaceAll: (store, list) => write(store, (os) => { os.clear(); list.forEach((v) => os.put(v)); }),
+  };
+}
+
+const getAll = async (store) => (await backend()).getAll(store);
+const put = async (store, v) => { await (await backend()).put(store, v); return v; };
+const del = async (store, key) => (await backend()).del(store, key);
+const putMany = async (store, list) => (await backend()).putMany(store, list);
+const replaceAll = async (store, list) => (await backend()).replaceAll(store, list);
+
+async function initStorage() {
+  await backend();
+  return storageInfo.kind;
+}
+
+function uid() {
+  return (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+}
+
+/** توحيد شكل صنف (للاستيراد والحفظ) */
+function cleanFood(f) {
+  const num = (v) => (v === '' || v == null || !Number.isFinite(Number(v)) ? null : Number(v));
+  return {
+    id: f.id || uid(),
+    seedId: f.seedId || null,
+    name: String(f.name || '').trim(),
+    category: f.category || 'other',
+    refQty: num(f.refQty),
+    unit: String(f.unit || '').trim(),
+    carbs: num(f.carbs),
+    altQty: num(f.altQty),
+    altUnit: String(f.altUnit || '').trim(),
+    note: String(f.note || '').trim(),
+    source: String(f.source || '').trim(),
+    image: f.image || null,
+    updatedAt: f.updatedAt || Date.now(),
+  };
+}
+
+const settings = {
+  async get(key, fallback) {
+    const r = await (await backend()).get('settings', key);
+    return r ? r.value : fallback;
+  },
+  set: (key, value) => put('settings', { key, value }),
+  all: () => getAll('settings'),
+};
+
+const foods = {
+  all: () => getAll('foods'),
+  save: (food) => put('foods', cleanFood({ ...food, updatedAt: Date.now() })),
+  remove: (id) => del('foods', id),
+  replaceAll: (list) => replaceAll('foods', list.map(cleanFood)),
+  putMany: (list) => putMany('foods', list.map(cleanFood)),
+};
+
+const meals = {
+  all: () => getAll('meals'),
+  save: (meal) => put('meals', meal),
+  remove: (id) => del('meals', id),
+  replaceAll: (list) => replaceAll('meals', list),
+};
+
+/**
+ * تعبئة البيانات الأولية: في أول تشغيل تُضاف كل الأصناف،
+ * وعند تحديث ملف البيانات تُضاف الأصناف الجديدة فقط (دون الكتابة فوق تعديلات المستخدم
+ * ودون إعادة صنف حذفه المستخدم).
+ */
+async function ensureSeed() {
+  const current = await settings.get('seedVersion', 0);
+  if (current >= SEED_VERSION) return;
+  const existing = await foods.all();
+  const known = new Set(await settings.get('knownSeedIds', []));
+  existing.forEach((f) => f.seedId && known.add(f.seedId));
+  const toAdd = SEED_FOODS.filter((s) => !known.has(s.seedId));
+  await foods.putMany(toAdd.map((s) => ({ ...s, id: s.seedId })));
+  toAdd.forEach((s) => known.add(s.seedId));
+  await settings.set('knownSeedIds', [...known]);
+  await settings.set('seedVersion', SEED_VERSION);
+}
+
+/** إعادة الأصناف الأصلية من الجداول (يستبدل قاعدة الأطعمة بالكامل) */
+async function restoreOriginalFoods() {
+  await foods.replaceAll(SEED_FOODS.map((s) => ({ ...s, id: s.seedId })));
+  await settings.set('knownSeedIds', SEED_FOODS.map((s) => s.seedId));
+  await settings.set('seedVersion', SEED_VERSION);
+}
+
+async function requestPersistence() {
+  if (storageInfo.kind !== 'local') return;
+  try {
+    if (navigator.storage?.persist && !(await navigator.storage.persisted())) await navigator.storage.persist();
+  } catch { /* غير مدعوم */ }
+}
+
+return { storageInfo, initStorage, uid, cleanFood, settings, foods, meals, ensureSeed, restoreOriginalFoods, requestPersistence };
+})();
+
+__m["app"] = (() => {
+// حاسبة الكربوهيدرات والإنسولين — منطق الواجهة
+const { h, clear, toast, modal, confirmDialog, promptDialog, download, pickFile, resizeImage } = __m["ui"];
+const { CATEGORIES, getCategory, resolveCategory } = __m["categories"];
+const {
+  DEFAULT_RATIO, UNIT_SUGGESTIONS, carbsFor, sumCarbs, roundTo, insulinDose, formatDose, fmt, fmtQty,
+  parseNum, matchesQuery, refLabel, qtyLabel, isComplete, hasAlt, isWeightUnit, validateFood,
+} = __m["calc"];
+const db = __m["db"];
+
+const state = {
+  foods: [],
+  meals: [],
+  ratio: DEFAULT_RATIO,
+  current: { items: [], editingMealId: null, editingName: '' },
+  view: 'calc',
+  calc: { query: '', cat: null },
+  manage: { query: '', cat: '', onlyIncomplete: false },
+};
+
+const $ = (sel) => document.querySelector(sel);
+const foodById = (id) => state.foods.find((f) => f.id === id);
+
+/* ───────────── البيانات ───────────── */
+
+async function loadAll() {
+  await db.ensureSeed();
+  state.foods = await db.foods.all();
+  state.meals = await db.meals.all();
+  state.ratio = Number(await db.settings.get('ratio', DEFAULT_RATIO)) || DEFAULT_RATIO;
+  state.current = await db.settings.get('currentMeal', state.current);
+  sortFoods();
+}
+
+function sortFoods() {
+  state.foods.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
+}
+
+function saveCurrent() {
+  return db.settings.set('currentMeal', state.current);
+}
+
+/** بيانات الصنف المستخدمة لعنصر في الوجبة: النسخة الحالية من القاعدة، أو النسخة المحفوظة إن حُذف */
+function itemFood(item) {
+  return foodById(item.foodId) || item.snapshot;
+}
+
+function itemCarbs(item) {
+  return carbsFor(itemFood(item), item.qty, item.mode);
+}
+
+function mealTotal(items) {
+  return roundTo(sumCarbs(items.map(itemCarbs)), 1);
+}
+
+/* ───────────── التنقل ───────────── */
+
+const VIEWS = {
+  calc: { title: 'الحاسبة', icon: '🧮', render: renderCalc },
+  meals: { title: 'الوجبات', icon: '📋', render: renderMeals },
+  foods: { title: 'إدارة الأطعمة', icon: '🗂️', render: renderManage },
+  setup: { title: 'الإعدادات', icon: '⚙️', render: renderSettings },
+};
+
+function route() {
+  const v = location.hash.replace('#', '');
+  state.view = VIEWS[v] ? v : 'calc';
+  document.querySelectorAll('[data-nav]').forEach((a) => {
+    a.classList.toggle('active', a.dataset.nav === state.view);
+    a.setAttribute('aria-current', a.dataset.nav === state.view ? 'page' : 'false');
+  });
+  render();
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  VIEWS[state.view].render($('#view'));
+}
+
+function buildNav() {
+  const items = Object.entries(VIEWS).map(([id, v]) =>
+    h('a', { href: `#${id}`, class: 'nav-link', dataset: { nav: id } },
+      h('span', { class: 'nav-icon', 'aria-hidden': 'true' }, v.icon),
+      h('span', {}, v.title)));
+  clear($('#top-nav'), items);
+  clear($('#bottom-nav'), items.map((n) => n.cloneNode(true)));
+}
+
+/* ───────────── مكونات مشتركة ───────────── */
+
+function foodThumb(food) {
+  const cat = getCategory(food.category);
+  if (food.image) return h('img', { class: 'thumb', src: food.image, alt: '' });
+  return h('span', { class: 'thumb', style: { background: `var(--cat-${cat.id})` }, 'aria-hidden': 'true' }, cat.icon);
+}
+
+function carbsBadge(food) {
+  if (!isComplete(food)) return h('span', { class: 'badge warn' }, 'بيانات ناقصة');
+  return h('span', { class: 'badge carbs' }, `${fmt(Number(food.carbs), 2)} جم`);
+}
+
+function emptyState(icon, text, action) {
+  return h('div', { class: 'empty' }, h('div', { class: 'empty-icon' }, icon), h('p', {}, text), action);
+}
+
+/* ───────────── صفحة الحاسبة ───────────── */
+
+function renderCalc(root) {
+  const search = h('input', {
+    class: 'input search', type: 'search', placeholder: 'ابحث عن صنف… (مثال: خبز، أرز، حليب)',
+    value: state.calc.query, 'aria-label': 'بحث عن صنف', autocomplete: 'off',
+    oninput: (e) => { state.calc.query = e.target.value; renderFoodResults(); },
+  });
+  const chips = h('div', { class: 'chips', role: 'tablist', 'aria-label': 'التصنيفات' },
+    h('button', { class: `chip${!state.calc.cat ? ' active' : ''}`, onclick: () => setCat(null) }, '🔎 الكل'),
+    CATEGORIES.map((c) => h('button', {
+      class: `chip${state.calc.cat === c.id ? ' active' : ''}`, onclick: () => setCat(c.id),
+    }, `${c.icon} ${c.name}`)));
+
+  clear(root,
+    h('div', { class: 'calc-layout' },
+      h('section', { class: 'col-foods', 'aria-label': 'اختيار الأطعمة' },
+        h('div', { class: 'search-bar' }, search, chips),
+        h('div', { id: 'food-results' })),
+      h('aside', { class: 'col-meal' },
+        h('section', { class: 'card', id: 'meal-card' }),
+        h('section', { class: 'card insulin', id: 'insulin-card' }))),
+    // شريط عائم على الجوال يُظهر الإجمالي والجرعة دون الحاجة للتمرير
+    h('button', {
+      id: 'meal-fab', class: 'meal-fab', type: 'button', hidden: true,
+      onclick: () => $('#meal-card').scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    }));
+  renderFoodResults();
+  renderMealCard();
+  renderInsulinCard();
+}
+
+function setCat(cat) {
+  state.calc.cat = cat;
+  document.querySelectorAll('.chips .chip').forEach((b, i) =>
+    b.classList.toggle('active', (i === 0 && !cat) || (i > 0 && CATEGORIES[i - 1].id === cat)));
+  renderFoodResults();
+  const active = document.querySelector('.chips .chip.active');
+  active?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+}
+
+function renderFoodResults() {
+  const box = $('#food-results');
+  if (!box) return;
+  const { query, cat } = state.calc;
+
+  if (!state.foods.length) {
+    clear(box, emptyState('🗂️', 'لا توجد أصناف في قاعدة البيانات.',
+      h('a', { class: 'btn primary', href: '#foods' }, 'إضافة أصناف')));
+    return;
+  }
+
+  // بدون بحث أو تصنيف: بطاقات التصنيفات
+  if (!query.trim() && !cat) {
+    clear(box, h('div', { class: 'cat-grid' }, CATEGORIES.map((c) => {
+      const count = state.foods.filter((f) => f.category === c.id).length;
+      return h('button', { class: 'cat-card', style: { background: `var(--cat-${c.id})` }, onclick: () => setCat(c.id) },
+        h('span', { class: 'cat-icon', 'aria-hidden': 'true' }, c.icon),
+        h('span', { class: 'cat-name' }, c.name),
+        h('span', { class: 'cat-count' }, `${count} صنف`));
+    })));
+    return;
+  }
+
+  const list = state.foods.filter((f) => (!cat || f.category === cat) && matchesQuery(f.name, query));
+  if (!list.length) {
+    clear(box, emptyState('🔍', 'لا توجد نتائج مطابقة.',
+      h('button', { class: 'btn', onclick: () => openFoodForm({ name: query.trim(), category: cat || 'other' }) }, '➕ إضافة صنف جديد')));
+    return;
+  }
+  clear(box,
+    h('p', { class: 'muted small' }, `${list.length} صنف${cat ? ` في «${getCategory(cat).name}»` : ''}`),
+    h('ul', { class: 'food-list' }, list.map((f) =>
+      h('li', {},
+        h('button', { class: 'food-row', onclick: () => openQtyDialog(f) },
+          foodThumb(f),
+          h('span', { class: 'food-info' },
+            h('span', { class: 'food-name' }, f.name),
+            h('span', { class: 'food-ref' }, refLabel(f))),
+          carbsBadge(f),
+          h('span', { class: 'add-icon', 'aria-hidden': 'true' }, '+'))))));
+}
+
+/** نافذة تحديد الكمية — للإضافة (item = null) أو لتعديل عنصر موجود */
+function openQtyDialog(food, item = null) {
+  if (!isComplete(food)) {
+    modal({
+      title: food.name,
+      content: h('div', {},
+        h('p', {}, 'بيانات هذا الصنف ناقصة في الجدول الأصلي، ولا يمكن حسابه قبل إكمالها.'),
+        food.note && h('p', { class: 'note' }, food.note)),
+      actions: [
+        { label: 'إكمال البيانات', class: 'primary', onClick: () => openFoodForm(food) },
+        { label: 'إغلاق', class: 'ghost' },
+      ],
+    });
+    return;
+  }
+
+  let mode = item?.mode || 'unit';
+  const unitOf = () => (mode === 'alt' ? food.altUnit : food.unit);
+  const refOf = () => Number(mode === 'alt' ? food.altQty : food.refQty);
+  const defaultQty = () => refOf();
+
+  const qtyInput = h('input', {
+    class: 'input qty-input', inputmode: 'decimal', 'aria-label': 'الكمية',
+    value: String(roundTo(item ? item.qty : defaultQty(), 2)),
+    oninput: update,
+  });
+  const unitLbl = h('span', { class: 'qty-unit' });
+  const result = h('div', { class: 'qty-result', 'aria-live': 'polite' });
+  const presets = h('div', { class: 'presets' });
+
+  const stepOf = () => (isWeightUnit(unitOf()) ? 10 : (refOf() >= 1 ? 1 : refOf()));
+  const bump = (dir) => {
+    const v = parseNum(qtyInput.value) || 0;
+    qtyInput.value = String(roundTo(Math.max(0, v + dir * stepOf()), 2));
+    update();
+  };
+
+  const modeSwitch = hasAlt(food) && h('div', { class: 'segmented', role: 'radiogroup', 'aria-label': 'طريقة إدخال الكمية' },
+    [['unit', food.unit], ['alt', food.altUnit]].map(([m, label]) => h('button', {
+      type: 'button', role: 'radio', class: m === mode ? 'active' : '',
+      onclick: (e) => {
+        if (mode === m) return;
+        // تحويل الكمية الحالية إلى الوحدة الأخرى للحفاظ على نفس الكربوهيدرات
+        const v = parseNum(qtyInput.value);
+        const factor = Number(food.altQty) / Number(food.refQty);
+        mode = m;
+        if (v > 0) qtyInput.value = String(roundTo(m === 'alt' ? v * factor : v / factor, 2));
+        e.target.parentElement.querySelectorAll('button').forEach((b) => b.classList.toggle('active', b === e.target));
+        update();
+      },
+    }, `بـ${label}`)));
+
+  function renderPresets() {
+    const ref = refOf();
+    const vals = isWeightUnit(unitOf())
+      ? [...new Set([ref, 50, 100, 150, 200, 250].filter((v) => v > 0))].sort((a, b) => a - b)
+      : [...new Set([ref / 2, ref, ref * 2, ref * 3].map((v) => roundTo(v, 2)))];
+    clear(presets, vals.map((v) => h('button', {
+      type: 'button', class: 'chip small',
+      onclick: () => { qtyInput.value = String(v); update(); },
+    }, `${fmtQty(v)} ${unitOf()}`)));
+  }
+
+  function update() {
+    unitLbl.textContent = unitOf();
+    const q = parseNum(qtyInput.value);
+    const c = carbsFor(food, q, mode);
+    if (!(q > 0) || !Number.isFinite(c)) {
+      clear(result, h('span', { class: 'muted' }, 'أدخل كمية أكبر من صفر'));
+      return;
+    }
+    clear(result,
+      h('div', { class: 'qty-carbs' }, h('strong', {}, fmt(c, 1)), ' جم كربوهيدرات'),
+      h('div', { class: 'equation', dir: 'ltr' }, `${fmt(q, 2)} ÷ ${fmt(refOf(), 2)} × ${fmt(Number(food.carbs), 2)} = ${fmt(c, 2)}`));
+  }
+
+  const content = h('div', { class: 'qty-dialog' },
+    h('div', { class: 'qty-head' }, foodThumb(food),
+      h('div', {},
+        h('div', { class: 'muted small' }, 'المرجع حسب الجدول'),
+        h('div', {}, `${refLabel(food)} = `, h('strong', {}, `${fmt(Number(food.carbs), 2)} جم كربوهيدرات`)))),
+    food.note && h('p', { class: 'note' }, food.note),
+    modeSwitch,
+    h('label', { class: 'field' }, h('span', {}, 'الكمية'),
+      h('div', { class: 'stepper' },
+        h('button', { type: 'button', class: 'step-btn', 'aria-label': 'زيادة', onclick: () => bump(1) }, '+'),
+        qtyInput, unitLbl,
+        h('button', { type: 'button', class: 'step-btn', 'aria-label': 'إنقاص', onclick: () => bump(-1) }, '−'))),
+    presets,
+    result);
+
+  const submit = async () => {
+    const q = parseNum(qtyInput.value);
+    if (!(q > 0) || !Number.isFinite(carbsFor(food, q, mode))) {
+      qtyInput.focus();
+      toast('أدخل كمية صحيحة أكبر من صفر', 'error');
+      return false;
+    }
+    const snapshot = { ...food, image: null };
+    if (item) {
+      Object.assign(item, { qty: q, mode, snapshot });
+      toast('تم تعديل الكمية');
+    } else {
+      state.current.items.push({ uid: db.uid(), foodId: food.id, qty: q, mode, snapshot });
+      toast(`أُضيف «${food.name}» إلى الوجبة`);
+    }
+    await saveCurrent();
+    renderMealCard();
+    renderInsulinCard();
+  };
+
+  const dlg = modal({
+    title: food.name,
+    content,
+    actions: [
+      { label: item ? 'حفظ التعديل' : 'إضافة إلى الوجبة', class: 'primary', onClick: submit },
+      { label: 'إلغاء', class: 'ghost' },
+    ],
+  });
+  qtyInput.addEventListener('keydown', async (e) => {
+    if (e.key === 'Enter' && (await submit()) !== false) dlg.close();
+  });
+  renderPresets();
+  update();
+  // إعادة بناء أزرار الكميات السريعة عند تبديل الوحدة
+  modeSwitch && modeSwitch.addEventListener('click', renderPresets);
+}
+
+function renderMealCard() {
+  const card = $('#meal-card');
+  if (!card) return;
+  const { items, editingMealId, editingName } = state.current;
+  const total = mealTotal(items);
+
+  const head = h('div', { class: 'card-head' },
+    h('h2', {}, '🍽️ مكونات الوجبة الحالية'),
+    items.length > 0 && h('span', { class: 'muted small' }, `${items.length} صنف`));
+
+  const editingBanner = editingMealId && h('div', { class: 'banner' },
+    `تعديل الوجبة المحفوظة: «${editingName}»`,
+    h('button', { class: 'link-btn', onclick: stopEditing }, 'إلغاء التعديل'));
+
+  if (!items.length) {
+    clear(card, head, editingBanner,
+      emptyState('🥗', 'لم تُضف أي أصناف بعد. اختر الأطعمة من القائمة لإضافتها إلى الوجبة.'));
+    return;
+  }
+
+  const rows = items.map((it) => {
+    const food = itemFood(it);
+    const c = itemCarbs(it);
+    const deleted = !foodById(it.foodId);
+    return h('tr', {},
+      h('td', { class: 'td-name' }, food.name, deleted && h('span', { class: 'badge warn tiny' }, 'محذوف من القاعدة')),
+      h('td', { class: 'td-qty' }, qtyLabel(it, food)),
+      h('td', { class: 'td-carbs' }, Number.isFinite(c) ? `${fmt(c, 1)} جم` : '—'),
+      h('td', { class: 'td-actions' },
+        h('button', { class: 'icon-btn', title: 'تعديل الكمية', 'aria-label': `تعديل كمية ${food.name}`, onclick: () => openQtyDialog(food, it) }, '✏️'),
+        h('button', { class: 'icon-btn', title: 'حذف', 'aria-label': `حذف ${food.name}`, onclick: () => removeItem(it.uid) }, '🗑️')));
+  });
+
+  clear(card, head, editingBanner,
+    h('div', { class: 'table-wrap' },
+      h('table', { class: 'meal-table' },
+        h('thead', {}, h('tr', {}, h('th', {}, 'الصنف'), h('th', {}, 'الكمية'), h('th', {}, 'الكربوهيدرات'), h('th', { class: 'sr' }, 'إجراءات'))),
+        h('tbody', {}, rows),
+        h('tfoot', {}, h('tr', {}, h('th', { colspan: 2 }, 'الإجمالي'), h('th', { class: 'td-carbs total', id: 'meal-total' }, `${fmt(total, 1)} جم`), h('th', {}))))),
+    h('div', { class: 'row-actions' },
+      editingMealId
+        ? [h('button', { class: 'btn primary', onclick: () => saveMeal(true) }, '💾 تحديث الوجبة المحفوظة'),
+          h('button', { class: 'btn', onclick: () => saveMeal(false) }, 'حفظ كوجبة جديدة')]
+        : h('button', { class: 'btn primary', onclick: () => saveMeal(false) }, '💾 حفظ الوجبة'),
+      h('button', { class: 'btn ghost', onclick: clearMeal }, 'مسح الوجبة')));
+}
+
+async function removeItem(uid) {
+  state.current.items = state.current.items.filter((i) => i.uid !== uid);
+  await saveCurrent();
+  renderMealCard();
+  renderInsulinCard();
+}
+
+async function clearMeal() {
+  if (!(await confirmDialog('مسح جميع أصناف الوجبة الحالية؟', { okLabel: 'مسح', danger: true }))) return;
+  state.current = { items: [], editingMealId: null, editingName: '' };
+  await saveCurrent();
+  renderMealCard();
+  renderInsulinCard();
+}
+
+async function stopEditing() {
+  state.current = { items: [], editingMealId: null, editingName: '' };
+  await saveCurrent();
+  renderMealCard();
+  renderInsulinCard();
+}
+
+async function saveMeal(update) {
+  const items = state.current.items;
+  if (!items.length) return;
+  let meal;
+  if (update) {
+    meal = state.meals.find((m) => m.id === state.current.editingMealId);
+  }
+  if (!meal) {
+    const name = await promptDialog('حفظ الوجبة', { label: 'اسم الوجبة', value: defaultMealName() });
+    if (!name) return;
+    meal = { id: db.uid(), name, createdAt: Date.now() };
+    state.meals.push(meal);
+  }
+  meal.items = items.map((i) => ({ ...i }));
+  meal.totalCarbs = mealTotal(items);
+  meal.updatedAt = Date.now();
+  await db.meals.save(meal);
+  state.current.editingMealId = meal.id;
+  state.current.editingName = meal.name;
+  await saveCurrent();
+  toast(update ? 'تم تحديث الوجبة المحفوظة' : `تم حفظ «${meal.name}»`);
+  renderMealCard();
+}
+
+function defaultMealName() {
+  const hr = new Date().getHours();
+  const label = hr < 11 ? 'فطور' : hr < 17 ? 'غداء' : 'عشاء';
+  return `${label} ${new Date().toLocaleDateString('ar', { day: 'numeric', month: 'long' })}`;
+}
+
+function renderInsulinCard() {
+  const card = $('#insulin-card');
+  if (!card) return;
+  const total = mealTotal(state.current.items);
+  const dose = insulinDose(total, state.ratio);
+  const fab = $('#meal-fab');
+  if (fab) {
+    const n = state.current.items.length;
+    fab.hidden = n === 0;
+    clear(fab,
+      h('span', {}, `🍽️ ${n} صنف`),
+      h('span', {}, h('strong', {}, fmt(total, 1)), ' جم'),
+      h('span', { class: 'fab-dose' }, '💉 ', h('strong', {}, formatDose(dose)), ' وحدة'),
+      h('span', { 'aria-hidden': 'true' }, '⌄'));
+  }
+  clear(card,
+    h('div', { class: 'card-head' }, h('h2', {}, '💉 حاسبة جرعة الإنسولين')),
+    h('dl', { class: 'insulin-grid' },
+      h('div', {}, h('dt', {}, 'إجمالي كربوهيدرات الوجبة'), h('dd', {}, h('strong', {}, fmt(total, 1)), ' جم')),
+      h('div', {}, h('dt', {}, 'معامل الكربوهيدرات (ICR)'),
+        h('dd', {}, h('strong', {}, fmt(state.ratio, 2)), ' جم لكل وحدة ',
+          h('a', { href: '#setup', class: 'link-btn' }, 'تغيير')))),
+    h('div', { class: 'dose' },
+      h('div', { class: 'dose-label' }, 'جرعة الإنسولين الحسابية'),
+      h('div', { class: 'dose-value', id: 'dose-value' }, formatDose(dose), h('span', {}, ' وحدة')),
+      h('div', { class: 'equation', dir: 'ltr' }, `${fmt(total, 1)} ÷ ${fmt(state.ratio, 2)} = ${formatDose(dose)}`)),
+    h('p', { class: 'disclaimer' },
+      '⚠️ تنبيه طبي: هذه النتيجة ناتج معادلة حسابية فقط (إجمالي الكربوهيدرات ÷ المعامل)، وليست وصفة طبية أو أمراً بإعطاء جرعة. ',
+      'لا تتضمن جرعات تصحيحية ولا تقريباً للجرعة. يجب أن يكون المعامل معتمداً من الطبيب، وراجع خطة العلاج المعتمدة قبل أي جرعة.'));
+}
+
+/* ───────────── صفحة سجل الوجبات ───────────── */
+
+function renderMeals(root) {
+  const list = [...state.meals].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  clear(root,
+    h('div', { class: 'page-head' }, h('h1', {}, '📋 الوجبات المحفوظة'),
+      h('span', { class: 'muted' }, `${list.length} وجبة`)),
+    !list.length
+      ? emptyState('📋', 'لا توجد وجبات محفوظة بعد. أنشئ وجبة في الحاسبة ثم اضغط «حفظ الوجبة».',
+        h('a', { class: 'btn primary', href: '#calc' }, 'الذهاب إلى الحاسبة'))
+      : h('div', { class: 'meal-cards' }, list.map(mealCard)));
+}
+
+function mealCard(meal) {
+  const total = mealTotal(meal.items);
+  const dose = insulinDose(total, state.ratio);
+  return h('article', { class: 'card meal-saved' },
+    h('div', { class: 'card-head' },
+      h('div', {},
+        h('h2', {}, meal.name),
+        h('div', { class: 'muted small' }, new Date(meal.updatedAt || meal.createdAt).toLocaleString('ar', { dateStyle: 'medium', timeStyle: 'short' }))),
+      h('div', { class: 'meal-total' }, h('strong', {}, fmt(total, 1)), h('span', {}, 'جم كربوهيدرات'))),
+    h('details', {},
+      h('summary', {}, `${meal.items.length} صنف — عرض المكونات`),
+      h('ul', { class: 'meal-items' }, meal.items.map((it) => {
+        const food = itemFood(it);
+        return h('li', {}, h('span', {}, food.name), h('span', { class: 'muted' }, qtyLabel(it, food)),
+          h('span', {}, `${fmt(itemCarbs(it), 1)} جم`));
+      })),
+      h('p', { class: 'muted small' }, `الناتج الحسابي بالمعامل الحالي (${fmt(state.ratio, 2)}): ${formatDose(dose)} وحدة`)),
+    h('div', { class: 'row-actions' },
+      h('button', { class: 'btn primary', onclick: () => loadMeal(meal, false) }, '↩️ استخدام'),
+      h('button', { class: 'btn', onclick: () => loadMeal(meal, true) }, '✏️ تعديل'),
+      h('button', { class: 'btn', onclick: () => renameMeal(meal) }, 'إعادة تسمية'),
+      h('button', { class: 'btn danger-ghost', onclick: () => deleteMeal(meal) }, '🗑️ حذف')));
+}
+
+async function loadMeal(meal, edit) {
+  if (state.current.items.length && !state.current.editingMealId) {
+    const ok = await confirmDialog('ستُستبدل الوجبة الحالية غير المحفوظة. متابعة؟', { okLabel: 'متابعة' });
+    if (!ok) return;
+  }
+  state.current = {
+    items: meal.items.map((i) => ({ ...i, uid: db.uid() })),
+    editingMealId: edit ? meal.id : null,
+    editingName: edit ? meal.name : '',
+  };
+  await saveCurrent();
+  location.hash = '#calc';
+  toast(edit ? 'عدّل الوجبة ثم اضغط «تحديث الوجبة المحفوظة»' : `تم تحميل «${meal.name}»`);
+}
+
+async function renameMeal(meal) {
+  const name = await promptDialog('إعادة تسمية الوجبة', { label: 'الاسم الجديد', value: meal.name });
+  if (!name) return;
+  meal.name = name;
+  await db.meals.save(meal);
+  if (state.current.editingMealId === meal.id) { state.current.editingName = name; await saveCurrent(); }
+  render();
+}
+
+async function deleteMeal(meal) {
+  if (!(await confirmDialog(`حذف الوجبة «${meal.name}»؟`, { okLabel: 'حذف', danger: true }))) return;
+  await db.meals.remove(meal.id);
+  state.meals = state.meals.filter((m) => m.id !== meal.id);
+  if (state.current.editingMealId === meal.id) {
+    state.current.editingMealId = null;
+    state.current.editingName = '';
+    await saveCurrent();
+  }
+  toast('تم حذف الوجبة');
+  render();
+}
+
+/* ───────────── صفحة إدارة الأطعمة ───────────── */
+
+function renderManage(root) {
+  const incompleteCount = state.foods.filter((f) => !isComplete(f)).length;
+  clear(root,
+    h('div', { class: 'page-head' },
+      h('h1', {}, '🗂️ إدارة الأطعمة'),
+      h('button', { class: 'btn primary', onclick: () => openFoodForm() }, '➕ إضافة صنف')),
+    h('div', { class: 'filters' },
+      h('input', {
+        class: 'input search', type: 'search', placeholder: 'ابحث عن صنف موجود…', value: state.manage.query,
+        'aria-label': 'بحث في الأصناف',
+        oninput: (e) => { state.manage.query = e.target.value; renderManageList(); },
+      }),
+      h('select', {
+        class: 'input', 'aria-label': 'تصفية حسب التصنيف',
+        onchange: (e) => { state.manage.cat = e.target.value; renderManageList(); },
+      },
+      h('option', { value: '' }, 'كل التصنيفات'),
+      CATEGORIES.map((c) => h('option', { value: c.id, selected: state.manage.cat === c.id }, `${c.icon} ${c.name}`))),
+      incompleteCount > 0 && h('label', { class: 'check' },
+        h('input', {
+          type: 'checkbox', checked: state.manage.onlyIncomplete,
+          onchange: (e) => { state.manage.onlyIncomplete = e.target.checked; renderManageList(); },
+        }),
+        `الناقصة فقط (${incompleteCount})`)),
+    h('div', { id: 'manage-list' }));
+  renderManageList();
+}
+
+function renderManageList() {
+  const box = $('#manage-list');
+  if (!box) return;
+  const { query, cat, onlyIncomplete } = state.manage;
+  const list = state.foods.filter((f) =>
+    (!cat || f.category === cat) && matchesQuery(f.name, query) && (!onlyIncomplete || !isComplete(f)));
+  if (!list.length) {
+    clear(box, emptyState('🔍', 'لا توجد أصناف مطابقة.'));
+    return;
+  }
+  clear(box,
+    h('p', { class: 'muted small' }, `${list.length} من ${state.foods.length} صنف`),
+    h('ul', { class: 'food-list manage' }, list.map((f) => {
+      const cat = getCategory(f.category);
+      return h('li', { class: 'food-row static' },
+        foodThumb(f),
+        h('span', { class: 'food-info' },
+          h('span', { class: 'food-name' }, f.name),
+          h('span', { class: 'food-ref' }, `${refLabel(f)} • ${cat.icon} ${cat.name}`),
+          f.note && h('span', { class: 'food-note' }, f.note)),
+        carbsBadge(f),
+        h('span', { class: 'row-btns' },
+          h('button', { class: 'icon-btn', title: 'تعديل', 'aria-label': `تعديل ${f.name}`, onclick: () => openFoodForm(f) }, '✏️'),
+          h('button', { class: 'icon-btn', title: 'حذف', 'aria-label': `حذف ${f.name}`, onclick: () => deleteFood(f) }, '🗑️')));
+    })));
+}
+
+function openFoodForm(food = null) {
+  const isEdit = !!food?.id;
+  const data = { name: '', category: 'other', refQty: '', unit: 'حبة', carbs: '', altQty: '', altUnit: '', note: '', image: null, ...(food || {}) };
+  // عرض القيم الكسرية بشكل مقروء (1/3) والإبقاء على القيمة الأصلية الدقيقة إن لم تُعدّل
+  const val = (v) => {
+    if (v == null || v === '') return '';
+    const n = Number(v);
+    for (const d of [3, 6, 8]) {
+      const k = n * d;
+      if (Math.abs(k - Math.round(k)) < 1e-9 && roundTo(n, 4) !== n) return `${Math.round(k)}/${d}`;
+    }
+    return String(roundTo(n, 4));
+  };
+  const keep = (key) => (inputs[key].value.trim() === val(data[key]) && data[key] != null ? data[key] : null);
+
+  const field = (label, input, hint) => h('label', { class: 'field' }, h('span', {}, label), input, hint && h('small', { class: 'muted' }, hint));
+  const unitList = h('datalist', { id: 'unit-list' }, UNIT_SUGGESTIONS.map((u) => h('option', { value: u })));
+
+  const inputs = {
+    name: h('input', { class: 'input', value: data.name, required: true }),
+    category: h('select', { class: 'input' }, CATEGORIES.map((c) => h('option', { value: c.id, selected: data.category === c.id }, `${c.icon} ${c.name}`))),
+    refQty: h('input', { class: 'input', inputmode: 'decimal', value: val(data.refQty), placeholder: 'مثال: 1 أو 100 أو 1/2' }),
+    unit: h('input', { class: 'input', value: data.unit, list: 'unit-list', placeholder: 'حبة، كوب، جرام…' }),
+    carbs: h('input', { class: 'input', inputmode: 'decimal', value: val(data.carbs), placeholder: 'مثال: 15' }),
+    altQty: h('input', { class: 'input', inputmode: 'decimal', value: val(data.altQty), placeholder: 'اختياري — مثال: 250' }),
+    altUnit: h('input', { class: 'input', value: data.altUnit, list: 'unit-list', placeholder: 'اختياري — مثال: مل أو جرام' }),
+    note: h('input', { class: 'input', value: data.note, placeholder: 'اختياري' }),
+  };
+  let image = data.image;
+  const preview = h('div', { class: 'img-preview' });
+  const renderPreview = () => clear(preview,
+    image ? h('img', { src: image, alt: 'صورة الصنف' }) : h('span', { class: 'muted small' }, 'لا توجد صورة'),
+    h('button', {
+      type: 'button', class: 'btn small', onclick: async () => {
+        const file = await pickFile('image/*');
+        if (!file) return;
+        try { image = await resizeImage(file); renderPreview(); } catch { toast('تعذر قراءة الصورة', 'error'); }
+      },
+    }, image ? 'تغيير الصورة' : '📷 إضافة صورة'),
+    image && h('button', { type: 'button', class: 'btn small ghost', onclick: () => { image = null; renderPreview(); } }, 'إزالة'));
+  renderPreview();
+
+  const errorsBox = h('div', { class: 'form-errors', role: 'alert' });
+  const content = h('form', { class: 'food-form', onsubmit: (e) => e.preventDefault() },
+    unitList,
+    field('اسم الصنف *', inputs.name),
+    field('التصنيف *', inputs.category),
+    h('div', { class: 'grid-2' },
+      field('الكمية المرجعية *', inputs.refQty),
+      field('نوع الوحدة *', inputs.unit)),
+    field('كمية الكربوهيدرات بالجرام *', inputs.carbs, 'الكربوهيدرات الموجودة في الكمية المرجعية أعلاه'),
+    h('fieldset', { class: 'fieldset' },
+      h('legend', {}, 'قياس مكافئ (اختياري)'),
+      h('small', { class: 'muted' }, 'يتيح إدخال الكمية بطريقة ثانية، مثال: 1 كوب = 250 مل، أو 1 حبة = 60 جرام'),
+      h('div', { class: 'grid-2' }, field('الكمية المكافئة', inputs.altQty), field('وحدتها', inputs.altUnit))),
+    field('ملاحظة', inputs.note),
+    h('div', { class: 'field' }, h('span', {}, 'صورة الصنف (اختياري)'), preview),
+    food?.source && h('p', { class: 'muted small' }, `المصدر: ${food.source}`),
+    errorsBox);
+
+  modal({
+    title: isEdit ? 'تعديل صنف' : 'إضافة صنف جديد',
+    content,
+    wide: true,
+    actions: [
+      { label: isEdit ? 'حفظ التعديلات' : 'إضافة الصنف', class: 'primary', onClick: async () => {
+        const f = {
+          ...(food || {}),
+          name: inputs.name.value.trim(),
+          category: inputs.category.value,
+          refQty: keep('refQty') ?? parseNum(inputs.refQty.value),
+          unit: inputs.unit.value.trim(),
+          carbs: inputs.carbs.value.trim() === '' ? '' : (keep('carbs') ?? parseNum(inputs.carbs.value)),
+          altQty: inputs.altQty.value.trim() === '' ? '' : (keep('altQty') ?? parseNum(inputs.altQty.value)),
+          altUnit: inputs.altUnit.value.trim(),
+          note: inputs.note.value.trim(),
+          image,
+        };
+        const errors = validateFood(f);
+        if (errors.length) {
+          clear(errorsBox, h('ul', {}, errors.map((e) => h('li', {}, e))));
+          return false;
+        }
+        if (f.altQty === '') { f.altQty = null; f.altUnit = ''; }
+        const saved = await db.foods.save(f);
+        const i = state.foods.findIndex((x) => x.id === saved.id);
+        if (i >= 0) state.foods[i] = saved; else state.foods.push(saved);
+        sortFoods();
+        toast(isEdit ? 'تم حفظ التعديلات' : `تمت إضافة «${saved.name}»`);
+        render();
+      } },
+      { label: 'إلغاء', class: 'ghost' },
+    ],
+  });
+  setTimeout(() => (isEdit ? null : inputs.name.focus()), 50);
+}
+
+async function deleteFood(food) {
+  const used = state.current.items.some((i) => i.foodId === food.id);
+  const msg = `حذف «${food.name}» من قاعدة البيانات؟${used ? '\nالصنف موجود في الوجبة الحالية وسيبقى فيها بآخر بيانات محفوظة.' : ''}`;
+  if (!(await confirmDialog(msg, { okLabel: 'حذف', danger: true }))) return;
+  await db.foods.remove(food.id);
+  state.foods = state.foods.filter((f) => f.id !== food.id);
+  toast('تم حذف الصنف');
+  render();
+}
+
+/* ───────────── صفحة الإعدادات ───────────── */
+
+function renderSettings(root) {
+  const ratioInput = h('input', { class: 'input ratio-input', inputmode: 'decimal', value: String(state.ratio), 'aria-label': 'معامل الكربوهيدرات' });
+  const saveRatio = async () => {
+    const r = parseNum(ratioInput.value);
+    if (!(r > 0)) { toast('أدخل معاملاً أكبر من صفر', 'error'); return; }
+    state.ratio = r;
+    await db.settings.set('ratio', r);
+    toast(`تم حفظ المعامل: ${fmt(r, 2)}`);
+    render();
+  };
+
+  clear(root,
+    h('div', { class: 'page-head' }, h('h1', {}, '⚙️ الإعدادات')),
+    h('section', { class: 'card' },
+      h('h2', {}, '💉 معامل الكربوهيدرات (Insulin to Carb Ratio)'),
+      h('p', { class: 'muted' }, 'عدد جرامات الكربوهيدرات لكل وحدة إنسولين. القيمة الافتراضية: ', h('strong', {}, String(DEFAULT_RATIO)), '.'),
+      h('div', { class: 'ratio-row' },
+        ratioInput, h('span', {}, 'جم / وحدة'),
+        h('button', { class: 'btn primary', onclick: saveRatio }, 'حفظ'),
+        h('button', {
+          class: 'btn ghost', onclick: async () => {
+            state.ratio = DEFAULT_RATIO;
+            await db.settings.set('ratio', DEFAULT_RATIO);
+            toast('تمت استعادة القيمة الافتراضية 25');
+            render();
+          },
+        }, 'استعادة الافتراضي (25)')),
+      h('p', { class: 'disclaimer' }, '⚠️ يجب أن يكون المعامل معتمداً من الطبيب المعالج.')),
+
+    h('section', { class: 'card' },
+      h('h2', {}, '🗄️ قاعدة بيانات الأطعمة'),
+      h('p', { class: 'muted' }, `${state.foods.length} صنف محفوظ ${db.storageInfo.kind === 'cloud' ? 'في حسابك (مساحة خاصة بك وحدك، تتزامن بين أجهزتك)' : 'على هذا الجهاز'}.`),
+      h('div', { class: 'row-actions wrap' },
+        h('button', { class: 'btn', onclick: exportFoodsJSON }, '⬇️ تصدير (JSON)'),
+        h('button', { class: 'btn', onclick: exportFoodsCSV }, '⬇️ تصدير (CSV / Excel)'),
+        h('button', { class: 'btn', onclick: importFoods }, '⬆️ استيراد أطعمة'),
+        h('button', { class: 'btn danger-ghost', onclick: resetFoods }, 'استعادة الأصناف الأصلية من الجداول'))),
+
+    h('section', { class: 'card' },
+      h('h2', {}, '💾 النسخ الاحتياطي'),
+      h('p', { class: 'muted' }, 'نسخة كاملة تشمل الأطعمة والوجبات المحفوظة والإعدادات. احفظها في الملفات أو iCloud لنقلها لجهاز آخر.'),
+      h('div', { class: 'row-actions wrap' },
+        h('button', { class: 'btn primary', onclick: exportBackup }, '⬇️ إنشاء نسخة احتياطية'),
+        h('button', { class: 'btn', onclick: restoreBackup }, '⬆️ استعادة من نسخة احتياطية'))),
+
+    h('section', { class: 'card' },
+      h('h2', {}, '📱 التثبيت كتطبيق'),
+      h('p', {}, 'على الآيفون/الآيباد: افتح الموقع في Safari ← زر المشاركة ← «إضافة إلى الشاشة الرئيسية».'),
+      h('p', {}, 'على أندرويد/الكمبيوتر: من قائمة المتصفح اختر «تثبيت التطبيق».'),
+      h('p', { class: 'muted small' }, db.storageInfo.kind === 'cloud'
+        ? 'بياناتك محفوظة في مساحة خاصة بحسابك في Claude، ولا يستطيع أحد غيرك قراءتها أو تعديلها، وتظهر نفسها على الآيفون والآيباد.'
+        : 'تُحفظ البيانات على هذا الجهاز وهذا المتصفح فقط.')));
+}
+
+function stamp() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function exportFoodsJSON() {
+  const data = { type: 'carb-calculator-foods', version: 1, exportedAt: new Date().toISOString(), foods: state.foods };
+  return download(`أطعمة-${stamp()}.json`, JSON.stringify(data, null, 2));
+}
+
+const CSV_COLS = ['name', 'category', 'refQty', 'unit', 'carbs', 'altQty', 'altUnit', 'note', 'source', 'id'];
+function exportFoodsCSV() {
+  const esc = (v) => {
+    const s = v == null ? '' : String(v);
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const rows = state.foods.map((f) => CSV_COLS.map((c) => esc(c === 'category' ? getCategory(f.category).name : f[c])).join(','));
+  download(`أطعمة-${stamp()}.csv`, '﻿' + [CSV_COLS.join(','), ...rows].join('\n'), 'text/csv');
+}
+
+function parseCSV(text) {
+  const rows = [];
+  let row = [], cur = '', q = false;
+  text = text.replace(/^﻿/, '');
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (q) {
+      if (ch === '"' && text[i + 1] === '"') { cur += '"'; i++; } else if (ch === '"') q = false; else cur += ch;
+    } else if (ch === '"') q = true;
+    else if (ch === ',') { row.push(cur); cur = ''; }
+    else if (ch === '\n' || ch === '\r') {
+      if (ch === '\r' && text[i + 1] === '\n') i++;
+      row.push(cur); rows.push(row); row = []; cur = '';
+    } else cur += ch;
+  }
+  if (cur || row.length) { row.push(cur); rows.push(row); }
+  const [head, ...body] = rows.filter((r) => r.some((c) => c.trim()));
+  if (!head) return [];
+  const keys = head.map((k) => k.trim());
+  return body.map((r) => Object.fromEntries(keys.map((k, i) => [k, r[i] ?? ''])));
+}
+
+async function readFoodsFile(file) {
+  const text = await file.text();
+  if (file.name.toLowerCase().endsWith('.csv')) {
+    return parseCSV(text).map((r) => ({ ...r, category: resolveCategory(r.category), refQty: parseNum(r.refQty), carbs: r.carbs === '' ? null : parseNum(r.carbs), altQty: r.altQty === '' ? null : parseNum(r.altQty) }));
+  }
+  const json = JSON.parse(text);
+  const list = Array.isArray(json) ? json : json.foods;
+  if (!Array.isArray(list)) throw new Error('لا يحتوي الملف على قائمة أطعمة');
+  return list.map((r) => ({ ...r, category: resolveCategory(r.category) }));
+}
+
+async function importFoods() {
+  const file = await pickFile('.json,.csv,application/json,text/csv');
+  if (!file) return;
+  let list;
+  try {
+    list = (await readFoodsFile(file)).filter((f) => String(f.name || '').trim());
+  } catch (e) {
+    toast(`تعذر قراءة الملف: ${e.message}`, 'error');
+    return;
+  }
+  if (!list.length) { toast('الملف لا يحتوي على أصناف', 'error'); return; }
+
+  let choice = null;
+  await new Promise((resolve) => modal({
+    title: 'استيراد الأطعمة',
+    content: h('p', {}, `يحتوي الملف على ${list.length} صنف. كيف تريد الاستيراد؟`),
+    actions: [
+      { label: 'دمج مع الموجود', class: 'primary', onClick: () => { choice = 'merge'; } },
+      { label: 'استبدال الكل', class: 'danger', onClick: () => { choice = 'replace'; } },
+      { label: 'إلغاء', class: 'ghost' },
+    ],
+    onClose: resolve,
+  }));
+  if (!choice) return;
+
+  if (choice === 'replace') {
+    await db.foods.replaceAll(list);
+  } else {
+    // الدمج: تحديث الصنف المطابق (بالمعرّف أو الاسم والوحدة) وإضافة الجديد
+    const merged = list.map((f) => {
+      const match = state.foods.find((x) => (f.id && x.id === f.id) || (f.seedId && x.seedId === f.seedId)
+        || (x.name === String(f.name).trim() && x.unit === String(f.unit || '').trim()));
+      return match ? { ...match, ...f, id: match.id } : { ...f, id: f.id || db.uid() };
+    });
+    await db.foods.putMany(merged);
+  }
+  state.foods = await db.foods.all();
+  sortFoods();
+  toast(`تم استيراد ${list.length} صنف`);
+  render();
+}
+
+async function resetFoods() {
+  const ok = await confirmDialog('سيتم استبدال قاعدة الأطعمة الحالية بالأصناف الأصلية المستخرجة من الجداول، وستُفقد الأصناف المضافة والتعديلات. ينصح بأخذ نسخة احتياطية أولاً. متابعة؟', { okLabel: 'استعادة', danger: true });
+  if (!ok) return;
+  await db.restoreOriginalFoods();
+  state.foods = await db.foods.all();
+  sortFoods();
+  toast('تمت استعادة الأصناف الأصلية');
+  render();
+}
+
+async function exportBackup() {
+  const data = {
+    type: 'carb-calculator-backup', version: 1, exportedAt: new Date().toISOString(),
+    foods: state.foods, meals: state.meals, settings: await db.settings.all(),
+  };
+  if (await download(`نسخة-احتياطية-حاسبة-الكربوهيدرات-${stamp()}.json`, JSON.stringify(data, null, 2))) toast('تم حفظ النسخة الاحتياطية');
+}
+
+async function restoreBackup() {
+  const file = await pickFile('.json,application/json');
+  if (!file) return;
+  let data;
+  try {
+    data = JSON.parse(await file.text());
+    if (data.type !== 'carb-calculator-backup' || !Array.isArray(data.foods)) throw new Error('ليس ملف نسخة احتياطية لهذا التطبيق');
+  } catch (e) {
+    toast(`تعذر قراءة الملف: ${e.message}`, 'error');
+    return;
+  }
+  const ok = await confirmDialog(`استعادة النسخة الاحتياطية (${data.foods.length} صنف، ${(data.meals || []).length} وجبة)؟ ستُستبدل جميع البيانات الحالية.`, { okLabel: 'استعادة', danger: true });
+  if (!ok) return;
+  await db.foods.replaceAll(data.foods);
+  await db.meals.replaceAll(data.meals || []);
+  for (const s of data.settings || []) await db.settings.set(s.key, s.value);
+  await loadAll();
+  toast('تمت استعادة النسخة الاحتياطية');
+  render();
+}
+
+/* ───────────── التشغيل ───────────── */
+
+async function init() {
+  buildNav();
+  try {
+    clear($('#view'), h('div', { class: 'loading' }, 'جارِ تحميل بياناتك…'));
+    await db.initStorage();
+    await loadAll();
+  } catch (e) {
+    console.error(e);
+    clear($('#view'), emptyState('⚠️', `تعذر تحميل البيانات: ${e?.message || 'خطأ غير معروف'}`,
+      h('button', { class: 'btn primary', onclick: () => location.reload() }, 'إعادة المحاولة')));
+    return;
+  }
+  if (window.claude && db.storageInfo.kind === 'local') {
+    toast('لم يتوفر الحفظ في حسابك؛ تُحفظ البيانات على هذا الجهاز فقط', 'error');
+  }
+  db.requestPersistence();
+  window.addEventListener('hashchange', route);
+  route();
+  document.body.classList.add('ready');
+
+  // مزامنة عند العودة للتطبيق (مثلاً بعد التعديل من الآيباد)
+  let lastSync = Date.now();
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible' || db.storageInfo.kind !== 'cloud') return;
+    if (Date.now() - lastSync < 15000 || document.querySelector('dialog[open]')) return;
+    lastSync = Date.now();
+    try {
+      await loadAll();
+      render();
+    } catch { /* تجاهل؛ تبقى البيانات الحالية */ }
+  });
+
+  if ('serviceWorker' in navigator && !window.claude && location.protocol !== 'file:') {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+}
+
+init();
+
+return {  };
+})();
+})();
+</script>

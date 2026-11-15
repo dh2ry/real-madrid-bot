@@ -1,73 +1,131 @@
 // طبقة التخزين الدائم — IndexedDB داخل المتصفح (تبقى البيانات بعد التحديث والإغلاق)
 import { SEED_FOODS, SEED_VERSION } from '../data/foods.js';
 
-const DB_NAME = 'carb-calculator';
-const DB_VERSION = 1;
-let dbPromise;
+// ── الواجهة الخلفية للتخزين ──
+// 1) داخل Claude: قاعدة بيانات الصفحة في مساحة المستخدم الخاصة data/users/<id>/ (لا يراها غيره،
+//    وتتزامن بين أجهزته). 2) خارج Claude: IndexedDB في المتصفح.
+const STORES = { foods: 'id', meals: 'id', settings: 'key' };
+let backendPromise;
 
-function open() {
-  if (dbPromise) return dbPromise;
-  dbPromise = new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
+export const storageInfo = { kind: 'none' };
+
+function withTimeout(promise, ms, msg) {
+  return Promise.race([promise, new Promise((_, rej) => setTimeout(() => rej(new Error(msg)), ms))]);
+}
+
+async function pickBackend() {
+  if (window.claude?.use) {
+    const [cdb, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+    const id = cdb && user ? await user.id() : null;
+    if (cdb && id) {
+      storageInfo.kind = 'cloud';
+      return cloudBackend(cdb, id);
+    }
+  }
+  storageInfo.kind = 'local';
+  return idbBackend();
+}
+
+function backend() {
+  if (!backendPromise) backendPromise = pickBackend();
+  return backendPromise;
+}
+
+function cloudBackend(cdb, uid) {
+  const base = cdb.doc(`data/users/${uid}/app`);
+  const col = (store) => base.collection(store);
+  const clone = (v) => JSON.parse(JSON.stringify(v));
+  // تنفيذ عدد محدود من الكتابات في وقت واحد
+  async function pool(items, fn, size = 6) {
+    const queue = [...items];
+    const workers = Array.from({ length: Math.min(size, queue.length) }, async () => {
+      while (queue.length) await fn(queue.shift());
+    });
+    await Promise.all(workers);
+  }
+  // إعادة المحاولة عند الضغط المؤقت فقط (unavailable / resource_exhausted)
+  const call = async (fn, tries = 4) => {
+    for (let i = 0; ; i++) {
+      try {
+        return await withTimeout(fn(), 20000, 'تعذر الوصول إلى البيانات. تحقق من الاتصال بالإنترنت.');
+      } catch (e) {
+        const transient = e?.code === 'unavailable' || e?.code === 'resource_exhausted';
+        if (!transient || i >= tries - 1) throw e;
+        await new Promise((r) => setTimeout(r, 400 * 2 ** i + Math.random() * 300));
+      }
+    }
+  };
+  return {
+    async getAll(store) {
+      const snap = await call(() => col(store).limit(1000).get());
+      return snap.docs.filter((d) => d.exists).map((d) => clone(d.data()));
+    },
+    async get(store, key) {
+      const d = await call(() => col(store).doc(key).get());
+      return d.exists ? clone(d.data()) : undefined;
+    },
+    put: (store, v) => call(() => col(store).doc(String(v[STORES[store]])).set(clone(v))),
+    del: (store, key) => call(() => col(store).doc(String(key)).delete()),
+    putMany: (store, list) => pool(list, (v) => call(() => col(store).doc(String(v[STORES[store]])).set(clone(v)))),
+    async replaceAll(store, list) {
+      const keep = new Set(list.map((v) => String(v[STORES[store]])));
+      const existing = await this.getAll(store);
+      await pool(existing.filter((v) => !keep.has(String(v[STORES[store]]))), (v) => call(() => col(store).doc(String(v[STORES[store]])).delete()));
+      await this.putMany(store, list);
+    },
+  };
+}
+
+function idbBackend() {
+  let dbp;
+  const open = () => dbp || (dbp = new Promise((resolve, reject) => {
+    const req = indexedDB.open('carb-calculator', 1);
     req.onupgradeneeded = () => {
-      const db = req.result;
-      if (!db.objectStoreNames.contains('foods')) db.createObjectStore('foods', { keyPath: 'id' });
-      if (!db.objectStoreNames.contains('meals')) db.createObjectStore('meals', { keyPath: 'id' });
-      if (!db.objectStoreNames.contains('settings')) db.createObjectStore('settings', { keyPath: 'key' });
+      for (const [name, keyPath] of Object.entries(STORES)) {
+        if (!req.result.objectStoreNames.contains(name)) req.result.createObjectStore(name, { keyPath });
+      }
     };
     req.onsuccess = () => resolve(req.result);
     req.onerror = () => reject(req.error);
-  });
-  return dbPromise;
-}
-
-function done(tx) {
-  return new Promise((resolve, reject) => {
+  }));
+  const done = (tx) => new Promise((resolve, reject) => {
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
     tx.onabort = () => reject(tx.error);
   });
+  const read = async (store, fn) => {
+    const db = await open();
+    return new Promise((resolve, reject) => {
+      const r = fn(db.transaction(store).objectStore(store));
+      r.onsuccess = () => resolve(r.result);
+      r.onerror = () => reject(r.error);
+    });
+  };
+  const write = async (store, fn) => {
+    const db = await open();
+    const tx = db.transaction(store, 'readwrite');
+    fn(tx.objectStore(store));
+    await done(tx);
+  };
+  return {
+    getAll: (store) => read(store, (os) => os.getAll()),
+    get: (store, key) => read(store, (os) => os.get(key)),
+    put: (store, v) => write(store, (os) => os.put(v)),
+    del: (store, key) => write(store, (os) => os.delete(key)),
+    putMany: (store, list) => write(store, (os) => list.forEach((v) => os.put(v))),
+    replaceAll: (store, list) => write(store, (os) => { os.clear(); list.forEach((v) => os.put(v)); }),
+  };
 }
 
-async function getAll(store) {
-  const db = await open();
-  return new Promise((resolve, reject) => {
-    const r = db.transaction(store).objectStore(store).getAll();
-    r.onsuccess = () => resolve(r.result);
-    r.onerror = () => reject(r.error);
-  });
-}
+const getAll = async (store) => (await backend()).getAll(store);
+const put = async (store, v) => { await (await backend()).put(store, v); return v; };
+const del = async (store, key) => (await backend()).del(store, key);
+const putMany = async (store, list) => (await backend()).putMany(store, list);
+const replaceAll = async (store, list) => (await backend()).replaceAll(store, list);
 
-async function put(store, value) {
-  const db = await open();
-  const tx = db.transaction(store, 'readwrite');
-  tx.objectStore(store).put(value);
-  await done(tx);
-  return value;
-}
-
-async function del(store, key) {
-  const db = await open();
-  const tx = db.transaction(store, 'readwrite');
-  tx.objectStore(store).delete(key);
-  await done(tx);
-}
-
-async function replaceAll(store, values) {
-  const db = await open();
-  const tx = db.transaction(store, 'readwrite');
-  const os = tx.objectStore(store);
-  os.clear();
-  values.forEach((v) => os.put(v));
-  await done(tx);
-}
-
-async function putMany(store, values) {
-  const db = await open();
-  const tx = db.transaction(store, 'readwrite');
-  const os = tx.objectStore(store);
-  values.forEach((v) => os.put(v));
-  await done(tx);
+export async function initStorage() {
+  await backend();
+  return storageInfo.kind;
 }
 
 export function uid() {
@@ -96,12 +154,8 @@ export function cleanFood(f) {
 
 export const settings = {
   async get(key, fallback) {
-    const db = await open();
-    return new Promise((resolve, reject) => {
-      const r = db.transaction('settings').objectStore('settings').get(key);
-      r.onsuccess = () => resolve(r.result ? r.result.value : fallback);
-      r.onerror = () => reject(r.error);
-    });
+    const r = await (await backend()).get('settings', key);
+    return r ? r.value : fallback;
   },
   set: (key, value) => put('settings', { key, value }),
   all: () => getAll('settings'),
@@ -148,6 +202,7 @@ export async function restoreOriginalFoods() {
 }
 
 export async function requestPersistence() {
+  if (storageInfo.kind !== 'local') return;
   try {
     if (navigator.storage?.persist && !(await navigator.storage.persisted())) await navigator.storage.persist();
   } catch { /* غير مدعوم */ }

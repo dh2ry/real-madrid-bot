@@ -58,7 +58,7 @@ const VIEWS = {
   calc: { title: 'الحاسبة', icon: '🧮', render: renderCalc },
   meals: { title: 'الوجبات', icon: '📋', render: renderMeals },
   foods: { title: 'إدارة الأطعمة', icon: '🗂️', render: renderManage },
-  settings: { title: 'الإعدادات', icon: '⚙️', render: renderSettings },
+  setup: { title: 'الإعدادات', icon: '⚙️', render: renderSettings },
 };
 
 function route() {
@@ -433,7 +433,7 @@ function renderInsulinCard() {
       h('div', {}, h('dt', {}, 'إجمالي كربوهيدرات الوجبة'), h('dd', {}, h('strong', {}, fmt(total, 1)), ' جم')),
       h('div', {}, h('dt', {}, 'معامل الكربوهيدرات (ICR)'),
         h('dd', {}, h('strong', {}, fmt(state.ratio, 2)), ' جم لكل وحدة ',
-          h('a', { href: '#settings', class: 'link-btn' }, 'تغيير')))),
+          h('a', { href: '#setup', class: 'link-btn' }, 'تغيير')))),
     h('div', { class: 'dose' },
       h('div', { class: 'dose-label' }, 'جرعة الإنسولين الحسابية'),
       h('div', { class: 'dose-value', id: 'dose-value' }, formatDose(dose), h('span', {}, ' وحدة')),
@@ -714,7 +714,7 @@ function renderSettings(root) {
 
     h('section', { class: 'card' },
       h('h2', {}, '🗄️ قاعدة بيانات الأطعمة'),
-      h('p', { class: 'muted' }, `${state.foods.length} صنف محفوظ على هذا الجهاز.`),
+      h('p', { class: 'muted' }, `${state.foods.length} صنف محفوظ ${db.storageInfo.kind === 'cloud' ? 'في حسابك (مساحة خاصة بك وحدك، تتزامن بين أجهزتك)' : 'على هذا الجهاز'}.`),
       h('div', { class: 'row-actions wrap' },
         h('button', { class: 'btn', onclick: exportFoodsJSON }, '⬇️ تصدير (JSON)'),
         h('button', { class: 'btn', onclick: exportFoodsCSV }, '⬇️ تصدير (CSV / Excel)'),
@@ -732,7 +732,9 @@ function renderSettings(root) {
       h('h2', {}, '📱 التثبيت كتطبيق'),
       h('p', {}, 'على الآيفون/الآيباد: افتح الموقع في Safari ← زر المشاركة ← «إضافة إلى الشاشة الرئيسية».'),
       h('p', {}, 'على أندرويد/الكمبيوتر: من قائمة المتصفح اختر «تثبيت التطبيق».'),
-      h('p', { class: 'muted small' }, 'يعمل التطبيق بدون إنترنت بعد أول فتح، وتُحفظ البيانات على جهازك فقط.')));
+      h('p', { class: 'muted small' }, db.storageInfo.kind === 'cloud'
+        ? 'بياناتك محفوظة في مساحة خاصة بحسابك في Claude، ولا يستطيع أحد غيرك قراءتها أو تعديلها، وتظهر نفسها على الآيفون والآيباد.'
+        : 'تُحفظ البيانات على هذا الجهاز وهذا المتصفح فقط.')));
 }
 
 function stamp() {
@@ -741,7 +743,7 @@ function stamp() {
 
 function exportFoodsJSON() {
   const data = { type: 'carb-calculator-foods', version: 1, exportedAt: new Date().toISOString(), foods: state.foods };
-  download(`أطعمة-${stamp()}.json`, JSON.stringify(data, null, 2));
+  return download(`أطعمة-${stamp()}.json`, JSON.stringify(data, null, 2));
 }
 
 const CSV_COLS = ['name', 'category', 'refQty', 'unit', 'carbs', 'altQty', 'altUnit', 'note', 'source', 'id'];
@@ -844,8 +846,7 @@ async function exportBackup() {
     type: 'carb-calculator-backup', version: 1, exportedAt: new Date().toISOString(),
     foods: state.foods, meals: state.meals, settings: await db.settings.all(),
   };
-  download(`نسخة-احتياطية-حاسبة-الكربوهيدرات-${stamp()}.json`, JSON.stringify(data, null, 2));
-  toast('تم إنشاء النسخة الاحتياطية');
+  if (await download(`نسخة-احتياطية-حاسبة-الكربوهيدرات-${stamp()}.json`, JSON.stringify(data, null, 2))) toast('تم حفظ النسخة الاحتياطية');
 }
 
 async function restoreBackup() {
@@ -874,18 +875,36 @@ async function restoreBackup() {
 async function init() {
   buildNav();
   try {
+    clear($('#view'), h('div', { class: 'loading' }, 'جارِ تحميل بياناتك…'));
+    await db.initStorage();
     await loadAll();
   } catch (e) {
     console.error(e);
-    clear($('#view'), emptyState('⚠️', 'تعذر فتح قاعدة البيانات على هذا المتصفح. تأكد من عدم استخدام التصفح الخاص.'));
+    clear($('#view'), emptyState('⚠️', `تعذر تحميل البيانات: ${e?.message || 'خطأ غير معروف'}`,
+      h('button', { class: 'btn primary', onclick: () => location.reload() }, 'إعادة المحاولة')));
     return;
+  }
+  if (window.claude && db.storageInfo.kind === 'local') {
+    toast('لم يتوفر الحفظ في حسابك؛ تُحفظ البيانات على هذا الجهاز فقط', 'error');
   }
   db.requestPersistence();
   window.addEventListener('hashchange', route);
   route();
   document.body.classList.add('ready');
 
-  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  // مزامنة عند العودة للتطبيق (مثلاً بعد التعديل من الآيباد)
+  let lastSync = Date.now();
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== 'visible' || db.storageInfo.kind !== 'cloud') return;
+    if (Date.now() - lastSync < 15000 || document.querySelector('dialog[open]')) return;
+    lastSync = Date.now();
+    try {
+      await loadAll();
+      render();
+    } catch { /* تجاهل؛ تبقى البيانات الحالية */ }
+  });
+
+  if ('serviceWorker' in navigator && !window.claude && location.protocol !== 'file:') {
     navigator.serviceWorker.register('sw.js').catch(() => {});
   }
 }

@@ -9,6 +9,8 @@ const SHOTS = process.argv[3];
 (async () => {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({ ...devices['iPhone 13'], locale: 'ar' });
+  // MOCK_CLAUDE=1 يحاكي قاعدة بيانات Claude لاختبار الصفحة المنشورة
+  if (process.env.MOCK_CLAUDE) await ctx.addInitScript({ path: require('node:path').join(__dirname, 'claude-mock.js') });
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', (e) => errors.push(e.message));
@@ -99,14 +101,14 @@ const SHOTS = process.argv[3];
   step('تعديل الوجبة المحفوظة (+ تمر 15 = 117)');
 
   // تغيير المعامل
-  await page.goto(URL + '#settings');
+  await page.goto(URL + '#setup');
   await page.fill('.ratio-input', '20');
   await page.click('.ratio-row .btn.primary');
   await page.waitForSelector('.toast.show');
   await page.goto(URL + '#calc');
   assert.match(await page.textContent('#dose-value'), /^5\.85/); // 117 ÷ 20
   step('تغيير المعامل إلى 20: 117 ÷ 20 = 5.85');
-  await page.goto(URL + '#settings');
+  await page.goto(URL + '#setup');
   await shot('06-settings');
   await page.click('text=استعادة الافتراضي (25)');
   await page.waitForFunction(() => document.querySelector('.ratio-input')?.value === '25');
@@ -176,6 +178,15 @@ const SHOTS = process.argv[3];
   assert.equal(overflow, false, 'تمرير أفقي على الجوال');
   step('لا يوجد تمرير أفقي على الجوال');
 
+  if (process.env.MOCK_CLAUDE) {
+    const stored = await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('__mock_db__') || '{}')));
+    assert.ok(stored.length > 120, 'لم تُحفظ البيانات في قاعدة Claude');
+    assert.ok(stored.every((k) => k.startsWith('data/users/viewer-123/app/')), 'بيانات خارج المساحة الخاصة');
+    await page.goto(URL + '#setup');
+    await page.click('text=⬇️ إنشاء نسخة احتياطية');
+    await page.waitForFunction(() => window.__lastDownload);
+    step(`الحفظ في مساحة المستخدم الخاصة فقط (${stored.length} مستند) والتنزيل عبر Claude`);
+  }
   assert.deepEqual(errors, [], `أخطاء في المتصفح: ${errors.join(' | ')}`);
   step('لا أخطاء في وحدة التحكم');
   await browser.close();
