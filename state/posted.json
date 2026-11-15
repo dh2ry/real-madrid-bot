@@ -6276,8 +6276,8 @@
     "cover:marca:2026-11-14": 1794637114629,
     "cover:as:2026-11-14": 1794637143890,
     "onthisday:2026-11-14": 1794647810353,
-    "cover:marca:2026-11-15": 1794734791639,
-    "cover:as:2026-11-15": 1794734803642,
+    "cover:marca:2026-11-15": 1794737774976,
+    "cover:as:2026-11-15": 1794737787413,
     "onthisday:2026-11-15": 1794734818047
   },
   "afIds": {},
@@ -6346,7 +6346,7 @@
       }
     ]
   },
-  "lastNewsRun": 1794734782566,
+  "lastNewsRun": 1794737763021,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2121622684920590407",
@@ -6671,7 +6671,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794734791543,
+  "officialXRun": 1794737774914,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6690,9 +6690,7 @@
     "1956: ريال مدريد يسقط في فيينا ثم يتجاوز رابيد"
   ],
   "officialSince": "2121604074147877137",
-  "postTimes": [
-    1794650772205
-  ],
+  "postTimes": [],
   "xBlockedUntil": 1793618696842,
   "tries": {
     "575386:pre:rm": 3,
