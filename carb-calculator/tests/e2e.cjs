@@ -100,6 +100,79 @@ const SHOTS = process.argv[3];
   assert.match(await page.textContent('.meal-total'), /117/);
   step('تعديل الوجبة المحفوظة (+ تمر 15 = 117)');
 
+  // ── سجل السكر والوجبات ──
+  await page.goto(URL + '#calc');
+  await page.click('#log-from-calc');
+  await page.waitForSelector('dialog .log-form');
+  assert.match(await page.textContent('dialog .meal-chosen'), /117/);
+  await page.fill('#log-date', '2026-11-18');
+  await page.dispatchEvent('#log-date', 'input');
+  assert.equal((await page.textContent('#log-day')).trim(), 'الأربعاء');
+  await page.fill('#log-time', '13:00');
+  await page.dispatchEvent('#log-time', 'input');
+  assert.match(await page.textContent('#log-due'), /3:00 م/);
+  await page.fill('#log-before', '120');
+  assert.equal(await page.inputValue('#log-dose'), '', 'الجرعة لا تُعبّأ تلقائياً');
+  await page.click('dialog .dose-hint .link-btn');
+  assert.equal(await page.inputValue('#log-dose'), '4.68');
+  await shot('11-log-form');
+  await page.locator('dialog .btn.primary').click();
+  await page.waitForSelector('dialog', { state: 'detached' });
+  await page.waitForSelector('.log-entry');
+  await page.click('.log-toolbar button:has-text("الكل")');
+  let card = page.locator('.log-entry').first();
+  assert.match(await card.textContent(), /1:00 م/);
+  assert.match(await card.textContent(), /120/);
+  assert.match(await card.textContent(), /4\.68/);
+  assert.match(await card.textContent(), /لم يُسجَّل/);
+  assert.match(await page.textContent('.log-days'), /الأربعاء، 18 نوفمبر 2026/);
+  step('تسجيل من الحاسبة: التاريخ واليوم (الأربعاء) والوقت والسكر قبل والوجبة (117 جم) والجرعة');
+
+  await card.locator('button[title="تعديل"]').click();
+  await page.fill('#log-after', '165');
+  await page.locator('dialog .btn.primary').click();
+  await page.waitForSelector('dialog', { state: 'detached' });
+  await page.waitForFunction(() => /\+45/.test(document.querySelector('.log-entry')?.textContent || ''));
+  step('إضافة قياس بعد ساعتين لاحقاً بالتعديل (165، الفرق +45)');
+
+  // تسجيل يدوي قبل ساعتين من الآن ← يظهر في تنبيه «قياس بعد ساعتين»
+  const twoHoursAgo = await page.evaluate(() => {
+    const d = new Date(Date.now() - 125 * 60000);
+    const p = (n) => String(n).padStart(2, '0');
+    return { date: `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`, time: `${p(d.getHours())}:${p(d.getMinutes())}` };
+  });
+  await page.click('#log-new');
+  await page.waitForSelector('dialog .log-form');
+  await page.click('dialog button:has-text("كتابة يدوية")');
+  await page.fill('#log-date', twoHoursAgo.date);
+  await page.fill('#log-time', twoHoursAgo.time);
+  await page.fill('#log-meal-name', 'كبسة دجاج');
+  await page.fill('#log-meal-carbs', '60');
+  await page.fill('#log-before', '110');
+  await page.fill('#log-dose', '2.4');
+  await page.locator('dialog .btn.primary').click();
+  await page.waitForSelector('dialog', { state: 'detached' });
+  await page.waitForSelector('.pending');
+  await shot('12-log');
+  await page.click('.pending button:has-text("إدخال القياس")');
+  await page.fill('#quick-after', '140');
+  await page.locator('dialog .btn.primary').click();
+  await page.waitForSelector('.pending', { state: 'detached' });
+  assert.equal(await page.locator('.log-entry').count(), 2);
+  assert.match(await page.textContent('.log-days'), /كبسة دجاج/);
+  step('تسجيل يدوي + تنبيه موعد القياس بعد ساعتين + الإدخال السريع');
+
+  await page.reload();
+  await page.waitForSelector('.log-entry');
+  await page.click('.log-toolbar button:has-text("الكل")');
+  assert.equal(await page.locator('.log-entry').count(), 2);
+  step('السجل يبقى بعد تحديث الصفحة');
+
+  await page.locator('.log-entry', { hasText: 'كبسة دجاج' }).locator('button[title="حذف"]').click();
+  await page.locator('dialog .btn.danger').click();
+  await page.waitForFunction(() => document.querySelectorAll('.log-entry').length === 1);
+  step('حذف تسجيل');
+
   // تغيير المعامل
   await page.goto(URL + '#setup');
   await page.fill('.ratio-input', '20');

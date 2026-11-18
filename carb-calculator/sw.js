@@ -1,8 +1,8 @@
 // Service Worker — يتيح العمل بدون إنترنت. غيّر VERSION عند تحديث الملفات.
-const VERSION = 'carb-calc-v2';
+const VERSION = 'carb-calc-v3';
 const ASSETS = [
   './', './index.html', './manifest.webmanifest', './css/styles.css',
-  './js/app.js', './js/ui.js', './js/calc.js', './js/db.js', './js/categories.js', './data/foods.js',
+  './js/app.js', './js/ui.js', './js/calc.js', './js/log.js', './js/db.js', './js/categories.js', './data/foods.js',
   './icons/icon.svg', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png',
 ];
 

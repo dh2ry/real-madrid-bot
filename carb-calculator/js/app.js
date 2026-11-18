@@ -2,15 +2,18 @@
 import { h, clear, toast, modal, confirmDialog, promptDialog, download, pickFile, resizeImage } from './ui.js';
 import { CATEGORIES, getCategory, resolveCategory } from './categories.js';
 import {
-  DEFAULT_RATIO, UNIT_SUGGESTIONS, carbsFor, sumCarbs, roundTo, insulinDose, formatDose, fmt, fmtQty,
+  DEFAULT_RATIO, UNIT_SUGGESTIONS, GLUCOSE_UNITS, carbsFor, sumCarbs, roundTo, insulinDose, formatDose, fmt, fmtQty,
   parseNum, matchesQuery, refLabel, qtyLabel, isComplete, hasAlt, isWeightUnit, validateFood,
 } from './calc.js';
 import * as db from './db.js';
+import { renderLog, openLogForm, mealFromItems } from './log.js';
 
 const state = {
   foods: [],
   meals: [],
+  logs: [],
   ratio: DEFAULT_RATIO,
+  glucoseUnit: 'mg/dL',
   current: { items: [], editingMealId: null, editingName: '' },
   view: 'calc',
   calc: { query: '', cat: null },
@@ -28,8 +31,22 @@ async function loadAll() {
   state.meals = await db.meals.all();
   state.ratio = Number(await db.settings.get('ratio', DEFAULT_RATIO)) || DEFAULT_RATIO;
   state.current = await db.settings.get('currentMeal', state.current);
+  state.glucoseUnit = await db.settings.get('glucoseUnit', 'mg/dL');
+  state.logs = await db.logs.all();
   sortFoods();
 }
+
+/** ما تحتاجه صفحة السجل من التطبيق */
+const ctx = {
+  state,
+  render: () => render(),
+  itemFood: (it) => itemFood(it),
+  itemCarbs: (it) => itemCarbs(it),
+  mealTotal: (items) => mealTotal(items),
+  qtyLabel: (it, food) => qtyLabel(it, food),
+  defaultMealName: () => defaultMealName(),
+  emptyState: (...a) => emptyState(...a),
+};
 
 function sortFoods() {
   state.foods.sort((a, b) => a.name.localeCompare(b.name, 'ar'));
@@ -57,7 +74,8 @@ function mealTotal(items) {
 const VIEWS = {
   calc: { title: 'الحاسبة', icon: '🧮', render: renderCalc },
   meals: { title: 'الوجبات', icon: '📋', render: renderMeals },
-  foods: { title: 'إدارة الأطعمة', icon: '🗂️', render: renderManage },
+  log: { title: 'السجل', icon: '📝', render: (root) => renderLog(root, ctx) },
+  foods: { title: 'الأطعمة', icon: '🗂️', render: renderManage },
   setup: { title: 'الإعدادات', icon: '⚙️', render: renderSettings },
 };
 
@@ -438,6 +456,10 @@ function renderInsulinCard() {
       h('div', { class: 'dose-label' }, 'جرعة الإنسولين الحسابية'),
       h('div', { class: 'dose-value', id: 'dose-value' }, formatDose(dose), h('span', {}, ' وحدة')),
       h('div', { class: 'equation', dir: 'ltr' }, `${fmt(total, 1)} ÷ ${fmt(state.ratio, 2)} = ${formatDose(dose)}`)),
+    state.current.items.length > 0 && h('button', {
+      class: 'btn log-btn', id: 'log-from-calc',
+      onclick: () => openLogForm(ctx, { meal: mealFromItems(ctx, state.current.editingName || defaultMealName(), state.current.items) }),
+    }, '📝 تسجيل الوجبة في السجل (مع قياس السكر والجرعة)'),
     h('p', { class: 'disclaimer' },
       '⚠️ تنبيه طبي: هذه النتيجة ناتج معادلة حسابية فقط (إجمالي الكربوهيدرات ÷ المعامل)، وليست وصفة طبية أو أمراً بإعطاء جرعة. ',
       'لا تتضمن جرعات تصحيحية ولا تقريباً للجرعة. يجب أن يكون المعامل معتمداً من الطبيب، وراجع خطة العلاج المعتمدة قبل أي جرعة.'));
@@ -476,6 +498,7 @@ function mealCard(meal) {
     h('div', { class: 'row-actions' },
       h('button', { class: 'btn primary', onclick: () => loadMeal(meal, false) }, '↩️ استخدام'),
       h('button', { class: 'btn', onclick: () => loadMeal(meal, true) }, '✏️ تعديل'),
+      h('button', { class: 'btn', onclick: () => openLogForm(ctx, { meal: mealFromItems(ctx, meal.name, meal.items) }) }, '📝 تسجيل'),
       h('button', { class: 'btn', onclick: () => renameMeal(meal) }, 'إعادة تسمية'),
       h('button', { class: 'btn danger-ghost', onclick: () => deleteMeal(meal) }, '🗑️ حذف')));
 }
@@ -713,6 +736,20 @@ function renderSettings(root) {
       h('p', { class: 'disclaimer' }, '⚠️ يجب أن يكون المعامل معتمداً من الطبيب المعالج.')),
 
     h('section', { class: 'card' },
+      h('h2', {}, '🩸 وحدة قياس السكر'),
+      h('p', { class: 'muted' }, 'تُستخدم في السجل للتسجيلات الجديدة، والتسجيلات السابقة تحتفظ بوحدتها.'),
+      h('div', { class: 'segmented unit-switch', role: 'radiogroup', 'aria-label': 'وحدة قياس السكر' },
+        GLUCOSE_UNITS.map((u) => h('button', {
+          type: 'button', role: 'radio', dir: 'ltr', class: state.glucoseUnit === u ? 'active' : '', 'aria-checked': String(state.glucoseUnit === u),
+          onclick: async () => {
+            state.glucoseUnit = u;
+            await db.settings.set('glucoseUnit', u);
+            toast(`وحدة السكر: ${u}`);
+            render();
+          },
+        }, u)))),
+
+    h('section', { class: 'card' },
       h('h2', {}, '🗄️ قاعدة بيانات الأطعمة'),
       h('p', { class: 'muted' }, `${state.foods.length} صنف محفوظ ${db.storageInfo.kind === 'cloud' ? 'في حسابك (مساحة خاصة بك وحدك، تتزامن بين أجهزتك)' : 'على هذا الجهاز'}.`),
       h('div', { class: 'row-actions wrap' },
@@ -723,7 +760,7 @@ function renderSettings(root) {
 
     h('section', { class: 'card' },
       h('h2', {}, '💾 النسخ الاحتياطي'),
-      h('p', { class: 'muted' }, 'نسخة كاملة تشمل الأطعمة والوجبات المحفوظة والإعدادات. احفظها في الملفات أو iCloud لنقلها لجهاز آخر.'),
+      h('p', { class: 'muted' }, 'نسخة كاملة تشمل الأطعمة والوجبات المحفوظة وسجل السكر والإعدادات. احفظها في الملفات أو iCloud لنقلها لجهاز آخر.'),
       h('div', { class: 'row-actions wrap' },
         h('button', { class: 'btn primary', onclick: exportBackup }, '⬇️ إنشاء نسخة احتياطية'),
         h('button', { class: 'btn', onclick: restoreBackup }, '⬆️ استعادة من نسخة احتياطية'))),
@@ -844,7 +881,7 @@ async function resetFoods() {
 async function exportBackup() {
   const data = {
     type: 'carb-calculator-backup', version: 1, exportedAt: new Date().toISOString(),
-    foods: state.foods, meals: state.meals, settings: await db.settings.all(),
+    foods: state.foods, meals: state.meals, logs: state.logs, settings: await db.settings.all(),
   };
   if (await download(`نسخة-احتياطية-حاسبة-الكربوهيدرات-${stamp()}.json`, JSON.stringify(data, null, 2))) toast('تم حفظ النسخة الاحتياطية');
 }
@@ -860,11 +897,12 @@ async function restoreBackup() {
     toast(`تعذر قراءة الملف: ${e.message}`, 'error');
     return;
   }
-  const ok = await confirmDialog(`استعادة النسخة الاحتياطية (${data.foods.length} صنف، ${(data.meals || []).length} وجبة)؟ ستُستبدل جميع البيانات الحالية.`, { okLabel: 'استعادة', danger: true });
+  const ok = await confirmDialog(`استعادة النسخة الاحتياطية (${data.foods.length} صنف، ${(data.meals || []).length} وجبة، ${(data.logs || []).length} تسجيل)؟ ستُستبدل جميع البيانات الحالية.`, { okLabel: 'استعادة', danger: true });
   if (!ok) return;
   await db.foods.replaceAll(data.foods);
   await db.meals.replaceAll(data.meals || []);
-  for (const s of data.settings || []) await db.settings.set(s.key, s.value);
+  for (const s of data.settings || []) if (s.key !== 'logMonths') await db.settings.set(s.key, s.value);
+  await db.logs.replaceAll(data.logs || []);
   await loadAll();
   toast('تمت استعادة النسخة الاحتياطية');
   render();

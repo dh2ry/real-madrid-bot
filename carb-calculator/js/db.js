@@ -4,7 +4,7 @@ import { SEED_FOODS, SEED_VERSION } from '../data/foods.js';
 // ── الواجهة الخلفية للتخزين ──
 // 1) داخل Claude: قاعدة بيانات الصفحة في مساحة المستخدم الخاصة data/users/<id>/ (لا يراها غيره،
 //    وتتزامن بين أجهزته). 2) خارج Claude: IndexedDB في المتصفح.
-const STORES = { foods: 'id', meals: 'id', settings: 'key' };
+const STORES = { foods: 'id', meals: 'id', settings: 'key', logs: 'id' };
 let backendPromise;
 
 export const storageInfo = { kind: 'none' };
@@ -64,6 +64,10 @@ function cloudBackend(cdb, uid) {
       const d = await call(() => col(store).doc(key).get());
       return d.exists ? clone(d.data()) : undefined;
     },
+    async query(store, field, value) {
+      const snap = await call(() => col(store).where(field, '==', value).limit(1000).get());
+      return snap.docs.filter((d) => d.exists).map((d) => clone(d.data()));
+    },
     put: (store, v) => call(() => col(store).doc(String(v[STORES[store]])).set(clone(v))),
     del: (store, key) => call(() => col(store).doc(String(key)).delete()),
     putMany: (store, list) => pool(list, (v) => call(() => col(store).doc(String(v[STORES[store]])).set(clone(v)))),
@@ -79,7 +83,7 @@ function cloudBackend(cdb, uid) {
 function idbBackend() {
   let dbp;
   const open = () => dbp || (dbp = new Promise((resolve, reject) => {
-    const req = indexedDB.open('carb-calculator', 1);
+    const req = indexedDB.open('carb-calculator', 2);
     req.onupgradeneeded = () => {
       for (const [name, keyPath] of Object.entries(STORES)) {
         if (!req.result.objectStoreNames.contains(name)) req.result.createObjectStore(name, { keyPath });
@@ -110,6 +114,7 @@ function idbBackend() {
   return {
     getAll: (store) => read(store, (os) => os.getAll()),
     get: (store, key) => read(store, (os) => os.get(key)),
+    query: async (store, field, value) => (await read(store, (os) => os.getAll())).filter((v) => v[field] === value),
     put: (store, v) => write(store, (os) => os.put(v)),
     del: (store, key) => write(store, (os) => os.delete(key)),
     putMany: (store, list) => write(store, (os) => list.forEach((v) => os.put(v))),
@@ -174,6 +179,36 @@ export const meals = {
   save: (meal) => put('meals', meal),
   remove: (id) => del('meals', id),
   replaceAll: (list) => replaceAll('meals', list),
+};
+
+/**
+ * سجل السكر والوجبات: مستند لكل تسجيل، وفهرس بالأشهر (logMonths) لتحميل السجل كاملاً
+ * مهما طال (كل شهر يُقرأ باستعلام مستقل).
+ */
+export const logs = {
+  async all() {
+    const months = await settings.get('logMonths', []);
+    const b = await backend();
+    const parts = await Promise.all(months.map((m) => b.query('logs', 'month', m)));
+    return parts.flat();
+  },
+  async save(entry) {
+    const e = { ...entry, month: String(entry.date).slice(0, 7), updatedAt: Date.now() };
+    await put('logs', e);
+    const months = await settings.get('logMonths', []);
+    if (!months.includes(e.month)) await settings.set('logMonths', [...months, e.month].sort());
+    return e;
+  },
+  remove: (id) => del('logs', id),
+  async replaceAll(list) {
+    const current = await this.all();
+    const b = await backend();
+    const keep = new Set(list.map((e) => e.id));
+    for (const e of current) if (!keep.has(e.id)) await b.del('logs', e.id);
+    const withMonth = list.map((e) => ({ ...e, month: String(e.date).slice(0, 7) }));
+    await putMany('logs', withMonth);
+    await settings.set('logMonths', [...new Set(withMonth.map((e) => e.month))].sort());
+  },
 };
 
 /**

@@ -4,6 +4,7 @@ import assert from 'node:assert/strict';
 import {
   carbsFor, insulinDose, formatDose, parseNum, normalizeAr, matchesQuery, sumCarbs, roundTo,
   isComplete, hasAlt, validateFood, refLabel, fmtQty,
+  weekdayName, formatTime12, dueTime, todayStr, isValidDateStr, logsToCSV,
 } from '../js/calc.js';
 import { SEED_FOODS } from '../data/foods.js';
 import { CATEGORIES } from '../js/categories.js';
@@ -111,4 +112,35 @@ test('سلامة قاعدة البيانات المستخرجة', () => {
   // أسماء مكررة بنفس الوحدة = تكرار فعلي
   const keys = SEED_FOODS.map((f) => `${f.name}|${f.unit}`);
   assert.equal(new Set(keys).size, keys.length, 'يوجد صنف مكرر');
+});
+
+test('السجل: اليوم من التاريخ والوقت بنظام 12 ساعة', () => {
+  assert.equal(weekdayName('2026-11-18'), 'الأربعاء');
+  assert.equal(weekdayName('2026-11-20'), 'الجمعة');
+  assert.equal(weekdayName('bad'), '');
+  assert.equal(formatTime12('13:05'), '1:05 م');
+  assert.equal(formatTime12('00:30'), '12:30 ص');
+  assert.equal(formatTime12('12:00'), '12:00 م');
+  assert.ok(isValidDateStr('2026-02-28'));
+  assert.ok(!isValidDateStr('2026-02-30'));
+});
+
+test('السجل: موعد القياس بعد ساعتين (حتى لو عبر منتصف الليل)', () => {
+  const d = dueTime({ date: '2026-11-18', time: '23:15' });
+  assert.equal(todayStr(d), '2026-11-19');
+  assert.equal(`${d.getHours()}:${d.getMinutes()}`, '1:15');
+  const d2 = dueTime({ date: '2026-11-18', time: '13:30' });
+  assert.equal(`${d2.getHours()}:${d2.getMinutes()}`, '15:30');
+});
+
+test('السجل: التصدير إلى CSV مرتب زمنياً', () => {
+  const csv = logsToCSV([
+    { date: '2026-11-18', time: '19:00', mealType: 'عشاء', bgBefore: 140, dose: 3, bgAfter: 160, unit: 'mg/dL', meal: { name: 'عشاء', items: [], totalCarbs: 75 } },
+    { date: '2026-11-18', time: '08:00', mealType: 'فطور', bgBefore: 110, dose: 2.5, bgAfter: null, unit: 'mg/dL', meal: { name: 'فطور', items: [{ name: 'توست (أسمر أو أبيض)', qty: '2 حبة', carbs: 30 }], totalCarbs: 30 }, note: 'قبل الرياضة, صباحاً' },
+  ]);
+  const lines = csv.replace('\uFEFF', '').split('\n');
+  assert.equal(lines.length, 3);
+  assert.match(lines[1], /^2026-11-18,الأربعاء,08:00,فطور,110,/);
+  assert.match(lines[1], /"قبل الرياضة, صباحاً"$/);
+  assert.match(lines[2], /19:00,عشاء,140,عشاء,75,3,160,mg\/dL,$/);
 });

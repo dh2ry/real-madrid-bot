@@ -11,6 +11,7 @@ const MODULES = [
   ['foods', 'data/foods.js'],
   ['ui', 'js/ui.js'],
   ['db', 'js/db.js'],
+  ['log', 'js/log.js'],
   ['app', 'js/app.js'],
 ];
 

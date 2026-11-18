@@ -146,3 +146,82 @@ export function validateFood(f) {
   if (hasAltQty && !String(f.altUnit || '').trim()) errors.push('حدد وحدة القياس المكافئ');
   return errors;
 }
+
+/* ───── سجل السكر: التاريخ والوقت ───── */
+
+export const GLUCOSE_UNITS = ['mg/dL', 'mmol/L'];
+export const MEAL_TYPES = ['فطور', 'غداء', 'عشاء', 'وجبة خفيفة'];
+const AR = 'ar-u-nu-latn'; // عربي بأرقام 0-9
+
+const pad = (n) => String(n).padStart(2, '0');
+
+/** تاريخ اليوم المحلي بصيغة YYYY-MM-DD */
+export function todayStr(d = new Date()) {
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+
+/** الوقت المحلي بصيغة HH:MM */
+export function nowTimeStr(d = new Date()) {
+  return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export function parseLocalDate(s, t = '00:00') {
+  const [y, m, d] = String(s).split('-').map(Number);
+  const [hh, mm] = String(t || '00:00').split(':').map(Number);
+  return new Date(y, m - 1, d, hh || 0, mm || 0);
+}
+
+export function isValidDateStr(s) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(s))) return false;
+  const d = parseLocalDate(s);
+  return todayStr(d) === s;
+}
+
+/** اسم اليوم: "الأربعاء" */
+export function weekdayName(s) {
+  return isValidDateStr(s) ? parseLocalDate(s).toLocaleDateString(AR, { weekday: 'long' }) : '';
+}
+
+/** "الأربعاء 18 نوفمبر 2026" */
+export function formatDateAr(s) {
+  if (!isValidDateStr(s)) return '';
+  return parseLocalDate(s).toLocaleDateString(AR, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+/** "13:05" → "1:05 م" */
+export function formatTime12(t) {
+  const m = String(t || '').match(/^(\d{1,2}):(\d{2})$/);
+  if (!m) return '';
+  const hh = Number(m[1]);
+  const h12 = hh % 12 === 0 ? 12 : hh % 12;
+  return `${h12}:${m[2]} ${hh < 12 ? 'ص' : 'م'}`;
+}
+
+/** موعد قياس ما بعد الوجبة (افتراضياً بعد ساعتين) */
+export function dueTime(entry, minutes = 120) {
+  const d = parseLocalDate(entry.date, entry.time);
+  return new Date(d.getTime() + minutes * 60000);
+}
+
+/** تصدير السجل إلى CSV (يفتح في Excel) */
+export function logsToCSV(entries) {
+  const esc = (v) => {
+    const s = v == null ? '' : String(v);
+    return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+  };
+  const head = ['التاريخ', 'اليوم', 'الوقت', 'نوع الوجبة', 'السكر قبل الوجبة', 'الوجبة', 'الكربوهيدرات (جم)', 'جرعة الإنسولين (وحدة)', 'السكر بعد ساعتين', 'وحدة السكر', 'ملاحظات'];
+  const rows = [...entries]
+    .sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`))
+    .map((e) => [
+      e.date, weekdayName(e.date), e.time, e.mealType,
+      e.bgBefore, mealSummary(e.meal), e.meal?.totalCarbs, e.dose, e.bgAfter, e.unit, e.note,
+    ].map(esc).join(','));
+  return '﻿' + [head.join(','), ...rows].join('\n');
+}
+
+/** وصف مختصر للوجبة المسجلة */
+export function mealSummary(meal) {
+  if (!meal) return '';
+  const items = (meal.items || []).map((i) => `${i.name} (${i.qty})`).join(' + ');
+  return [meal.name, items].filter(Boolean).join(': ');
+}

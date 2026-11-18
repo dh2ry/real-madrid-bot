@@ -18,21 +18,25 @@
       collection: (c) => colRef(path + '/' + c),
     };
   };
-  const colRef = (path) => {
+  const colRef = (path, filters = []) => {
     if (segs(path) % 2 === 0) throw new TypeError('collection path must have odd segments: ' + path);
-    const q = {
+    return {
       path,
       doc: (id) => docRef(path + '/' + (id || Math.random().toString(36).slice(2))),
-      limit: () => q,
+      limit: () => colRef(path, filters),
+      where: (field, op, value) => {
+        if (op !== '==') throw new Error('mock supports == only');
+        return colRef(path, [...filters, (d) => d[field] === value]);
+      },
       async get() {
         await wait();
         const m = load();
         const docs = Object.keys(m).filter((k) => k.startsWith(path + '/') && segs(k) === segs(path) + 1)
+          .filter((k) => filters.every((f) => f(m[k])))
           .sort().map((k) => ({ id: k.split('/').pop(), exists: true, data: () => JSON.parse(JSON.stringify(m[k])), metadata: {} }));
         return { docs, size: docs.length, empty: !docs.length };
       },
     };
-    return q;
   };
   const caps = {
     db: { doc: docRef, collection: colRef },
