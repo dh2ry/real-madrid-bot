@@ -6291,7 +6291,7 @@
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1794947956232,
+    "fetchedAt": 1794969695573,
     "list": [
       {
         "id": "564754",
@@ -6352,10 +6352,30 @@
         },
         "matchday": 14,
         "stage": "REGULAR_SEASON"
+      },
+      {
+        "id": "564855",
+        "kickoff": 1796234400000,
+        "status": "TIMED",
+        "competition": "Primera Division",
+        "isHome": false,
+        "opponent": {
+          "name": "Real Sociedad",
+          "fullName": "Real Sociedad de Fútbol",
+          "crest": "https://crests.football-data.org/92.png"
+        },
+        "rmCrest": "https://crests.football-data.org/86.png",
+        "venue": null,
+        "score": {
+          "home": null,
+          "away": null
+        },
+        "matchday": 23,
+        "stage": "REGULAR_SEASON"
       }
     ]
   },
-  "lastNewsRun": 1794966596221,
+  "lastNewsRun": 1794969695824,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2121622684920590407",
@@ -6680,7 +6700,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1794966604383,
+  "officialXRun": 1794969704997,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
