@@ -6301,11 +6301,11 @@
     "564754:pre:rm": 1795232762979,
     "564754:pre:opp": 1795202891209,
     "564754:absences": 1795218805984,
-    "cover:marca:2026-11-21": 1795263165594,
-    "cover:as:2026-11-21": 1795263166637,
-    "564754:matchinfo": 1795260344944,
-    "onthisday:2026-11-21": 1795260349391,
-    "564754:milestones:pre": 1795263166897
+    "cover:marca:2026-11-21": 1795267335162,
+    "cover:as:2026-11-21": 1795267336559,
+    "564754:matchinfo": 1795267331929,
+    "onthisday:2026-11-21": 1795267337195,
+    "564754:milestones:pre": 1795267337035
   },
   "afIds": {},
   "fixtures": {
@@ -6393,7 +6393,7 @@
       }
     ]
   },
-  "lastNewsRun": 1795263164474,
+  "lastNewsRun": 1795267332262,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2121622684920590407",
@@ -6718,7 +6718,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1795263165542,
+  "officialXRun": 1795267335098,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6761,7 +6761,7 @@
     "564754:pre:rm": 6,
     "564754:pre:opp": 3,
     "564754:absences": 4,
-    "564754:matchinfo": 3,
-    "564754:milestones:pre": 1
+    "564754:matchinfo": 4,
+    "564754:milestones:pre": 2
   }
 }
