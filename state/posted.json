@@ -6308,18 +6308,20 @@
     "564754:milestones:pre": 1795267337035,
     "564754:post:rm": 1795308058834,
     "564754:post:opp": 1795308059229,
-    "564754:motm": 1795308060807,
-    "564754:milestones:post": 1795308060989,
-    "564754:standings": 1795308061158
+    "564754:motm": 1795332735490,
+    "564754:milestones:post": 1795332735633,
+    "564754:standings": 1795332735771,
+    "cover:marca:2026-11-22": 1795332734003,
+    "cover:as:2026-11-22": 1795332735121
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1795293484377,
+    "fetchedAt": 1795332727890,
     "list": [
       {
         "id": "564754",
         "kickoff": 1795291200000,
-        "status": "IN_PLAY",
+        "status": "FINISHED",
         "competition": "Primera Division",
         "isHome": true,
         "opponent": {
@@ -6330,7 +6332,7 @@
         "rmCrest": "https://crests.football-data.org/86.png",
         "venue": null,
         "score": {
-          "home": 0,
+          "home": 2,
           "away": 1
         },
         "matchday": 13,
@@ -6395,10 +6397,30 @@
         },
         "matchday": 23,
         "stage": "REGULAR_SEASON"
+      },
+      {
+        "id": "564775",
+        "kickoff": 1796570100000,
+        "status": "TIMED",
+        "competition": "Primera Division",
+        "isHome": false,
+        "opponent": {
+          "name": "Athletic",
+          "fullName": "Athletic Club",
+          "crest": "https://crests.football-data.org/77.png"
+        },
+        "rmCrest": "https://crests.football-data.org/86.png",
+        "venue": null,
+        "score": {
+          "home": null,
+          "away": null
+        },
+        "matchday": 15,
+        "stage": "REGULAR_SEASON"
       }
     ]
   },
-  "lastNewsRun": 1795308059400,
+  "lastNewsRun": 1795332727918,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2121622684920590407",
@@ -6799,7 +6821,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1795308060743,
+  "officialXRun": 1795332733915,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6846,7 +6868,7 @@
     "564754:milestones:pre": 2,
     "564754:post:rm": 1,
     "564754:post:opp": 1,
-    "564754:motm": 1,
-    "564754:milestones:post": 1
+    "564754:motm": 2,
+    "564754:milestones:post": 2
   }
 }
