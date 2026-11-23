@@ -6313,11 +6313,14 @@
     "564754:standings": 1795362008917,
     "cover:marca:2026-11-22": 1795362006985,
     "cover:as:2026-11-22": 1795362008446,
-    "onthisday:2026-11-22": 1795362021525
+    "onthisday:2026-11-22": 1795362021525,
+    "cover:marca:2026-11-23": 1795429603388,
+    "cover:as:2026-11-23": 1795429604793,
+    "onthisday:2026-11-23": 1795429605241
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1795398613365,
+    "fetchedAt": 1795429593185,
     "list": [
       {
         "id": "564754",
@@ -6421,7 +6424,7 @@
       }
     ]
   },
-  "lastNewsRun": 1795398613395,
+  "lastNewsRun": 1795429593733,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2121622684920590407",
@@ -6822,7 +6825,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1795398614932,
+  "officialXRun": 1795429603331,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
