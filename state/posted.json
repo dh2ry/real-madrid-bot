@@ -6324,36 +6324,20 @@
     "cover:as:2026-11-24": 1795542272206,
     "575397:matchinfo": 1795542269480,
     "575397:milestones:pre": 1795542272414,
-    "onthisday:2026-11-24": 1795542272446
+    "onthisday:2026-11-24": 1795542272446,
+    "575397:post:rm": 1795570712843,
+    "575397:post:opp": 1795570712902,
+    "575397:motm": 1795570714074,
+    "575397:milestones:post": 1795570714111
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1795542269452,
+    "fetchedAt": 1795570712809,
     "list": [
-      {
-        "id": "564754",
-        "kickoff": 1795291200000,
-        "status": "FINISHED",
-        "competition": "Primera Division",
-        "isHome": true,
-        "opponent": {
-          "name": "Celta",
-          "fullName": "RC Celta de Vigo",
-          "crest": "https://crests.football-data.org/558.png"
-        },
-        "rmCrest": "https://crests.football-data.org/86.png",
-        "venue": null,
-        "score": {
-          "home": 2,
-          "away": 1
-        },
-        "matchday": 13,
-        "stage": "REGULAR_SEASON"
-      },
       {
         "id": "575397",
         "kickoff": 1795550400000,
-        "status": "TIMED",
+        "status": "FINISHED",
         "competition": "UEFA Champions League",
         "isHome": true,
         "opponent": {
@@ -6364,8 +6348,8 @@
         "rmCrest": "https://crests.football-data.org/86.png",
         "venue": null,
         "score": {
-          "home": null,
-          "away": null
+          "home": 5,
+          "away": 1
         },
         "matchday": 5,
         "stage": "LEAGUE_STAGE"
@@ -6429,10 +6413,30 @@
         },
         "matchday": 15,
         "stage": "REGULAR_SEASON"
+      },
+      {
+        "id": "575280",
+        "kickoff": 1796846400000,
+        "status": "TIMED",
+        "competition": "UEFA Champions League",
+        "isHome": false,
+        "opponent": {
+          "name": "Arsenal",
+          "fullName": "Arsenal FC",
+          "crest": "https://crests.football-data.org/57.png"
+        },
+        "rmCrest": "https://crests.football-data.org/86.png",
+        "venue": null,
+        "score": {
+          "home": null,
+          "away": null
+        },
+        "matchday": 6,
+        "stage": "LEAGUE_STAGE"
       }
     ]
   },
-  "lastNewsRun": 1795542269710,
+  "lastNewsRun": 1795570712950,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2121622684920590407",
@@ -6833,7 +6837,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1795542271289,
+  "officialXRun": 1795570713989,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6886,6 +6890,10 @@
     "575397:pre:opp": 3,
     "575397:absences": 2,
     "575397:matchinfo": 1,
-    "575397:milestones:pre": 1
+    "575397:milestones:pre": 1,
+    "575397:post:rm": 1,
+    "575397:post:opp": 1,
+    "575397:motm": 1,
+    "575397:milestones:post": 1
   }
 }
