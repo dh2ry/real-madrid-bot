@@ -6338,36 +6338,19 @@
     "cover:marca:2026-11-27": 1795785119518,
     "cover:as:2026-11-27": 1795785120338,
     "onthisday:2026-11-27": 1795785120580,
-    "564762:pre:rm": 1795837986470,
-    "564762:pre:opp": 1795837986602,
-    "564762:absences": 1795837998817,
-    "cover:marca:2026-11-28": 1795837996457,
-    "cover:as:2026-11-28": 1795837997245
+    "564762:pre:rm": 1795870012051,
+    "564762:pre:opp": 1795870012155,
+    "564762:absences": 1795870015072,
+    "cover:marca:2026-11-28": 1795870013393,
+    "cover:as:2026-11-28": 1795870014688,
+    "564762:matchinfo": 1795870011919,
+    "564762:milestones:pre": 1795870015157,
+    "onthisday:2026-11-28": 1795870015245
   },
   "afIds": {},
   "fixtures": {
-    "fetchedAt": 1795817184927,
+    "fetchedAt": 1795870011688,
     "list": [
-      {
-        "id": "575397",
-        "kickoff": 1795550400000,
-        "status": "FINISHED",
-        "competition": "UEFA Champions League",
-        "isHome": true,
-        "opponent": {
-          "name": "PSV",
-          "fullName": "PSV",
-          "crest": "https://crests.football-data.org/674.png"
-        },
-        "rmCrest": "https://crests.football-data.org/86.png",
-        "venue": null,
-        "score": {
-          "home": 5,
-          "away": 1
-        },
-        "matchday": 5,
-        "stage": "LEAGUE_STAGE"
-      },
       {
         "id": "564762",
         "kickoff": 1795896000000,
@@ -6450,7 +6433,7 @@
       }
     ]
   },
-  "lastNewsRun": 1795837986703,
+  "lastNewsRun": 1795870012238,
   "xSince": {
     "(from:realmadrid OR from:MarioCortegana) -is:retweet -is:reply": "2115024303343501400",
     "(from:FabrizioRomano OR from:MatteMoretto OR from:relevo OR from:diarioas OR from:marca) (\"Real Madrid\" OR \"ريال مدريد\" OR RealMadrid OR #HalaMadrid) -is:retweet -is:reply": "2121622684920590407",
@@ -6851,7 +6834,7 @@
     "Deportivo": "ديبورتيفو",
     "Santander": "سانتاندير"
   },
-  "officialXRun": 1795837996397,
+  "officialXRun": 1795870013324,
   "otdUsed": [
     "2009: الكورنثو: ريال مدريد يسقط 4-0 أمام ألكوركون",
     "2023: بيلينغهام يحسم كلاسيكو مونتجويك بهدف قاتل",
@@ -6909,8 +6892,10 @@
     "575397:post:opp": 1,
     "575397:motm": 1,
     "575397:milestones:post": 1,
-    "564762:pre:rm": 2,
-    "564762:pre:opp": 2,
-    "564762:absences": 2
+    "564762:pre:rm": 3,
+    "564762:pre:opp": 3,
+    "564762:absences": 3,
+    "564762:matchinfo": 1,
+    "564762:milestones:pre": 1
   }
 }
